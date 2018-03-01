@@ -2,5 +2,5 @@
 This CPP project makes you recode the Snake game with several different graphical interfaces, the player can switch between the interfaces during the game. This is an opportunity to discover how to load and use dynamic libraries at runtime.
 
 
-![Alt Text](https://ibb.co/fGKrfx)
+![Alt Text](https://image.ibb.co/cozrfx/nibblercover.jpg)
 `npm run client-master`
