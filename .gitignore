@@ -1,0 +1,4 @@
+*.o
+Nibbler
+/assets
+schemes.pdf
