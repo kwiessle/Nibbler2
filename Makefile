@@ -28,10 +28,12 @@ install:
 	@sh install.sh
 
 scheme:
+	@mkdir -p assets
 	@curl -o ./schemes.pdf http://dl.free.fr/mfMBHqNAf
+	@mv schemes.pdf assets
 
 assets:
-	@mkdir assets
+	@mkdir -p assets
 	@curl -o ./assets.zip http://dl.free.fr/q6Q35FrKf
 	@unzip assets.zip -d assets
 	@rm assets.zip
@@ -46,4 +48,4 @@ sdl:
 	@make -C IGraphism/sdl
 
 
-.PHONY : re fclean clean all
+.PHONY : re fclean clean all install assets aclean dsclean scheme sdl
