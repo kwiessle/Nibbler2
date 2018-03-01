@@ -1,9 +1,9 @@
 NAME = Nibbler
 COMPILATOR = clang++
-INC	= -I . -I avm -I parser -I instruction -I data -I exceptions
+INC	= -I . -I IGraphism
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
-SRC =
+SRC = main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -17,6 +17,7 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ)
+	@make fclean -C IGraphism/sdl
 
 fclean: clean
 	@rm -rf $(NAME)
@@ -26,7 +27,7 @@ re: fclean all
 install:
 	@sh install.sh
 
-schemes:
+scheme:
 	@curl -o ./schemes.pdf http://dl.free.fr/mfMBHqNAf
 
 assets:
@@ -37,5 +38,12 @@ assets:
 
 aclean:
 	@rm -rf assets schemes.pdf
+
+dsclean:
+	@rm -rf */.DS_S*
+
+sdl:
+	@make -C IGraphism/sdl
+
 
 .PHONY : re fclean clean all
