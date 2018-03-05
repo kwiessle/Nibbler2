@@ -12,8 +12,4 @@ This CPP project makes you recode the Snake game with several different graphica
 3) Download projetc's scheme :
 `make scheme`
 
-4) Compile sources & dynamic lib :
-`make sdl` & `make`
 
-5) Run Nibbler with '.so' file :
-`./Nibbler 30 30 ./IGraphism/sdl/sdl.so`
