@@ -1,9 +1,13 @@
 NAME = Nibbler
 COMPILATOR = clang++
-INC	= -I . -I avm -I parser -I instruction -I data -I exceptions
+INC	= -I . -I lib -I Game -I Player
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
-SRC =
+SRC = main.cpp \
+			BinaryCall.cpp \
+			Game/Game.cpp \
+			Player/Player.cpp
+
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -26,11 +30,13 @@ re: fclean all
 install:
 	@sh install.sh
 
-schemes:
-	@curl -o ./schemes.pdf http://dl.free.fr/mfMBHqNAf
+scheme:
+	@mkdir -p assets
+	@curl -o ./schemes.pdf http://dl.free.fr/ryjyv7FMG
+	@mv schemes.pdf assets
 
 assets:
-	@mkdir assets
+	@mkdir -p assets
 	@curl -o ./assets.zip http://dl.free.fr/q6Q35FrKf
 	@unzip assets.zip -d assets
 	@rm assets.zip
@@ -38,4 +44,11 @@ assets:
 aclean:
 	@rm -rf assets schemes.pdf
 
-.PHONY : re fclean clean all
+dsclean:
+	@rm -rf */.DS_S*
+
+sdl:
+	@make -C lib/sdl
+
+
+.PHONY : re fclean clean all install assets aclean dsclean scheme sdl
