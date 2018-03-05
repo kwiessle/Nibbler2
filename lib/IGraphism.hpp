@@ -3,6 +3,8 @@
 
 #define CELL_UNITY 30
 
+
+
 class IGraphism {
   public:
     virtual ~IGraphism(void) {}

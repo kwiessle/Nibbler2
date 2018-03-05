@@ -1,23 +1,5 @@
-#include <dlfcn.h>
-#include <iostream>
-#include "IGraphism.hpp"
-
-void  dlerror_wrapper(void) {
-  std::cout << "Error: " << dlerror() << std::endl;
-}
-
-IGraphism   *openLibrary(void *dl_handle, char const *symbol, unsigned int width, unsigned int height) {
-
-  if (!dl_handle) {
-    dlerror_wrapper();
-  }
-  IGraphism   *(*windowCreator)(unsigned int, unsigned int);
-  windowCreator = (IGraphism *(*)(unsigned int, unsigned int)) dlsym(dl_handle, symbol);
-  if (!windowCreator)
-    dlerror_wrapper();
-  IGraphism *window = windowCreator(width, height);
-  return window;
-}
+#include "main.hpp"
+#include "Game.hpp"
 
 int   main(int ac, char **av) {
   void    *dl_handle;
@@ -31,12 +13,24 @@ int   main(int ac, char **av) {
     case 4: {
       unsigned int width = atoi(av[1]);
       unsigned int height = atoi(av[2]);
-      std::string  symbol = "createWindow";
       char *path = av[3];
 
-      dl_handle = dlopen(path, RTLD_LOCAL | RTLD_LAZY);
-      IGraphism *engine = openLibrary(dl_handle, symbol.c_str(), width, height);
-      engine->loop();
+
+      if (!(dl_handle = dlopen(path, RTLD_LOCAL | RTLD_LAZY))) {
+        dlerror_wrapper();
+      }
+      else {
+        IGraphism *engine = createEngine(dl_handle, width, height);
+        // Game game = Game::singleton();
+        Game *game = new Game(engine, dl_handle);
+        // Game::singleton();
+        // Game::singleton().setBinaryLib(dl_handle);
+        // Game::singleton().setEngine(engine);
+        // Game::singleton().play();
+        game->play();
+        deleteEngine(dl_handle, engine);
+      }
+
 
     }
   }

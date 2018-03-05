@@ -9,7 +9,12 @@ Window::Window(unsigned int width, unsigned int height) {
   }
   else {
     SDL_Window    *pWindow = nullptr;
-    pWindow = pWindow = SDL_CreateWindow("Nibbler", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width * CELL_UNITY, height * CELL_UNITY, SDL_WINDOW_SHOWN);
+    pWindow = pWindow = SDL_CreateWindow("Nibbler",
+                                         SDL_WINDOWPOS_UNDEFINED,
+                                         SDL_WINDOWPOS_UNDEFINED,
+                                         width * CELL_UNITY,
+                                         height * CELL_UNITY,
+                                         SDL_WINDOW_SHOWN);
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
     std::cout << "SDL dynamicly charged" << std::endl;

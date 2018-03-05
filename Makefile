@@ -1,9 +1,13 @@
 NAME = Nibbler
 COMPILATOR = clang++
-INC	= -I . -I IGraphism
+INC	= -I . -I lib -I Game -I Player
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
-SRC = main.cpp
+SRC = main.cpp \
+			BinaryCall.cpp \
+			Game/Game.cpp \
+			Player/Player.cpp
+
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -17,7 +21,6 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ)
-	@make fclean -C IGraphism/sdl
 
 fclean: clean
 	@rm -rf $(NAME)
@@ -29,7 +32,7 @@ install:
 
 scheme:
 	@mkdir -p assets
-	@curl -o ./schemes.pdf http://dl.free.fr/mfMBHqNAf
+	@curl -o ./schemes.pdf http://dl.free.fr/ryjyv7FMG
 	@mv schemes.pdf assets
 
 assets:
@@ -45,7 +48,7 @@ dsclean:
 	@rm -rf */.DS_S*
 
 sdl:
-	@make -C IGraphism/sdl
+	@make -C lib/sdl
 
 
 .PHONY : re fclean clean all install assets aclean dsclean scheme sdl
