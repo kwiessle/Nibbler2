@@ -2,8 +2,6 @@
 #include "Game.hpp"
 
 
-extern void *BINARY_LIB;
-// IGraphism const *ENGINE = nullptr;
 
 int   main(int ac, char **av) {
   // void    *dl_handle;

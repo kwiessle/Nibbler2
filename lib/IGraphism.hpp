@@ -10,7 +10,7 @@ class IGraphism {
     virtual ~IGraphism(void) {}
 
       // virtual void      drawFrame(std::list <Entity *> data) = 0;
-    virtual int       loop(void) = 0;
+    virtual int      loop(void) const = 0;
 };
 
 #endif

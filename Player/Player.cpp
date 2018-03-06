@@ -1,6 +1,8 @@
 #include "Player.hpp"
 #include "Game.hpp"
 
+void *BINARY_LIB;
+
 Player::Player(void) { return; }
 
 Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
@@ -16,7 +18,6 @@ std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
 void  Player::initSnake(void) {
-  printf("%p\n", Game::singleton().getBinaryLib());
   IEntity *head = createEntity(BINARY_LIB, 0, 90, Snake, Right, rHead);
   this->_snake.push_front(head);
 }

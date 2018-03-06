@@ -1,7 +1,5 @@
 #include "Game.hpp"
 
-
-
 Game::Game(void) { return; }
 
 Game::Game(IGraphism const *engine, void *binaryLib) :
@@ -70,8 +68,9 @@ void  Game::initFood(void) {
 }
 
 void  Game::play(void) const {
-  std::cout << "food-x :" << this->_food.front()->getPosX() << std::endl;
-  return;
+    this->_engine->loop();
+    std::cout << "food-x :" << this->_food.front()->getPosX() << std::endl;
+    return;
 }
 
 

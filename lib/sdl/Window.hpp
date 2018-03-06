@@ -9,7 +9,7 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    int               loop(void);
+    int               loop(void) const;
 
   public:
     Window(unsigned int width, unsigned int height);
