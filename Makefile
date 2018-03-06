@@ -26,8 +26,10 @@ re: fclean all
 install:
 	@sh install.sh
 
-schemes:
-	@curl -o ./schemes.pdf http://dl.free.fr/mfMBHqNAf
+scheme:
+	@mkdir -p assets
+	@curl -o ./scheme.pdf https://transfer.sh/uHJWo/scheme.pdf
+	@mv scheme.pdf assets
 
 assets:
 	@mkdir -p assets
