@@ -1,5 +1,5 @@
 *.o
-*.so
+lib/*/*.so
 Nibbler
 /assets
 .DS_Store
