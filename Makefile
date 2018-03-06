@@ -32,8 +32,8 @@ install:
 
 scheme:
 	@mkdir -p assets
-	@curl -o ./schemes.pdf http://dl.free.fr/ryjyv7FMG
-	@mv schemes.pdf assets
+	@curl -o ./scheme.pdf https://transfer.sh/uHJWo/scheme.pdf
+	@mv scheme.pdf assets
 
 assets:
 	@mkdir -p assets
