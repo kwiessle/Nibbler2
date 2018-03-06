@@ -19,9 +19,9 @@ std::list <IEntity *>    Player::getSnake(void) const
 
 void  Player::initSnake(void) {
   printf("%p\n", BINARY_LIB);
-  IEntity *head = createEntity(BINARY_LIB, 0, 90, Snake, Right, rHead);
-  IEntity *body = createEntity(BINARY_LIB, 0, 60, Snake, Right, hBody);
-  IEntity *queue = createEntity(BINARY_LIB, 0, 30, Snake, Right, rHead);
+  IEntity *head = createEntity(90, 0, Snake, Right, rHead);
+  IEntity *body = createEntity(60, 0, Snake, Right, hBody);
+  IEntity *queue = createEntity(30, 0, Snake, Right, rHead);
 
   this->_snake.push_front(head);
   this->_snake.push_front(body);

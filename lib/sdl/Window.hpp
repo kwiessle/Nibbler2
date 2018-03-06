@@ -9,7 +9,8 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    int               loop(void) const;
+    int        getHooks(void) const;
+    void              drawFrame(std::list <IEntity *> data) const;
 
   public:
     Window(unsigned int width, unsigned int height);

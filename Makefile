@@ -1,13 +1,14 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
-INC	= -I . -I lib -I Game -I Player
+INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
-			Player/Player.cpp
+			Player/Player.cpp \
+			Timer/Timer.cpp
 
 
 OBJ = $(SRC:.cpp=.o)

@@ -1,8 +1,5 @@
 #include "Game.hpp"
 
-// Game::Game(void) { return; }
-
-
 Game::Game(void) {
   this->_player = new Player();
   this->initFood();
@@ -17,8 +14,6 @@ Game::~Game(void) {
 
 Game   &Game::singleton(void) {
   static Game game;
-  // game.setBinaryLib(BINARY_LIB);
-  // game.setEngine(ENGINE);
   return game;
 }
 
@@ -32,7 +27,6 @@ IGraphism const   *Game::getEngine() const
 void   Game::setEngine(IGraphism const *engine)
 {
   this->_engine = engine;
-  // ENGINE = this->_engine;
   return;
 }
 
@@ -41,20 +35,40 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 }
 
 void  Game::initFood(void) {
-  IEntity *food = createEntity(BINARY_LIB, 20, 20, Food, NoDir, tFood );
+  IEntity *food = createEntity(20, 20, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
+
   foodList.push_front(food);
-  std::cout << "FOOD INITIATE" << std::endl;
   this->_food = foodList;
   return;
 }
 
 void  Game::start(unsigned int width, unsigned int height) {
-    printf("%p\n", BINARY_LIB);
-    this->_engine = createEngine(BINARY_LIB, width, height);
-    this->_engine->loop();
-    std::cout << "food-x :" << this->_food.front()->getPosX() << std::endl;
+
+    Timer frame(33);
+    Timer hooks(50);
+
+    this->_engine = createEngine(width, height);
+
+    while (1) {
+      if (frame.update()) { this->refresh(); }
+      if (hooks.update()) {
+        switch(this->_engine->getHooks()) {
+          case -1 : return;
+          case Up : printf("Up\n"); break;
+          case Down : printf("Down\n"); break;
+          case Left : printf("Left\n"); break;
+          case Right : printf("Right\n"); break;
+          default : break;
+        }
+      }
+    }
     return;
+}
+
+void  Game::refresh(void) {
+  this->_engine->drawFrame(this->mergeEntities());
+  return;
 }
 
 
