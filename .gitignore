@@ -1,4 +1,5 @@
 *.o
 Nibbler
 /assets
+.DS_Store
 schemes.pdf
