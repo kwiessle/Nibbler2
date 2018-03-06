@@ -1,15 +1,15 @@
 NAME =sdl.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity
+INC	= -I .. -I . -I ../Entity -I ~/.brew/include
 FLAGS = -shared -fPIC
 
 SCRIPT = install.sh
 
-SDL = -L /usr/local/Cellar/sdl2/ -lSDL2
-
+#SDL = -L /usr/local/Cellar/sdl2/ -lSDL2
+SDL = -L ~/.brew/lib/ -lSDL2
 
 SRC = Window.cpp \
-			../Entity/Entity.cpp
+	../Entity/Entity.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
