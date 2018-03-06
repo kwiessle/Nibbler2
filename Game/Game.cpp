@@ -1,28 +1,19 @@
 #include "Game.hpp"
 
-Game::Game(void) { return; }
+// Game::Game(void) { return; }
 
-Game::Game(IGraphism const *engine, void *binaryLib) :
-  _engine(engine),
-  _binaryLib(binaryLib)
-{
+
+Game::Game(void) {
   this->_player = new Player();
   this->initFood();
   this->_player->initSnake();
-
-
+  return;
 }
 
 Game::~Game(void) {
   delete this->_player;
 }
 
-Game   &Game::operator=(Game const &rhs) {
-  if (this != &rhs)
-    this->_engine = rhs.getEngine();
-    this->_binaryLib = rhs.getBinaryLib();
-  return (*this);
-}
 
 Game   &Game::singleton(void) {
   static Game game;
@@ -34,15 +25,6 @@ Game   &Game::singleton(void) {
 
 // GETTERS & SETTERS
 
-void    *Game::getBinaryLib(void) const
-  { return this->_binaryLib; }
-
-void    Game::setBinaryLib(void *binaryLib)
- {
-   this->_binaryLib = binaryLib;
-   // BINARY_LIB = this->_binaryLib;
-   return;
- }
 
 IGraphism const   *Game::getEngine() const
   { return this->_engine; }
@@ -59,7 +41,7 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 }
 
 void  Game::initFood(void) {
-  IEntity *food = createEntity(this->_binaryLib, 20, 20, Food, None, tFood );
+  IEntity *food = createEntity(BINARY_LIB, 20, 20, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
   foodList.push_front(food);
   std::cout << "FOOD INITIATE" << std::endl;
@@ -67,7 +49,9 @@ void  Game::initFood(void) {
   return;
 }
 
-void  Game::play(void) const {
+void  Game::start(unsigned int width, unsigned int height) {
+    printf("%p\n", BINARY_LIB);
+    this->_engine = createEngine(BINARY_LIB, width, height);
     this->_engine->loop();
     std::cout << "food-x :" << this->_food.front()->getPosX() << std::endl;
     return;

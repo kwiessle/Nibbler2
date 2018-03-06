@@ -1,11 +1,7 @@
 NAME =sdl.so
 COMPILATOR = g++
 INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-FLAGS = -shared -fPIC
 
-SCRIPT = install.sh
-
-#SDL = -L /usr/local/Cellar/sdl2/ -lSDL2
 SDL = -L ~/.brew/lib/ -lSDL2
 
 SRC = Window.cpp \
@@ -16,7 +12,8 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(COMPILATOR) $(FLAGS) $(OBJ) $(SDL) $(IMG) $(TTF) $(MXR) -o $(NAME)
+	$(COMPILATOR) -fPIC $(OBJ) -shared $(SDL) -o $(NAME)
+
 
 %.o: %.cpp
 	$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)
@@ -26,7 +23,6 @@ clean:
 
 fclean: clean
 	@rm -rf $(NAME)
-
 
 re: fclean all
 

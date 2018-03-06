@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include "Game.hpp"
 
-void *BINARY_LIB;
+
 
 Player::Player(void) { return; }
 
@@ -18,6 +18,13 @@ std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
 void  Player::initSnake(void) {
+  printf("%p\n", BINARY_LIB);
   IEntity *head = createEntity(BINARY_LIB, 0, 90, Snake, Right, rHead);
+  IEntity *body = createEntity(BINARY_LIB, 0, 60, Snake, Right, hBody);
+  IEntity *queue = createEntity(BINARY_LIB, 0, 30, Snake, Right, rHead);
+
   this->_snake.push_front(head);
+  this->_snake.push_front(body);
+  this->_snake.push_front(queue);
+  return;
 }

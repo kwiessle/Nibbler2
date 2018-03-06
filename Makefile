@@ -13,7 +13,7 @@ SRC = main.cpp \
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
-
+	@make -C ./lib/sdl
 $(NAME): $(OBJ)
 	$(COMPILATOR) $(FLAGS) $(OBJ) -o $(NAME)
 
@@ -22,9 +22,11 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ)
+	@make clean -C ./lib/sdl
 
 fclean: clean
 	@rm -rf $(NAME)
+	@make fclean -C ./lib/sdl
 
 re: fclean all
 
@@ -50,6 +52,7 @@ dsclean:
 
 sdl:
 	@make -C lib/sdl
+	@make re -C ./lib/sdl
 
 
 .PHONY : re fclean clean all install assets aclean dsclean scheme sdl

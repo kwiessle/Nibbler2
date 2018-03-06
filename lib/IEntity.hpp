@@ -1,12 +1,12 @@
 #ifndef IENTITY_HPP
 # define IENTITY_HPP
 
-enum eDirection { None, Up, Down, Left, Right };
+enum eDirection { NoDir, Up, Down, Left, Right };
 
 enum eType { Snake, Food, Wall };
 
 enum eTexture {
-  uHead, uHeadMiam, luCorner, uQueue, vBody,
+  uHead, uHeadMiam, luCorner, uQueue, vBody, NoImg,
   dHead, dHeadMiam, ldCorner, dQueue, hBody,
   lHead, lHeadMiam, ruCorner, lQueue, tFood,
   rHead, rHeadMiam, rdCorner, rQueue, tWall

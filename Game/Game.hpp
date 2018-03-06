@@ -31,7 +31,7 @@ class Game {
 
 
     void                          refresh(void) const;
-    void                          play(void) const;
+    void                          start(unsigned int with, unsigned int height);
     void                          pause(void) const;
     void                          save(void) const;
     void                          quit(void) const;
