@@ -1,8 +1,12 @@
 #include "main.hpp"
 #include "Game.hpp"
 
+
+extern void *BINARY_LIB;
+// IGraphism const *ENGINE = nullptr;
+
 int   main(int ac, char **av) {
-  void    *dl_handle;
+  // void    *dl_handle;
 
 
   switch (ac) {
@@ -16,19 +20,19 @@ int   main(int ac, char **av) {
       char *path = av[3];
 
 
-      if (!(dl_handle = dlopen(path, RTLD_LOCAL | RTLD_LAZY))) {
+      if (!(BINARY_LIB = dlopen(path, RTLD_LOCAL | RTLD_LAZY))) {
         dlerror_wrapper();
       }
       else {
-        IGraphism *engine = createEngine(dl_handle, width, height);
+        IGraphism *engine = createEngine(BINARY_LIB, width, height);
         // Game game = Game::singleton();
-        Game *game = new Game(engine, dl_handle);
+        Game *game = new Game(engine, BINARY_LIB);
         // Game::singleton();
         // Game::singleton().setBinaryLib(dl_handle);
         // Game::singleton().setEngine(engine);
         // Game::singleton().play();
         game->play();
-        deleteEngine(dl_handle, engine);
+        deleteEngine(BINARY_LIB, engine);
       }
 
 

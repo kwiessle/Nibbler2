@@ -1,7 +1,6 @@
 #include "Game.hpp"
 
-void *BINARY_LIB = nullptr;
-IGraphism const *ENGINE = nullptr;
+
 
 Game::Game(void) { return; }
 
@@ -29,8 +28,8 @@ Game   &Game::operator=(Game const &rhs) {
 
 Game   &Game::singleton(void) {
   static Game game;
-  game.setBinaryLib(BINARY_LIB);
-  game.setEngine(ENGINE);
+  // game.setBinaryLib(BINARY_LIB);
+  // game.setEngine(ENGINE);
   return game;
 }
 
@@ -43,7 +42,7 @@ void    *Game::getBinaryLib(void) const
 void    Game::setBinaryLib(void *binaryLib)
  {
    this->_binaryLib = binaryLib;
-   BINARY_LIB = this->_binaryLib;
+   // BINARY_LIB = this->_binaryLib;
    return;
  }
 
@@ -53,7 +52,7 @@ IGraphism const   *Game::getEngine() const
 void   Game::setEngine(IGraphism const *engine)
 {
   this->_engine = engine;
-  ENGINE = this->_engine;
+  // ENGINE = this->_engine;
   return;
 }
 

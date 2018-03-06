@@ -17,6 +17,6 @@ std::list <IEntity *>    Player::getSnake(void) const
 
 void  Player::initSnake(void) {
   printf("%p\n", Game::singleton().getBinaryLib());
-  IEntity *head = createEntity(Game::singleton().getBinaryLib(), 0, 90, Snake, Right, rHead);
+  IEntity *head = createEntity(BINARY_LIB, 0, 90, Snake, Right, rHead);
   this->_snake.push_front(head);
 }
