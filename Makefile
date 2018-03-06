@@ -1,4 +1,5 @@
 NAME = Nibbler
+LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
 INC	= -I . -I lib -I Game -I Player
 FLAGS = -Werror -Wall -Wextra -std=c++11
