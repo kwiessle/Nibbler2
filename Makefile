@@ -1,10 +1,14 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
-INC	= -I . -I avm -I parser -I instruction -I data -I exceptions
+INC	= -I . -I lib -I Game -I Player
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
-SRC =
+SRC = main.cpp \
+			BinaryCall.cpp \
+			Game/Game.cpp \
+			Player/Player.cpp
+
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -41,4 +45,11 @@ assets:
 aclean:
 	@rm -rf assets schemes.pdf
 
-.PHONY : re fclean clean all
+dsclean:
+	@rm -rf */.DS_S*
+
+sdl:
+	@make -C lib/sdl
+
+
+.PHONY : re fclean clean all install assets aclean dsclean scheme sdl
