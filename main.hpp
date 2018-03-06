@@ -1,29 +1,33 @@
 #ifndef MAIN_HPP
 # define MAIN_HPP
 
-enum eDiretion { Up, Down, Left, Right, }
+# include <iostream>
+# include <dlfcn.h>
+# include "IGraphism.hpp"
+# include "IEntity.hpp"
+# include <list>
 
-enum eType { Snake, Food, Wall }
+extern void *BINARY_LIB;
 
-enum eTexture {
-  uHead,
-  dHead,
-  lHead,
-  rHead,
-  uHeadMiam,
-  dHeadMiam,
-  lHeadMiam,
-  rHeadMiam,
-  luCorner,
-  ldCorner,
-  ruCorner,
-  rdCorner,
-  vBody,
-  hBody,
-  uQueue,
-  dQueue,
-  lQueue,
-  rQueue,
-}
+class Game;
+
+IGraphism   *createEngine(
+  void *dl_handle,
+  unsigned int width,
+  unsigned int height
+);
+
+IEntity     *createEntity(
+  void *dl_handle,
+  unsigned int x,
+  unsigned int y,
+  eType type,
+  eDirection direction,
+  eTexture texture
+);
+
+void        deleteEngine(void *dl_handle, IGraphism *engine);
+void        dlerror_wrapper(void);
+
 
 #endif
