@@ -1,4 +1,5 @@
 NAME = Nibbler
+LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
 INC	= -I . -I avm -I parser -I instruction -I data -I exceptions
 FLAGS = -Werror -Wall -Wextra -std=c++11
