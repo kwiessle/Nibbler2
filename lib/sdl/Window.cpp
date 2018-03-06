@@ -26,7 +26,7 @@ Window::~Window(void) {
   SDL_Quit();
 }
 
-int       Window::loop(void) {
+int       Window::loop(void) const {
   SDL_Event event;
   while (1) {
     SDL_PollEvent(&event);
