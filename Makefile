@@ -13,8 +13,9 @@ SRC = main.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 
-all: $(NAME)
-	@make -C ./lib/sdl
+all: sdl sfml $(NAME)
+
+
 $(NAME): $(OBJ)
 	$(COMPILATOR) $(FLAGS) $(OBJ) -o $(NAME)
 
@@ -28,6 +29,7 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 	@make fclean -C ./lib/sdl
+	@make fclean -C ./lib/sfml
 
 re: fclean all
 
@@ -54,6 +56,8 @@ dsclean:
 sdl:
 	@make -C lib/sdl
 	@make re -C ./lib/sdl
+sfml:
+	@make -C lib/sfml
+	@make re -C ./lib/sfml
 
-
-.PHONY : re fclean clean all install assets aclean dsclean scheme sdl
+.PHONY : re fclean clean all install assets aclean dsclean scheme sdl sfml
