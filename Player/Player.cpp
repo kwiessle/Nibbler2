@@ -35,34 +35,33 @@ void  Player::move(eDirection direction) {
 }
 
 void  Player::_updateSnake(eDirection direction) {
-    (void)direction;
-    // std::list <IEntity *>::iterator iter = this->_snake.begin();
-    // this->_snake.pop_front();
-    // deleteEntity(*iter);
-    //
-    // IEntity *newHead;
-    // IEntity *neck = this->_snake.back();
-    // unsigned int x = 0;
-    // unsigned int y = 0;
-    // unsigned int width = Game::singleton().getEngine().wWidth;
-    // unsigned int height = Game::singleton().getEngine().wHeight;
-    // switch(direction) {
-    //   case Up :
-    //     x = neck->x == 0 ? 720 : neck->x;
-    //     y = neck->y <= 0 ? 690 : neck->y - 30;
-    //     break;
-    //   case Down :
-    //     x = abs( neck->x % 720 );
-    //     y = abs( (neck->y + 30) % 720 );
-    //     break;
-    //   case Left :
-    //     x = neck->x <= 0 ? 690 : neck->x - 30;
-    //     y = neck->y == 0 ? 720 : neck->y;
-    //     break;
-    //   case Right :
-    //     x = abs( (neck->x + 30 ) % 720);
-    //     y = abs( neck->y % 720 );
-    //     break;
+    std::list <IEntity *>::iterator iter = this->_snake.begin();
+    this->_snake.pop_front();
+    deleteEntity(*iter);
 
-    // }
+    IEntity *newHead;
+    IEntity *neck = this->_snake.back();
+    unsigned int x = 0;
+    unsigned int y = 0;
+    unsigned int width = Game::singleton().getEngine().wWidth;
+    unsigned int height = Game::singleton().getEngine().wHeight;
+    switch(direction) {
+      case Up :
+        x = neck->getPosX() == 0 ? 720 : neck->getPosX();
+        y = neck->getPosY() <= 0 ? 690 : neck->getPosY() - 30;
+        break;
+      case Down :
+        x = abs( neck->getPosX() % 720 );
+        y = abs( (neck->getPosY() + 30) % 720 );
+        break;
+      case Left :
+        x = neck->getPosX() <= 0 ? 690 : neck->getPosX() - 30;
+        y = neck->getPosY() == 0 ? 720 : neck->getPosY();
+        break;
+      case Right :
+        x = abs( (neck->getPosX() + 30 ) % 720);
+        y = abs( neck->getPosY() % 720 );
+        break;
+
+    }
 }
