@@ -1,18 +1,20 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
-INC	= -I . -I lib -I Game -I Player
+INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
 
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
-			Player/Player.cpp
+			Player/Player.cpp \
+			Timer/Timer.cpp
 
 
 OBJ = $(SRC:.cpp=.o)
 
-all: $(NAME)
+all: sdl sfml $(NAME)
+
 
 $(NAME): $(OBJ)
 	$(COMPILATOR) $(FLAGS) $(OBJ) -o $(NAME)
@@ -22,9 +24,12 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ)
+	@make clean -C ./lib/sdl
 
 fclean: clean
 	@rm -rf $(NAME)
+	@make fclean -C ./lib/sdl
+	@make fclean -C ./lib/sfml
 
 re: fclean all
 
@@ -50,6 +55,9 @@ dsclean:
 
 sdl:
 	@make -C lib/sdl
+	@make re -C ./lib/sdl
+sfml:
+	@make -C lib/sfml
+	@make re -C ./lib/sfml
 
-
-.PHONY : re fclean clean all install assets aclean dsclean scheme sdl
+.PHONY : re fclean clean all install assets aclean dsclean scheme sdl sfml

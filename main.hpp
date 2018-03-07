@@ -12,21 +12,20 @@ extern void *BINARY_LIB;
 class Game;
 
 IGraphism   *createEngine(
-  void *dl_handle,
   unsigned int width,
   unsigned int height
 );
 
 IEntity     *createEntity(
-  void *dl_handle,
   unsigned int x,
   unsigned int y,
   eType type,
-  eDirection direction,
+  eHook direction,
   eTexture texture
 );
 
-void        deleteEngine(void *dl_handle, IGraphism *engine);
+void        deleteEngine(IGraphism *engine);
+void        deleteEntity(IEntity *entity);
 void        dlerror_wrapper(void);
 
 

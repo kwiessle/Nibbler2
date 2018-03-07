@@ -1,56 +1,32 @@
 #include "Game.hpp"
 
-Game::Game(void) { return; }
-
-Game::Game(IGraphism const *engine, void *binaryLib) :
-  _engine(engine),
-  _binaryLib(binaryLib)
-{
+Game::Game(void) {
   this->_player = new Player();
   this->initFood();
   this->_player->initSnake();
-
-
+  return;
 }
 
 Game::~Game(void) {
   delete this->_player;
 }
 
-Game   &Game::operator=(Game const &rhs) {
-  if (this != &rhs)
-    this->_engine = rhs.getEngine();
-    this->_binaryLib = rhs.getBinaryLib();
-  return (*this);
-}
 
 Game   &Game::singleton(void) {
   static Game game;
-  // game.setBinaryLib(BINARY_LIB);
-  // game.setEngine(ENGINE);
   return game;
 }
 
 
 // GETTERS & SETTERS
 
-void    *Game::getBinaryLib(void) const
-  { return this->_binaryLib; }
 
-void    Game::setBinaryLib(void *binaryLib)
- {
-   this->_binaryLib = binaryLib;
-   // BINARY_LIB = this->_binaryLib;
-   return;
- }
-
-IGraphism const   *Game::getEngine() const
+IGraphism    *Game::getEngine() const
   { return this->_engine; }
 
-void   Game::setEngine(IGraphism const *engine)
+void   Game::setEngine(IGraphism  *engine)
 {
   this->_engine = engine;
-  // ENGINE = this->_engine;
   return;
 }
 
@@ -59,18 +35,42 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 }
 
 void  Game::initFood(void) {
-  IEntity *food = createEntity(this->_binaryLib, 20, 20, Food, None, tFood );
+  IEntity *food = createEntity(20, 20, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
+
   foodList.push_front(food);
-  std::cout << "FOOD INITIATE" << std::endl;
   this->_food = foodList;
   return;
 }
 
-void  Game::play(void) const {
-    this->_engine->loop();
-    std::cout << "food-x :" << this->_food.front()->getPosX() << std::endl;
+void  Game::start(unsigned int width, unsigned int height) {
+
+    Timer frame(33);
+    Timer hooks(33);
+    Timer speed(100);
+    int   tmp = 0;
+    this->_engine = createEngine(width, height);
+
+    while (1) {
+      if (frame.update()) { this->refresh(); }
+      if (hooks.update()) { this->_engine->setHooks(); }
+      if (speed.update()) {
+        switch(tmp = this->_engine->getHooks()) {
+          case Exit : return;
+          case Up : this->_player->move(Up); break;
+          case Down : this->_player->move(Down); break;
+          case Left : this->_player->move(Left); break;
+          case Right : this->_player->move(Right); break;
+          default : break;
+        }
+      }
+    }
     return;
+}
+
+void  Game::refresh(void) {
+  this->_engine->drawFrame(this->mergeEntities());
+  return;
 }
 
 

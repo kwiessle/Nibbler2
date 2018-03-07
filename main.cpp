@@ -1,7 +1,7 @@
 #include "main.hpp"
 #include "Game.hpp"
 
-
+void *BINARY_LIB;
 
 int   main(int ac, char **av) {
   // void    *dl_handle;
@@ -22,15 +22,13 @@ int   main(int ac, char **av) {
         dlerror_wrapper();
       }
       else {
-        IGraphism *engine = createEngine(BINARY_LIB, width, height);
-        // Game game = Game::singleton();
-        Game *game = new Game(engine, BINARY_LIB);
-        // Game::singleton();
-        // Game::singleton().setBinaryLib(dl_handle);
-        // Game::singleton().setEngine(engine);
-        // Game::singleton().play();
-        game->play();
-        deleteEngine(BINARY_LIB, engine);
+
+
+         Game::singleton().start(width, height);
+         Game::singleton().refresh();
+
+        ;
+        // deleteEngine(BINARY_LIB, Game::singleton.getEngine());
       }
 
 

@@ -1,31 +1,31 @@
-#ifndef WINDOW_HPP
-# define WINDOW_HPP
+#ifndef SWINDOW_HPP
+# define SWINDOW_HPP
 
-# include <SDL2/SDL.h>
+# include <SFML/System.hpp>
+# include <SFML/Window.hpp>
+# include <SFML/Graphics.hpp>
 # include <iostream>
 # include "IGraphism.hpp"
-#include <map>
 
 class Window : public IGraphism {
   private:
     Window(void);
 
-    void              setHooks(void);
-    eHook             getHooks(void) const;
-    void              drawFrame(std::list <IEntity *> data) const;
+    void        drawFrame(std::list <IEntity *> data) const;
+    eHook       getHooks(void) const;
+    void        setHooks(void);
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
     void              initTextures(void);
   public:
     Window(unsigned int width, unsigned int height);
     ~Window(void);
-
-    SDL_Window        *pWindow;
-    SDL_Renderer      *pRenderer;
+    eHook        hook;
     unsigned int      wWidth;
     unsigned int      wHeight;
-    eHook             hook;
-    std::map <eTexture, SDL_Surface *>      _textures;
+    sf::RenderWindow	*window;
+    std::map <eTexture,  sf::Texture>      _textures;
+
 
 };
 
