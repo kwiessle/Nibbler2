@@ -13,6 +13,7 @@ IGraphism   *createEngine(unsigned int width, unsigned int height) {
 
   if (!windowCreator)
     dlerror_wrapper();
+
   IGraphism *window = windowCreator(width, height);
   return window;
 }
@@ -24,6 +25,7 @@ void      deleteEngine(IGraphism *engine) {
 
   if (!engineDestructor)
     dlerror_wrapper();
+
   engineDestructor(engine);
   return;
 }
@@ -34,6 +36,19 @@ IEntity   *createEntity(unsigned int x, unsigned int y, eType type, eDirection d
   entityCreator = (IEntity *(*)(unsigned int, unsigned int, eType type, eDirection direction, eTexture texture)) dlsym(BINARY_LIB, symbol.c_str());
   if (!entityCreator)
     dlerror_wrapper();
+
   IEntity *entity = entityCreator(x, y, type, direction, texture);
   return entity;
+}
+
+void      deleteEntity(IEntity *entity) {
+  std::string symbol = "deleteEntity";
+  IEntity   *(*entityDestructor)(IEntity *);
+  entityDestructor = (IEntity *(*)(IEntity *)) dlsym(BINARY_LIB, symbol.c_str());
+
+  if (!entityDestructor)
+    dlerror_wrapper();
+
+  entityDestructor(entity);
+  return;
 }

@@ -2,7 +2,10 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) {
+Window::Window(unsigned int width, unsigned int height) :
+  wWidth(width * CELL_UNITY),
+  wHeight(height * CELL_UNITY)
+ {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "SDL init() failed." << std::endl;
     exit(0);
@@ -13,8 +16,8 @@ Window::Window(unsigned int width, unsigned int height) {
       "Nibbler",
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
-      width * CELL_UNITY,
-      height * CELL_UNITY,
+      this->wWidth,
+      this->hWidth,
       SDL_WINDOW_SHOWN
     );
 

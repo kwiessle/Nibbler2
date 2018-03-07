@@ -24,7 +24,8 @@ IEntity     *createEntity(
   eTexture texture
 );
 
-void        deleteEngine(void *dl_handle, IGraphism *engine);
+void        deleteEngine(IGraphism *engine);
+void        deleteEntity(IEntity *entity);
 void        dlerror_wrapper(void);
 
 

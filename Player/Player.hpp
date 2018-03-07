@@ -13,15 +13,15 @@ class Player {
 
     void                         _grow(void);
     void                         _death(void);
-    void                         _updateSnake(eDirection);
-    void                         _detectCollision(eDirection);
+    void                         _updateSnake(eDirection direction);
+    void                         _detectCollision(eDirection direction);
 
   public:
     Player(void);                                                               //Use this constructor for default game.
     Player(std::list <IEntity *> snake, int life, int score, int speed);         //Use this constructor for load a saved game.
     ~Player(void);
 
-    void                         move(eDirection);
+    void                         move(eDirection direction);
 
     std::list <IEntity *>        getSnake(void) const;
     int                          getLife(void) const;
