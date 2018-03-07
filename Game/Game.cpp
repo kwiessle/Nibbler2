@@ -46,8 +46,8 @@ void  Game::initFood(void) {
 void  Game::start(unsigned int width, unsigned int height) {
 
     Timer frame(33);
-    Timer hooks(30);
-    Timer speed(80);
+    Timer hooks(33);
+    Timer speed(100);
     int   tmp = 0;
     this->_engine = createEngine(width, height);
 

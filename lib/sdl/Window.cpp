@@ -42,10 +42,10 @@ void   Window::setHooks(void) {
 
   if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { this->hook = Exit; }
   else if (event.type == SDL_KEYDOWN) {
-    if (event.key.keysym.sym == 1073741906) { this->hook = Up; }
-    else if (event.key.keysym.sym == 1073741905) { this->hook = Down; }
-    else if (event.key.keysym.sym == 1073741904) { this->hook = Left; }
-    else if (event.key.keysym.sym == 1073741903) { this->hook = Right; }
+    if (event.key.keysym.sym == 1073741906 && this->hook != Down) { this->hook = Up; }
+    else if (event.key.keysym.sym == 1073741905  && this->hook != Up) { this->hook = Down; }
+    else if (event.key.keysym.sym == 1073741904 && this->hook != Right) { this->hook = Left; }
+    else if (event.key.keysym.sym == 1073741903 && this->hook != Left) { this->hook = Right; }
   }
 }
 
