@@ -29,6 +29,7 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 	@make fclean -C ./lib/sdl
+	@make fclean -C ./lib/sfml
 
 re: fclean all
 

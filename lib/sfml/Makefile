@@ -1,10 +1,10 @@
 NAME = sfml.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity
+INC	= -I .. -I . -I ../Entity -I ~/.brew/include
 
-SFML = -lsfml-graphics -lsfml-window -lsfml-system
+SFML = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics
 
-SRC = Window.cpp \
+SRC = WindowSfml.cpp \
 	../Entity/Entity.cpp
 
 OBJ = $(SRC:.cpp=.o)

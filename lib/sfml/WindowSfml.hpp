@@ -1,5 +1,5 @@
-#ifndef WINDOW_HPP
-# define WINDOW_HPP
+#ifndef SWINDOW_HPP
+# define SWINDOW_HPP
 
 # include <SFML/System.hpp>
 # include <SFML/Window.hpp>
@@ -19,8 +19,6 @@ class Window : public IGraphism {
     ~Window(void);
 
     sf::RenderWindow	*window;
-    sf::Event           *event;
-    // SDL_Renderer      *pRenderer;
 
 };
 
