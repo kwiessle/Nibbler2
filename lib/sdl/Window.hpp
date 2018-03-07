@@ -16,9 +16,6 @@ class Window : public IGraphism {
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
     void              initTextures(void);
-
-
-
   public:
     Window(unsigned int width, unsigned int height);
     ~Window(void);

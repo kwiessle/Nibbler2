@@ -16,6 +16,7 @@ class Window : public IGraphism {
     void        setHooks(void);
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
+    void              initTextures(void);
   public:
     Window(unsigned int width, unsigned int height);
     ~Window(void);
@@ -23,6 +24,8 @@ class Window : public IGraphism {
     unsigned int      wWidth;
     unsigned int      wHeight;
     sf::RenderWindow	*window;
+    std::map <eTexture,  sf::Texture>      _textures;
+
 
 };
 
