@@ -56,13 +56,11 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     SDL_Rect    form;
     SDL_Texture *texture = nullptr;
     SDL_Surface *surface = nullptr;
-    IEntity *piece = nullptr;
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
-      piece = *iter;
-      form.x = piece->getPosX();
-      form.y = piece->getPosY();
+      form.x = (*iter)->getPosX();
+      form.y = (*iter)->getPosY();
       form.w = CELL_UNITY;
       form.h = CELL_UNITY;
       surface = SDL_LoadBMP( "/assets/r_head.bmp" );

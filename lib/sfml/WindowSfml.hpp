@@ -11,13 +11,17 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    int         getHooks(void) const;
     void        drawFrame(std::list <IEntity *> data) const;
-
+    eHook       getHooks(void) const;
+    void        setHooks(void);
+    unsigned int      getWidth(void) const;
+    unsigned int      getHeight(void) const;
   public:
     Window(unsigned int width, unsigned int height);
     ~Window(void);
-
+    eHook        hook;
+    unsigned int      wWidth;
+    unsigned int      wHeight;
     sf::RenderWindow	*window;
 
 };
