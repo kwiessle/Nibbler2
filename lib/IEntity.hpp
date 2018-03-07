@@ -6,10 +6,10 @@ enum eHook { NoDir, Up, Down, Left, Right, Exit };
 enum eType { Snake, Food, Wall };
 
 enum eTexture {
-  uHead, uHeadMiam, luCorner, uQueue, vBody, NoImg,
-  dHead, dHeadMiam, ldCorner, dQueue, hBody,
-  lHead, lHeadMiam, ruCorner, lQueue, tFood,
-  rHead, rHeadMiam, rdCorner, rQueue, tWall
+  uHead = 1, uHeadMiam = 5, luCorner = 9, uQueue = 13, vBody = 17, NoImg = 21,
+  dHead = 2, dHeadMiam = 6, ldCorner = 10, dQueue = 14, hBody = 18,
+  lHead = 3, lHeadMiam = 7, ruCorner = 11, lQueue = 15, tFood = 19,
+  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20
 };
 
 class IEntity {

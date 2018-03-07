@@ -33,7 +33,7 @@ void  Player::move(eHook direction) {
   return;
 }
 
-void  Player::_fillBody(eHook headDirection) {
+void  Player::_fillNeck(eHook headDirection) {
     eHook neckDirection = this->_snake.back()->getDirection();
 
     switch ( headDirection ) {
@@ -96,7 +96,17 @@ void  Player::_updateSnake(eHook direction) {
     std::list <IEntity *>::iterator iter = this->_snake.begin();
     this->_snake.pop_front();
     deleteEntity(*iter);
+    IEntity *newHead = this->_createHead(direction);
 
+
+    this->_fillQueue();
+    this->_fillNeck(newHead->getDirection());
+    this->_snake.push_back(newHead);
+    this->_fillHead();
+    return;
+}
+
+IEntity *   Player::_createHead(eHook direction) {
     IEntity *newHead;
     IEntity *neck = this->_snake.back();
     unsigned int x = 0;
@@ -124,7 +134,5 @@ void  Player::_updateSnake(eHook direction) {
 
     }
     newHead = createEntity(x, y, Snake, direction, rHead );
-    this->_fillBody(newHead->getDirection());
-    this->_snake.push_back(newHead);
-    return;
+    return newHead;
 }

@@ -47,7 +47,7 @@ void  Game::start(unsigned int width, unsigned int height) {
 
     Timer frame(33);
     Timer hooks(30);
-    Timer speed(150);
+    Timer speed(80);
     int   tmp = 0;
     this->_engine = createEngine(width, height);
 

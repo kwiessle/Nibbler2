@@ -7,18 +7,20 @@
 
 class Player {
   private:
-    std::list <IEntity *>        _snake;
-    int                          _life;
-    int                          _score;
-    int                          _speed;
+    std::list <IEntity *>                   _snake;
+    int                                     _life;
+    int                                     _score;
+    int                                     _speed;
 
-    void                         _grow(void);
-    void                         _death(void);
-    void                         _updateSnake(eHook direction);
-    void                         _detectCollision(eHook direction);
-    void                         _fillBody(eHook headDirection);
-    void                         _fillQueue(void);
-    void                         _fillHead(void);
+    void                                    _grow(void);
+    void                                    _death(void);
+    void                                    _updateSnake(eHook direction);
+    void                                    _detectCollision(eHook direction);
+    void                                    _fillNeck(eHook headDirection);
+    void                                    _fillQueue(void);
+    void                                    _fillHead(void);
+    IEntity *                               _createHead(eHook direction);
+
 
   public:
     Player(void);                                                               //Use this constructor for default game.

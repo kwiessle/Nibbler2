@@ -21,10 +21,9 @@ Window::Window(unsigned int width, unsigned int height) :
       this->wHeight,
       SDL_WINDOW_SHOWN
     );
-
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
-    std::cout << "SDL dynamicly charged" << std::endl;
+    this->initTextures();
   }
   return;
 }
@@ -55,7 +54,6 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     SDL_RenderClear(this->pRenderer);
     SDL_Rect    form;
     SDL_Texture *texture = nullptr;
-    SDL_Surface *surface = nullptr;
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
@@ -63,11 +61,11 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
       form.y = (*iter)->getPosY();
       form.w = CELL_UNITY;
       form.h = CELL_UNITY;
-      surface = SDL_LoadBMP( "/assets/r_head.bmp" );
-      texture = SDL_CreateTextureFromSurface( this->pRenderer, surface);
+      eTexture img = (*iter)->getTexture();
+
+      texture = SDL_CreateTextureFromSurface( this->pRenderer, this->_textures.find(img)->second );
       SDL_RenderCopy( this->pRenderer, texture, nullptr, &form);
       SDL_DestroyTexture( texture );
-      SDL_FreeSurface( surface );
       iter++;
     }
     SDL_RenderPresent( this->pRenderer );
@@ -88,4 +86,45 @@ Window    *createWindow(unsigned int width, unsigned int height) {
 
 void      deleteWindow(Window *window) {
   delete window;
+}
+
+void       Window::initTextures(void) {
+    SDL_Surface *uHeadSurf = SDL_LoadBMP("/assets/u_head.bmp");
+    SDL_Surface *dHeadSurf = SDL_LoadBMP("/assets/d_head.bmp");
+    SDL_Surface *lHeadSurf = SDL_LoadBMP("/assets/l_head.bmp");
+    SDL_Surface *rHeadSurf = SDL_LoadBMP("/assets/r_head.bmp");
+    SDL_Surface *uHeadMiamSurf = SDL_LoadBMP("/assets/u_head_miam.bmp");
+    SDL_Surface *dHeadMiamSurf = SDL_LoadBMP("/assets/d_head_miam.bmp");
+    SDL_Surface *lHeadMiamSurf = SDL_LoadBMP("/assets/l_head_miam.bmp");
+    SDL_Surface *rHeadMiamSurf = SDL_LoadBMP("/assets/r_head_miam.bmp");
+    SDL_Surface *uQueueSurf = SDL_LoadBMP("/assets/u_queue.bmp");
+    SDL_Surface *dQueueSurf = SDL_LoadBMP("/assets/d_queue.bmp");
+    SDL_Surface *lQueueSurf = SDL_LoadBMP("/assets/l_queue.bmp");
+    SDL_Surface *rQueueSurf = SDL_LoadBMP("/assets/r_queue.bmp");
+    SDL_Surface *luCornerSurf = SDL_LoadBMP("/assets/lu_corner.bmp");
+    SDL_Surface *ldCornerSurf = SDL_LoadBMP("/assets/ld_corner.bmp");
+    SDL_Surface *ruCornerSurf = SDL_LoadBMP("/assets/ru_corner.bmp");
+    SDL_Surface *rdCornerSurf = SDL_LoadBMP("/assets/rd_corner.bmp");
+    SDL_Surface *hBodySurf = SDL_LoadBMP("/assets/h_body.bmp");
+    SDL_Surface *vBodySurf = SDL_LoadBMP("/assets/v_body.bmp");
+
+    this->_textures.insert(std::make_pair(uHead, uHeadSurf));
+    this->_textures.insert(std::make_pair(dHead, dHeadSurf));
+    this->_textures.insert(std::make_pair(lHead, lHeadSurf));
+    this->_textures.insert(std::make_pair(rHead, rHeadSurf));
+    this->_textures.insert(std::make_pair(uHeadMiam, uHeadMiamSurf));
+    this->_textures.insert(std::make_pair(dHeadMiam, dHeadMiamSurf));
+    this->_textures.insert(std::make_pair(lHeadMiam, lHeadMiamSurf));
+    this->_textures.insert(std::make_pair(rHeadMiam, rHeadMiamSurf));
+    this->_textures.insert(std::make_pair(uQueue, uQueueSurf));
+    this->_textures.insert(std::make_pair(dQueue, dQueueSurf));
+    this->_textures.insert(std::make_pair(lQueue, lQueueSurf));
+    this->_textures.insert(std::make_pair(rQueue, rQueueSurf));
+    this->_textures.insert(std::make_pair(luCorner, luCornerSurf));
+    this->_textures.insert(std::make_pair(ldCorner, ldCornerSurf));
+    this->_textures.insert(std::make_pair(ruCorner, ruCornerSurf));
+    this->_textures.insert(std::make_pair(rdCorner, rdCornerSurf));
+    this->_textures.insert(std::make_pair(hBody, hBodySurf));
+    this->_textures.insert(std::make_pair(vBody, vBodySurf));
+    return;
 }

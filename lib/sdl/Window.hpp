@@ -4,6 +4,7 @@
 # include <SDL2/SDL.h>
 # include <iostream>
 # include "IGraphism.hpp"
+#include <map>
 
 class Window : public IGraphism {
   private:
@@ -14,6 +15,7 @@ class Window : public IGraphism {
     void              drawFrame(std::list <IEntity *> data) const;
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
+    void              initTextures(void);
 
 
 
@@ -25,7 +27,8 @@ class Window : public IGraphism {
     SDL_Renderer      *pRenderer;
     unsigned int      wWidth;
     unsigned int      wHeight;
-    eHook        hook;
+    eHook             hook;
+    std::map <eTexture, SDL_Surface *>      _textures;
 
 };
 
