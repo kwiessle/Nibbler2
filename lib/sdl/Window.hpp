@@ -9,8 +9,13 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    int               getHooks(void) const;
+    void              setHooks(void);
+    eHook             getHooks(void) const;
     void              drawFrame(std::list <IEntity *> data) const;
+    unsigned int      getWidth(void) const;
+    unsigned int      getHeight(void) const;
+
+
 
   public:
     Window(unsigned int width, unsigned int height);
@@ -20,6 +25,7 @@ class Window : public IGraphism {
     SDL_Renderer      *pRenderer;
     unsigned int      wWidth;
     unsigned int      wHeight;
+    eHook        hook;
 
 };
 

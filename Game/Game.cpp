@@ -21,10 +21,10 @@ Game   &Game::singleton(void) {
 // GETTERS & SETTERS
 
 
-IGraphism const   *Game::getEngine() const
+IGraphism    *Game::getEngine() const
   { return this->_engine; }
 
-void   Game::setEngine(IGraphism const *engine)
+void   Game::setEngine(IGraphism  *engine)
 {
   this->_engine = engine;
   return;
@@ -46,19 +46,21 @@ void  Game::initFood(void) {
 void  Game::start(unsigned int width, unsigned int height) {
 
     Timer frame(33);
-    Timer hooks(50);
-
+    Timer hooks(30);
+    Timer speed(150);
+    int   tmp = 0;
     this->_engine = createEngine(width, height);
 
     while (1) {
       if (frame.update()) { this->refresh(); }
-      if (hooks.update()) {
-        switch(this->_engine->getHooks()) {
-          case -1 : return;
-          case Up : printf("Up\n"); break;
-          case Down : printf("Down\n"); break;
-          case Left : printf("Left\n"); break;
-          case Right : printf("Right\n"); break;
+      if (hooks.update()) { this->_engine->setHooks(); }
+      if (speed.update()) {
+        switch(tmp = this->_engine->getHooks()) {
+          case Exit : return;
+          case Up : this->_player->move(Up); break;
+          case Down : this->_player->move(Down); break;
+          case Left : this->_player->move(Left); break;
+          case Right : this->_player->move(Right); break;
           default : break;
         }
       }

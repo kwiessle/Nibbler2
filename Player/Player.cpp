@@ -28,13 +28,71 @@ void  Player::initSnake(void) {
   return;
 }
 
-void  Player::move(eDirection direction) {
-  //Do someting to avoid back movements; /!\ -> <-
+void  Player::move(eHook direction) {
   this->_updateSnake(direction);
   return;
 }
 
-void  Player::_updateSnake(eDirection direction) {
+void  Player::_fillBody(eHook headDirection) {
+    eHook neckDirection = this->_snake.back()->getDirection();
+
+    switch ( headDirection ) {
+        case Up : {
+            if ( neckDirection == Right ) { this->_snake.back()->setTexture(luCorner); }
+            else if ( neckDirection == Left ) { this->_snake.back()->setTexture(ruCorner); }
+            else { this->_snake.back()->setTexture(vBody); }
+            break;
+        }
+        case Down : {
+            if ( neckDirection == Right ) { this->_snake.back()->setTexture(ldCorner); }
+            else if ( neckDirection == Left ) { this->_snake.back()->setTexture(rdCorner); }
+            else { this->_snake.back()->setTexture(vBody); }
+            break;
+        }
+        case Left : {
+            if ( neckDirection == Up ) { this->_snake.back()->setTexture(ldCorner);}
+            else if ( neckDirection == Down ) { this->_snake.back()->setTexture(luCorner);}
+            else { this->_snake.back()->setTexture(hBody); }
+            break;
+        }
+        case Right : {
+            if ( neckDirection == Up ) { this->_snake.back()->setTexture(rdCorner); }
+            else if ( neckDirection == Down ) { this->_snake.back()->setTexture(ruCorner); }
+            else { this->_snake.back()->setTexture(hBody); }
+            break;
+        }
+        default: break;
+    }
+    return;
+}
+
+void    Player::_fillQueue() {
+    std::list <IEntity *>::iterator iter = std::next(this->_snake.begin());
+    IEntity *ass = *iter;
+
+    switch ( ass->getDirection() ) {
+        case Up: this->_snake.front()->setTexture(uQueue); break;
+        case Down: this->_snake.front()->setTexture(dQueue); break;
+        case Left: this->_snake.front()->setTexture(lQueue); break;
+        case Right: this->_snake.front()->setTexture(rQueue); break;
+        default: break;
+    }
+    return;
+}
+
+void  Player::_fillHead(void) {
+    IEntity *head = this->_snake.back();
+    switch(head->getDirection()) {
+        case Up : head->setTexture(uHead); break;
+        case Down : head->setTexture(dHead); break;
+        case Left : head->setTexture(lHead); break;
+        case Right : head->setTexture(rHead); break;
+        default : break;
+    }
+    return;
+}
+
+void  Player::_updateSnake(eHook direction) {
     std::list <IEntity *>::iterator iter = this->_snake.begin();
     this->_snake.pop_front();
     deleteEntity(*iter);
@@ -43,25 +101,30 @@ void  Player::_updateSnake(eDirection direction) {
     IEntity *neck = this->_snake.back();
     unsigned int x = 0;
     unsigned int y = 0;
-    unsigned int width = Game::singleton().getEngine().wWidth;
-    unsigned int height = Game::singleton().getEngine().wHeight;
+    unsigned int width = Game::singleton().getEngine()->getWidth();
+    unsigned int height = Game::singleton().getEngine()->getHeight();
     switch(direction) {
-      case Up :
-        x = neck->getPosX() == 0 ? 720 : neck->getPosX();
-        y = neck->getPosY() <= 0 ? 690 : neck->getPosY() - 30;
-        break;
-      case Down :
-        x = abs( neck->getPosX() % 720 );
-        y = abs( (neck->getPosY() + 30) % 720 );
-        break;
-      case Left :
-        x = neck->getPosX() <= 0 ? 690 : neck->getPosX() - 30;
-        y = neck->getPosY() == 0 ? 720 : neck->getPosY();
-        break;
-      case Right :
-        x = abs( (neck->getPosX() + 30 ) % 720);
-        y = abs( neck->getPosY() % 720 );
-        break;
+        case Up :
+            x = neck->getPosX();
+            y = neck->getPosY() <= 0 ? height - CELL_UNITY : neck->getPosY() - CELL_UNITY;
+            break;
+        case Down :
+            x = neck->getPosX() % width;
+            y = (neck->getPosY() + CELL_UNITY) % height;
+            break;
+        case Left :
+            x = neck->getPosX() <= 0 ? width - CELL_UNITY : neck->getPosX() - CELL_UNITY;
+            y = neck->getPosY();
+            break;
+        case Right :
+            x = (neck->getPosX() + CELL_UNITY ) % width;
+            y = neck->getPosY() % height;
+            break;
+        default: break;
 
     }
+    newHead = createEntity(x, y, Snake, direction, rHead );
+    this->_fillBody(newHead->getDirection());
+    this->_snake.push_back(newHead);
+    return;
 }

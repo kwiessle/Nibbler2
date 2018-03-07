@@ -4,7 +4,8 @@ Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height) :
   wWidth(width * CELL_UNITY),
-  wHeight(height * CELL_UNITY)
+  wHeight(height * CELL_UNITY),
+  hook(Right)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -17,7 +18,7 @@ Window::Window(unsigned int width, unsigned int height) :
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth,
-      this->hWidth,
+      this->wHeight,
       SDL_WINDOW_SHOWN
     );
 
@@ -32,18 +33,21 @@ Window::~Window(void) {
   SDL_Quit();
 }
 
-int   Window::getHooks(void) const {
+eHook   Window::getHooks(void) const {
+    return this->hook;
+}
+
+void   Window::setHooks(void) {
   SDL_Event event;
   SDL_PollEvent(&event);
 
-  if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { return -1; }
+  if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { this->hook = Exit; }
   else if (event.type == SDL_KEYDOWN) {
-    if (event.key.keysym.sym == 1073741906) { return Up; }
-    else if (event.key.keysym.sym == 1073741905) {  return Down; }
-    else if (event.key.keysym.sym == 1073741904) {  return Left; }
-    else if (event.key.keysym.sym == 1073741903) {  return Right; }
+    if (event.key.keysym.sym == 1073741906) { this->hook = Up; }
+    else if (event.key.keysym.sym == 1073741905) { this->hook = Down; }
+    else if (event.key.keysym.sym == 1073741904) { this->hook = Left; }
+    else if (event.key.keysym.sym == 1073741903) { this->hook = Right; }
   }
-  return -2;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data) const {
@@ -70,6 +74,14 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     }
     SDL_RenderPresent( this->pRenderer );
     return;
+}
+
+unsigned int    Window::getWidth(void) const {
+    return this->wWidth;
+}
+
+unsigned int    Window::getHeight(void) const {
+    return this->wHeight;
 }
 
 Window    *createWindow(unsigned int width, unsigned int height) {

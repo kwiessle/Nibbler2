@@ -30,10 +30,10 @@ void      deleteEngine(IGraphism *engine) {
   return;
 }
 
-IEntity   *createEntity(unsigned int x, unsigned int y, eType type, eDirection direction, eTexture texture) {
+IEntity   *createEntity(unsigned int x, unsigned int y, eType type, eHook direction, eTexture texture) {
   std::string symbol = "createEntity";
-  IEntity   *(*entityCreator)(unsigned int, unsigned int, eType type, eDirection direction, eTexture texture);
-  entityCreator = (IEntity *(*)(unsigned int, unsigned int, eType type, eDirection direction, eTexture texture)) dlsym(BINARY_LIB, symbol.c_str());
+  IEntity   *(*entityCreator)(unsigned int, unsigned int, eType type, eHook direction, eTexture texture);
+  entityCreator = (IEntity *(*)(unsigned int, unsigned int, eType type, eHook direction, eTexture texture)) dlsym(BINARY_LIB, symbol.c_str());
   if (!entityCreator)
     dlerror_wrapper();
 

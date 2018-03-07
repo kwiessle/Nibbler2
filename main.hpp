@@ -20,7 +20,7 @@ IEntity     *createEntity(
   unsigned int x,
   unsigned int y,
   eType type,
-  eDirection direction,
+  eHook direction,
   eTexture texture
 );
 

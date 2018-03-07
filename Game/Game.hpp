@@ -13,7 +13,7 @@ class Game {
     Player                        *_player;
     std::list <IEntity *>          _food;
     std::list <IEntity *>          _walls;
-    IGraphism const               *_engine;
+    IGraphism                     *_engine;
 
     std::list <IEntity *>         mergeEntities(void) const;
 
@@ -23,8 +23,8 @@ class Game {
     static Game                   &singleton(void);
 
     void                          *getBinaryLib(void) const;
-    IGraphism const               *getEngine(void) const;
-    void                          setEngine(IGraphism const *engine);
+    IGraphism                     *getEngine(void) const;
+    void                          setEngine(IGraphism  *engine);
 
 
 
