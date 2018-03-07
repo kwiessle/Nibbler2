@@ -1,8 +1,8 @@
-NAME = sdl.so
+NAME = sfml.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity -I ~/.brew/include
+INC	= -I .. -I . -I ../Entity
 
-SDL = -L ~/.brew/lib/ -lSDL2
+SFML = -lsfml-graphics -lsfml-window -lsfml-system
 
 SRC = Window.cpp \
 	../Entity/Entity.cpp
@@ -12,7 +12,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(COMPILATOR) -fPIC $(OBJ) -shared $(SDL) -o $(NAME)
+	$(COMPILATOR) -fPIC $(OBJ) -shared $(SFML) -o $(NAME)
 
 
 %.o: %.cpp

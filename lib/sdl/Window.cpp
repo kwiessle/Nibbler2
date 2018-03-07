@@ -13,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height) :
   }
   else {
     SDL_Window    *pWindow = nullptr;
-    pWindow = pWindow = SDL_CreateWindow(
+    pWindow = SDL_CreateWindow(
       "Nibbler",
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,

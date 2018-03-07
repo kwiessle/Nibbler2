@@ -25,7 +25,7 @@ int   main(int ac, char **av) {
 
 
          Game::singleton().start(width, height);
-        // Game::singleton().refresh();
+         Game::singleton().refresh();
 
         ;
         // deleteEngine(BINARY_LIB, Game::singleton.getEngine());
