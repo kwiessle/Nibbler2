@@ -4,9 +4,6 @@
 void *BINARY_LIB;
 
 int   main(int ac, char **av) {
-  // void    *dl_handle;
-
-
   switch (ac) {
     case 0:
     case 1:
@@ -16,27 +13,15 @@ int   main(int ac, char **av) {
       unsigned int width = atoi(av[1]);
       unsigned int height = atoi(av[2]);
       char *path = av[3];
-
-
-      if (!(BINARY_LIB = dlopen(path, RTLD_LOCAL | RTLD_LAZY))) {
+      if (!(BINARY_LIB = dlopen(path, RTLD_LAZY | RTLD_LOCAL))) {
         dlerror_wrapper();
       }
       else {
-
-
          Game::singleton().start(width, height);
-         Game::singleton().refresh();
-
         ;
         // deleteEngine(BINARY_LIB, Game::singleton.getEngine());
       }
-
-
     }
   }
-
-
-
-
   return 0;
 }

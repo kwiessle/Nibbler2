@@ -3,7 +3,7 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = clang++
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-
+LDFLAGS = -rpath ~/.brew/lib
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -17,7 +17,7 @@ all: sdl sfml $(NAME)
 
 
 $(NAME): $(OBJ)
-	$(COMPILATOR) $(FLAGS) $(OBJ) -o $(NAME)
+	$(COMPILATOR) $(FLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
 
 %.o: %.cpp
 	$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)
@@ -25,6 +25,7 @@ $(NAME): $(OBJ)
 clean:
 	@rm -rf $(OBJ)
 	@make clean -C ./lib/sdl
+	@make clean -C ./lib/sfml
 
 fclean: clean
 	@rm -rf $(NAME)
@@ -43,7 +44,7 @@ scheme:
 
 assets:
 	@mkdir -p assets
-	@curl -o ./assets.zip https://transfer.sh/ajM1s/assets.zip
+	@curl -o ./assets.zip https://transfer.sh/bboC4/assets.zip
 	@unzip assets.zip -d assets
 	@rm assets.zip
 

@@ -9,10 +9,7 @@ Window::Window(unsigned int width, unsigned int height) :
 {
     try {
         this->window = new sf::RenderWindow(
-            sf::VideoMode(
-                width * CELL_UNITY * 2, height * CELL_UNITY * 2,
-                sf::VideoMode::getDesktopMode().bitsPerPixel
-            ),
+            sf::VideoMode(width * CELL_UNITY, height * CELL_UNITY),
             "Nibbler"
         );
     }
@@ -49,11 +46,11 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
     sf::Sprite sprite;
-    float size = (static_cast<float>(CELL_UNITY) / 150);
+    float size = (static_cast<float>(CELL_UNITY) / 300);
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
-        sprite.setPosition(sf::Vector2f((*iter)->getPosX() * 2, (*iter)->getPosY() * 2)); // position absolue
+        sprite.setPosition(sf::Vector2f((*iter)->getPosX(), (*iter)->getPosY())); // position absolue
         eTexture img = (*iter)->getTexture();
         sprite.setTexture(this->_textures.find(img)->second);
         sprite.setScale(size, size);

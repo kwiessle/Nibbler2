@@ -1,7 +1,6 @@
 NAME = sfml.so
-COMPILATOR = g++
+COMPILATOR = clang++
 INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-
 SFML = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics
 
 SRC = WindowSfml.cpp \
