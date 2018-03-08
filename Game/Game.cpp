@@ -40,7 +40,7 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 }
 
 void  Game::initFood(void) {
-  IEntity *food = createEntity(30, 30, Food, NoDir, tFood );
+  IEntity *food = createEntity(CELL_UNITY, CELL_UNITY, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
 
   foodList.push_front(food);
