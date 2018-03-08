@@ -9,7 +9,7 @@ enum eTexture {
   uHead = 1, uHeadMiam = 5, luCorner = 9, uQueue = 13, vBody = 17, NoImg = 21,
   dHead = 2, dHeadMiam = 6, ldCorner = 10, dQueue = 14, hBody = 18, Life = 22,
   lHead = 3, lHeadMiam = 7, ruCorner = 11, lQueue = 15, tFood = 19,
-  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20
+  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20, END
 };
 
 class IEntity {

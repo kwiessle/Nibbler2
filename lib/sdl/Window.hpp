@@ -24,9 +24,11 @@ class Window : public IGraphism {
 
     SDL_Window        *pWindow;
     SDL_Renderer      *pRenderer;
+    TTF_Font          *pFont;
     unsigned int      wWidth;
     unsigned int      wHeight;
     eHook             hook;
+
     std::map <eTexture, SDL_Surface *>      _textures;
 
 };
