@@ -90,32 +90,32 @@ void    Window::drawMenu(int lives) const {
   int y = this->wHeight;
 
   form.x = 0;
-  form.y = this->wHeight;
+  form.y = this->wHeight - CELL_UNITY;
   form.w = this->wWidth;
-  form.h = CELL_UNITY;
+  form.h = CELL_UNITY * 2;
   texture = SDL_CreateTextureFromSurface(this->pRenderer, this->_textures.find(NoImg)->second);
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
   SDL_DestroyTexture(texture);
 
-  // while (lives != 0) {
-  //   form.x = x;
-  //   form.y = y;
-  //   form.w = 30;
-  //   form.h = 30;
-  //   texture = SDL_CreateTextureFromSurface( this->pRenderer, this->_textures.find(Life)->second );
-  //   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
-  //   SDL_DestroyTexture(texture);
-  //   lives--;
-  //   x += CELL_UNITY;
-  // }
+  while (lives != 0) {
+    form.x = x;
+    form.y = y;
+    form.w = 30;
+    form.h = 30;
+    texture = SDL_CreateTextureFromSurface( this->pRenderer, this->_textures.find(Life)->second );
+    SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+    SDL_DestroyTexture(texture);
+    lives--;
+    x += CELL_UNITY;
+  }
   TTF_Font* Sans = TTF_OpenFont("/assets/roboto.ttf",10);
   SDL_Color White = {255, 255, 255, 0};
   surface = TTF_RenderText_Solid(Sans, "zdp", White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  30;
-  form.y = this->wHeight;
-  form.w = 100;
-  form.h = 200;
+  form.y = 30;
+  form.w = 20;
+  form.h = 10;
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
   SDL_FreeSurface(surface);
   return;
