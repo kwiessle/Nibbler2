@@ -6,6 +6,7 @@
 # include <iostream>
 # include "IGraphism.hpp"
 #include <map>
+# include <vector>
 
 class Window : public IGraphism {
   private:

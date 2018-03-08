@@ -52,7 +52,7 @@ aclean:
 	@rm -rf assets schemes.pdf
 
 dsclean:
-	@rm -rf */.DS_S*
+	@rm -rf *.DS_S*
 
 sdl:
 	@make -C lib/sdl
