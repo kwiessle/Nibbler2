@@ -44,7 +44,7 @@ scheme:
 
 assets:
 	@mkdir -p assets
-	@curl -o ./assets.zip https://transfer.sh/bboC4/assets.zip
+	@curl -o ./assets.zip https://transfer.sh/50GDc/assets.zip
 	@unzip assets.zip -d assets
 	@rm assets.zip
 
