@@ -98,16 +98,32 @@ void  Player::_fillHead(void) {
     return;
 }
 
+void  Player::_grow(void) {
+    IEntity  *queue = this->_snake.front();
+    IEntity *piece = nullptr;
+    switch ( queue->getDirection() ) {
+      case Up : piece = createEntity( queue->getPosX(), queue->getPosY() + 30, Snake, queue->getDirection(), queue->getTexture() ); break;
+      case Down : piece = createEntity( queue->getPosX(), queue->getPosY() - 30, Snake, queue->getDirection(), queue->getTexture() ); break;
+      case Left : piece = createEntity( queue->getPosX() + 30, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() ); break;
+      case Right : piece = createEntity( queue->getPosX() - 30, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() ); break;
+      default: break;
+    }
+    this->_snake.push_front( piece );
+}
+
 void  Player::_updateSnake(eHook direction) {
     std::list <IEntity *>::iterator iter = this->_snake.begin();
     this->_snake.pop_front();
     deleteEntity(*iter);
     IEntity *newHead = this->_createHead(direction);
-
-
+    if (newHead->getPosX() == Game::singleton().getFood().front()->getPosX() &&
+        newHead->getPosY() == Game::singleton().getFood().front()->getPosY()) {
+        this->_grow();
+    }
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());
     this->_snake.push_back(newHead);
+
     this->_fillHead();
     return;
 }
