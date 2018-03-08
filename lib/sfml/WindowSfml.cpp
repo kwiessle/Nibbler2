@@ -79,13 +79,13 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
      sf::Texture uHeadSurf;
-      uHeadSurf.loadFromFile("./assets/u_head.bmp");
+      uHeadSurf.loadFromFile("./assets/u_head30.bmp");
      sf::Texture dHeadSurf;
-      dHeadSurf.loadFromFile("./assets/d_head.bmp");
+      dHeadSurf.loadFromFile("./assets/d_head30.bmp");
      sf::Texture lHeadSurf;
-      lHeadSurf.loadFromFile("./assets/l_head.bmp");
+      lHeadSurf.loadFromFile("./assets/l_head30.bmp");
      sf::Texture rHeadSurf;
-      rHeadSurf.loadFromFile("./assets/r_head.bmp");
+      rHeadSurf.loadFromFile("./assets/r_head30.bmp");
      sf::Texture uHeadMiamSurf;
       uHeadMiamSurf.loadFromFile("./assets/u_head_miam.bmp");
      sf::Texture dHeadMiamSurf;
@@ -95,25 +95,29 @@ void       Window::initTextures(void) {
      sf::Texture rHeadMiamSurf;
       rHeadMiamSurf.loadFromFile("./assets/r_head_miam.bmp");
      sf::Texture uQueueSurf;
-      uQueueSurf.loadFromFile("./assets/u_queue.bmp");
+      uQueueSurf.loadFromFile("./assets/u_queue30.bmp");
      sf::Texture dQueueSurf;
-      dQueueSurf.loadFromFile("./assets/d_queue.bmp");
+      dQueueSurf.loadFromFile("./assets/d_queue30.bmp");
      sf::Texture lQueueSurf;
-      lQueueSurf.loadFromFile("./assets/l_queue.bmp");
+      lQueueSurf.loadFromFile("./assets/l_queue30.bmp");
      sf::Texture rQueueSurf;
-      rQueueSurf.loadFromFile("./assets/r_queue.bmp");
+      rQueueSurf.loadFromFile("./assets/r_queue30.bmp");
      sf::Texture luCornerSurf;
-      luCornerSurf.loadFromFile("./assets/lu_corner.bmp");
+      luCornerSurf.loadFromFile("./assets/lu_corner30.bmp");
      sf::Texture ldCornerSurf;
-      ldCornerSurf.loadFromFile("./assets/ld_corner.bmp");
+      ldCornerSurf.loadFromFile("./assets/ld_corner30.bmp");
      sf::Texture ruCornerSurf;
-      ruCornerSurf.loadFromFile("./assets/ru_corner.bmp");
+      ruCornerSurf.loadFromFile("./assets/ru_corner30.bmp");
      sf::Texture rdCornerSurf;
-      rdCornerSurf.loadFromFile("./assets/rd_corner.bmp");
+      rdCornerSurf.loadFromFile("./assets/rd_corner30.bmp");
      sf::Texture hBodySurf;
-      hBodySurf.loadFromFile("./assets/h_body.bmp");
+      hBodySurf.loadFromFile("./assets/h_body30.bmp");
      sf::Texture vBodySurf;
-      vBodySurf.loadFromFile("./assets/v_body.bmp");
+      vBodySurf.loadFromFile("./assets/v_body30.bmp");
+     sf::Texture noneSurf;
+      vBodySurf.loadFromFile("./assets/none.bmp");
+     sf::Texture lifeSurf;
+      vBodySurf.loadFromFile("./assets/life.bmp");
     this->_textures.insert(std::make_pair(uHead, uHeadSurf));
     this->_textures.insert(std::make_pair(dHead, dHeadSurf));
     this->_textures.insert(std::make_pair(lHead, lHeadSurf));
@@ -132,5 +136,7 @@ void       Window::initTextures(void) {
     this->_textures.insert(std::make_pair(rdCorner, rdCornerSurf));
     this->_textures.insert(std::make_pair(hBody, hBodySurf));
     this->_textures.insert(std::make_pair(vBody, vBodySurf));
+    this->_textures.insert(std::make_pair(NoImg, noneSurf));
+    this->_textures.insert(std::make_pair(Life, lifeSurf));
     return;
 }
