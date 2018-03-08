@@ -2,7 +2,7 @@ NAME = sdl.so
 COMPILATOR = g++
 INC	= -I .. -I . -I ../Entity -I ~/.brew/include
 
-SDL = -L ~/.brew/lib/ -lSDL2
+SDL = -L ~/.brew/lib/ -lSDL2 -lSDL2_TTF
 
 SRC = Window.cpp \
 	../Entity/Entity.cpp

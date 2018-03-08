@@ -18,11 +18,14 @@ Window::Window(unsigned int width, unsigned int height) :
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth,
-      this->wHeight,
+      this->wHeight + CELL_UNITY,
       SDL_WINDOW_SHOWN
     );
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Surface *icon = SDL_LoadBMP("/assets/u_head.bmp");
+    SDL_SetWindowIcon(pWindow, icon);
+    SDL_FreeSurface(icon);
     this->initTextures();
   }
   return;
@@ -68,8 +71,54 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
       SDL_DestroyTexture( texture );
       iter++;
     }
+
+
+    this->drawMenu(2);
+
+
     SDL_RenderPresent( this->pRenderer );
+
     return;
+}
+
+void    Window::drawMenu(int lives) const {
+  TTF_Init();
+  SDL_Rect    form;
+  SDL_Surface *surface = nullptr;
+  SDL_Texture *texture = nullptr;
+  int x = CELL_UNITY;
+  int y = this->wHeight;
+
+  form.x = 0;
+  form.y = this->wHeight;
+  form.w = this->wWidth;
+  form.h = CELL_UNITY;
+  texture = SDL_CreateTextureFromSurface(this->pRenderer, this->_textures.find(NoImg)->second);
+  SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+  SDL_DestroyTexture(texture);
+
+  // while (lives != 0) {
+  //   form.x = x;
+  //   form.y = y;
+  //   form.w = 30;
+  //   form.h = 30;
+  //   texture = SDL_CreateTextureFromSurface( this->pRenderer, this->_textures.find(Life)->second );
+  //   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+  //   SDL_DestroyTexture(texture);
+  //   lives--;
+  //   x += CELL_UNITY;
+  // }
+  TTF_Font* Sans = TTF_OpenFont("/assets/roboto.ttf",10);
+  SDL_Color White = {255, 255, 255, 0};
+  surface = TTF_RenderText_Solid(Sans, "zdp", White);
+  texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+  form.x =  30;
+  form.y = this->wHeight;
+  form.w = 100;
+  form.h = 200;
+  SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+  SDL_FreeSurface(surface);
+  return;
 }
 
 unsigned int    Window::getWidth(void) const {
@@ -107,6 +156,8 @@ void       Window::initTextures(void) {
     SDL_Surface *rdCornerSurf = SDL_LoadBMP("/assets/rd_corner.bmp");
     SDL_Surface *hBodySurf = SDL_LoadBMP("/assets/h_body.bmp");
     SDL_Surface *vBodySurf = SDL_LoadBMP("/assets/v_body.bmp");
+    SDL_Surface *NoneSurf = SDL_LoadBMP("/assets/none.bmp");
+    SDL_Surface *LifeSurf = SDL_LoadBMP("/assets/life.bmp");
 
     this->_textures.insert(std::make_pair(uHead, uHeadSurf));
     this->_textures.insert(std::make_pair(dHead, dHeadSurf));
@@ -126,5 +177,7 @@ void       Window::initTextures(void) {
     this->_textures.insert(std::make_pair(rdCorner, rdCornerSurf));
     this->_textures.insert(std::make_pair(hBody, hBodySurf));
     this->_textures.insert(std::make_pair(vBody, vBodySurf));
+    this->_textures.insert(std::make_pair(NoImg, NoneSurf));
+    this->_textures.insert(std::make_pair(Life, LifeSurf));
     return;
 }
