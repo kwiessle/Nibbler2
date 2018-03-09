@@ -37,16 +37,12 @@ re: fclean all
 install:
 	@sh install.sh
 
-scheme:
-	@mkdir -p assets
-	@curl -o ./scheme.pdf https://transfer.sh/uHJWo/scheme.pdf
-	@mv scheme.pdf assets
-
 assets:
 	@mkdir -p assets
-	@curl -o ./assets.zip https://transfer.sh/10vY6n/assets.zip
-	@unzip assets.zip -d assets
-	@rm assets.zip
+	@curl -o ./assets/scheme.pdf https://transfer.sh/uHJWo/scheme.pdf
+	@curl -o ./assets/assets.zip https://transfer.sh/10vY6n/assets.zip
+	@unzip ./assets/assets.zip
+	@rm ./assets/assets.zip
 
 aclean:
 	@rm -rf assets schemes.pdf
@@ -61,4 +57,4 @@ sfml:
 	@make -C lib/sfml
 	@make re -C ./lib/sfml
 
-.PHONY : re fclean clean all install assets aclean dsclean scheme sdl sfml
+.PHONY : re fclean clean all install assets aclean dsclean sdl sfml
