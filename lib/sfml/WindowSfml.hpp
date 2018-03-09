@@ -11,20 +11,22 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    void        drawFrame(std::list <IEntity *> data) const;
-    eHook       getHooks(void) const;
-    void        setHooks(void);
-    unsigned int      getWidth(void) const;
-    unsigned int      getHeight(void) const;
-    void              initTextures(void);
+    void            drawFrame(std::list <IEntity *> data) const;
+    void            drawMenu(int lives) const;
+    eHook           getHooks(void) const;
+    void            setHooks(void);
+    unsigned int    getWidth(void) const;
+    unsigned int    getHeight(void) const;
+    void            initTextures(void);
   public:
     Window(unsigned int width, unsigned int height);
     ~Window(void);
-    eHook        hook;
-    unsigned int      wWidth;
-    unsigned int      wHeight;
-    sf::RenderWindow	*window;
-    std::map <eTexture,  sf::Texture>      _textures;
+    eHook                               hook;
+    unsigned int                        wWidth;
+    unsigned int                        wHeight;
+    sf::RenderWindow                    *window;
+    sf::Font                            pFont;
+    std::map <eTexture,  sf::Texture>   _textures;
 
 
 };

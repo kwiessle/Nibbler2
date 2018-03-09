@@ -7,9 +7,10 @@ Window::Window(unsigned int width, unsigned int height) :
  wHeight(height * CELL_UNITY),
  hook(Right)
 {
+    sf::Image icon;
     try {
         this->window = new sf::RenderWindow(
-            sf::VideoMode(width * CELL_UNITY, height * CELL_UNITY),
+            sf::VideoMode(this->wWidth, this->wHeight + CELL_UNITY),
             "Nibbler"
         );
     }
@@ -18,6 +19,9 @@ Window::Window(unsigned int width, unsigned int height) :
         exit(0);
     }
     this->initTextures();
+    this->pFont.loadFromFile("./assets/roboto.ttf");
+    icon.loadFromFile("./assets/appicon.bmp");
+    this->window->setIcon(512, 512, icon.getPixelsPtr());
     std::cout << "SFML dynamicly charged" << std::endl;
     return;
 }
@@ -56,10 +60,36 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
         this->window->draw(sprite);
         iter++;
     }
+    this->drawMenu(3);
     this->window->display();
     return;
 }
+void    Window::drawMenu(int lives) const {
+    sf::Sprite  sprite;
+    int x = CELL_UNITY;
+    int y = this->wHeight - CELL_UNITY / 2;
 
+    sprite.setPosition(sf::Vector2f(0, this->wHeight - CELL_UNITY));
+    sprite.setTexture(this->_textures.find(NoImg)->second);
+    sprite.setScale(CELL_UNITY, 0.2f);
+    this->window->draw(sprite);
+    while (lives != 0) {
+        sprite.setPosition(sf::Vector2f(x, y));
+        sprite.setTexture(this->_textures.find(Life)->second);
+        sprite.setScale(1, 1);
+        this->window->draw(sprite);
+        x += CELL_UNITY + CELL_UNITY / 2;
+        lives--;
+    }
+    sf::Text text;
+    text.setFont(this->pFont);
+    text.setString("754");
+    text.setCharacterSize(30);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(this->wWidth - 140, this->wHeight - 20));
+    this->window->draw(text);
+  return;
+}
 unsigned int    Window::getWidth(void) const {
     return this->wWidth;
 }

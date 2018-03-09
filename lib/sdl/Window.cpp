@@ -19,7 +19,7 @@ Window::Window(unsigned int width, unsigned int height) :
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth,
       this->wHeight + CELL_UNITY,
-      SDL_WINDOW_SHOWN
+      SDL_WINDOW_RESIZABLE
     );
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
@@ -27,7 +27,7 @@ Window::Window(unsigned int width, unsigned int height) :
     SDL_SetWindowIcon(pWindow, icon);
     SDL_FreeSurface(icon);
     this->initTextures();
-    this->pFont = TTF_OpenFont("/assets/roboto.ttf",35);
+    this->pFont = TTF_OpenFont("/assets/roboto.ttf", 35);
   }
   return;
 }
@@ -72,13 +72,8 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
       SDL_DestroyTexture( texture );
       iter++;
     }
-
-
     this->drawMenu(3);
-
-
     SDL_RenderPresent( this->pRenderer );
-
     return;
 }
 
@@ -110,7 +105,7 @@ void    Window::drawMenu(int lives) const {
   }
 
   SDL_Color White = {255, 255, 255, 0};
-  surface = TTF_RenderText_Blended(this->pFont, "754", White);
+  surface = TTF_RenderText_Blended(this->pFont, "4", White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  this->wWidth - 140;
   form.y = this->wHeight - 15;
@@ -139,13 +134,12 @@ void      deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     eTexture texture;
-    std::string name = "/assets/";
 
     for (int i = 1; i <= 22; i++) {
+      std::string name = "/assets/";
       name += std::to_string(i);
       name += ".bmp";
       this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
-      name = "/assets/";
     }
     return;
 }
