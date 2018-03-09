@@ -41,7 +41,9 @@ assets:
 	@mkdir -p assets
 	@curl -o ./assets/scheme.pdf https://transfer.sh/uHJWo/scheme.pdf
 	@curl -o ./assets/assets.zip https://transfer.sh/10vY6n/assets.zip
+	@zip -d ./assets/assets.zip __MACOSX/\*
 	@unzip ./assets/assets.zip
+	@rm -rf  __MACOSX/\*
 	@rm ./assets/assets.zip
 
 aclean:
