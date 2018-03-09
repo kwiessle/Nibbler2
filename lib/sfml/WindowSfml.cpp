@@ -46,14 +46,12 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
     sf::Sprite sprite;
-    float size = (static_cast<float>(CELL_UNITY) / 300);
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
         sprite.setPosition(sf::Vector2f((*iter)->getPosX(), (*iter)->getPosY())); // position absolue
         eTexture img = (*iter)->getTexture();
         sprite.setTexture(this->_textures.find(img)->second);
-        sprite.setScale(size, size);
         this->window->draw(sprite);
         iter++;
     }
@@ -78,59 +76,15 @@ void        deleteWindow(Window *window) {
 }
 
 void       Window::initTextures(void) {
-     sf::Texture uHeadSurf;
-      uHeadSurf.loadFromFile("./assets/u_head.bmp");
-     sf::Texture dHeadSurf;
-      dHeadSurf.loadFromFile("./assets/d_head.bmp");
-     sf::Texture lHeadSurf;
-      lHeadSurf.loadFromFile("./assets/l_head.bmp");
-     sf::Texture rHeadSurf;
-      rHeadSurf.loadFromFile("./assets/r_head.bmp");
-     sf::Texture uHeadMiamSurf;
-      uHeadMiamSurf.loadFromFile("./assets/u_head_miam.bmp");
-     sf::Texture dHeadMiamSurf;
-      dHeadMiamSurf.loadFromFile("./assets/d_head_miam.bmp");
-     sf::Texture lHeadMiamSurf;
-      lHeadMiamSurf.loadFromFile("./assets/l_head_miam.bmp");
-     sf::Texture rHeadMiamSurf;
-      rHeadMiamSurf.loadFromFile("./assets/r_head_miam.bmp");
-     sf::Texture uQueueSurf;
-      uQueueSurf.loadFromFile("./assets/u_queue.bmp");
-     sf::Texture dQueueSurf;
-      dQueueSurf.loadFromFile("./assets/d_queue.bmp");
-     sf::Texture lQueueSurf;
-      lQueueSurf.loadFromFile("./assets/l_queue.bmp");
-     sf::Texture rQueueSurf;
-      rQueueSurf.loadFromFile("./assets/r_queue.bmp");
-     sf::Texture luCornerSurf;
-      luCornerSurf.loadFromFile("./assets/lu_corner.bmp");
-     sf::Texture ldCornerSurf;
-      ldCornerSurf.loadFromFile("./assets/ld_corner.bmp");
-     sf::Texture ruCornerSurf;
-      ruCornerSurf.loadFromFile("./assets/ru_corner.bmp");
-     sf::Texture rdCornerSurf;
-      rdCornerSurf.loadFromFile("./assets/rd_corner.bmp");
-     sf::Texture hBodySurf;
-      hBodySurf.loadFromFile("./assets/h_body.bmp");
-     sf::Texture vBodySurf;
-      vBodySurf.loadFromFile("./assets/v_body.bmp");
-    this->_textures.insert(std::make_pair(uHead, uHeadSurf));
-    this->_textures.insert(std::make_pair(dHead, dHeadSurf));
-    this->_textures.insert(std::make_pair(lHead, lHeadSurf));
-    this->_textures.insert(std::make_pair(rHead, rHeadSurf));
-    this->_textures.insert(std::make_pair(uHeadMiam, uHeadMiamSurf));
-    this->_textures.insert(std::make_pair(dHeadMiam, dHeadMiamSurf));
-    this->_textures.insert(std::make_pair(lHeadMiam, lHeadMiamSurf));
-    this->_textures.insert(std::make_pair(rHeadMiam, rHeadMiamSurf));
-    this->_textures.insert(std::make_pair(uQueue, uQueueSurf));
-    this->_textures.insert(std::make_pair(dQueue, dQueueSurf));
-    this->_textures.insert(std::make_pair(lQueue, lQueueSurf));
-    this->_textures.insert(std::make_pair(rQueue, rQueueSurf));
-    this->_textures.insert(std::make_pair(luCorner, luCornerSurf));
-    this->_textures.insert(std::make_pair(ldCorner, ldCornerSurf));
-    this->_textures.insert(std::make_pair(ruCorner, ruCornerSurf));
-    this->_textures.insert(std::make_pair(rdCorner, rdCornerSurf));
-    this->_textures.insert(std::make_pair(hBody, hBodySurf));
-    this->_textures.insert(std::make_pair(vBody, vBodySurf));
+    for (int i = 1; i <= 22; i++) {
+        sf::Texture texture;
+        std::string name = "./assets/";
+        name += std::to_string(i);
+        name += ".bmp";
+        texture.loadFromFile(name.c_str());
+        this->_textures.insert(
+            std::make_pair(static_cast<eTexture>(i), texture)
+        );
+    }
     return;
 }

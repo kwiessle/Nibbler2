@@ -18,12 +18,18 @@ std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
 void  Player::initSnake(void) {
-  IEntity *head = createEntity(90, 0, Snake, Right, rHead);
-  IEntity *body = createEntity(60, 0, Snake, Right, hBody);
-  IEntity *queue = createEntity(30, 0, Snake, Right, rHead);
+  IEntity *head = createEntity(150, 0, Snake, Right, rHead);
+  IEntity *body = createEntity(120, 0, Snake, Right, hBody);
+  IEntity *body2 = createEntity(90, 0, Snake, Right, hBody);
+  IEntity *body3 = createEntity(60, 0, Snake, Right, hBody);
+  IEntity *body4 = createEntity(30, 0, Snake, Right, hBody);
+  IEntity *queue = createEntity(0, 0, Snake, Right, rHead);
 
   this->_snake.push_front(head);
   this->_snake.push_front(body);
+  this->_snake.push_front(body2);
+  this->_snake.push_front(body3);
+  this->_snake.push_front(body4);
   this->_snake.push_front(queue);
   return;
 }

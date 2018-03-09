@@ -2,9 +2,11 @@
 # define WINDOW_HPP
 
 # include <SDL2/SDL.h>
+# include <SDL2/SDL_ttf.h>
 # include <iostream>
 # include "IGraphism.hpp"
-#include <map>
+# include <map>
+
 
 class Window : public IGraphism {
   private:
@@ -13,6 +15,7 @@ class Window : public IGraphism {
     void              setHooks(void);
     eHook             getHooks(void) const;
     void              drawFrame(std::list <IEntity *> data) const;
+    void              drawMenu(int lives) const;
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
     void              initTextures(void);
@@ -22,9 +25,11 @@ class Window : public IGraphism {
 
     SDL_Window        *pWindow;
     SDL_Renderer      *pRenderer;
+    TTF_Font          *pFont;
     unsigned int      wWidth;
     unsigned int      wHeight;
     eHook             hook;
+
     std::map <eTexture, SDL_Surface *>      _textures;
 
 };
