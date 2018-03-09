@@ -5,8 +5,8 @@
 # include <SDL2/SDL_ttf.h>
 # include <iostream>
 # include "IGraphism.hpp"
-#include <map>
-# include <vector>
+# include <map>
+
 
 class Window : public IGraphism {
   private:

@@ -1,5 +1,4 @@
 #include "Window.hpp"
-#include "stdlib.h"
 
 Window::Window(void) { return; }
 
