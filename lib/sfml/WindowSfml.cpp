@@ -33,6 +33,7 @@ eHook   Window::getHooks(void) const {
 void   Window::setHooks(void) {
     sf::Event   event;
     this->window->pollEvent(event);
+    if (event.type == sf::Event::Closed) { this->hook = Exit; return;}
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Escape) { this->hook = Exit; }
         if (event.key.code == sf::Keyboard::Up && this->hook != Down) { this->hook = Up; }

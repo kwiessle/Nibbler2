@@ -1,0 +1,16 @@
+playerinfo --
+		life
+		score
+		timer
+
+gameplay --
+		colision
+		mode hardcore
+		mode multi
+		random spawn
+
+lib		--
+		musique
+		derniere lib
+		switch de lib
+

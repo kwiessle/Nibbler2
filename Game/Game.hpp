@@ -25,9 +25,7 @@ class Game {
     void                          *getBinaryLib(void) const;
     IGraphism                     *getEngine(void) const;
     void                          setEngine(IGraphism  *engine);
-
-
-
+    std::list <IEntity *>         getFood(void) const;
     void                          refresh(void);
     void                          start(unsigned int with, unsigned int height);
     void                          pause(void) const;

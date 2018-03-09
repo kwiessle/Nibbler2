@@ -30,12 +30,17 @@ void   Game::setEngine(IGraphism  *engine)
   return;
 }
 
+std::list <IEntity *>  Game::getFood(void) const { return this->_food; }
+
 std::list <IEntity *>  Game::mergeEntities(void) const {
-  return this->_player->getSnake();
+    std::list<IEntity *> tmp;
+    tmp = this->_player->getSnake();
+    tmp.insert(tmp.end(), this->_food.begin(), this->_food.end());
+  return tmp;
 }
 
 void  Game::initFood(void) {
-  IEntity *food = createEntity(20, 20, Food, NoDir, tFood );
+  IEntity *food = createEntity(CELL_UNITY, CELL_UNITY, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
 
   foodList.push_front(food);
