@@ -2,8 +2,6 @@
 
 Game::Game(void) {
   this->_player = new Player();
-  this->initFood();
-  this->_player->initSnake();
   return;
 }
 
@@ -41,24 +39,42 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
   return tmp;
 }
 
-void  Game::initFood(void) {
-  IEntity *food = createEntity(CELL_UNITY, CELL_UNITY, Food, NoDir, tFood );
+void  Game::initFood(unsigned int x, unsigned int y) {
+  IEntity *food = createEntity(CELL_UNITY * x, CELL_UNITY * y, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
-
+  // std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
+  // while (check != Game::singleton()._map.end()) {
+  //     if ((*check)->getPosX() == CELL_UNITY * x && (*check)->getPosY() == CELL_UNITY * y) {
+  //         Game::singleton()._map.erase(check);
+  //     }
+  //     check++;
+  // }
   foodList.push_front(food);
   this->_food = foodList;
   return;
 }
 
-void  Game::start(unsigned int width, unsigned int height, int mode) {
+void  Game::initMap(unsigned int width, unsigned int height) {
+    for(unsigned int x = 0; x < width - 1; x++) {
+        for (unsigned int y = 0; y < height - 1; y++) {
+            IEntity *tmp = createEntity(x * CELL_UNITY, y * CELL_UNITY, Free, NoDir, None);
+            this->_map.push_front(tmp);
+        }
+    }
 
-    Timer frame(33);
-    Timer hooks(1);
-    Timer speed(100);
+    return;
+}
+
+void  Game::start(unsigned int width, unsigned int height) {
     int   tmp = 0;
+    Timer frame(33);
+    Timer hooks(300);
+    Timer speed(300);
     this->_engine = createEngine(width, height);
     this->initMode(mode);
-
+    this->initMap(width, height);
+    this->_player->initSnake();
+    this->initFood(1, 1);
     while (1) {
       if (frame.update()) { this->refresh(); }
       if (hooks.update()) { this->_engine->setHooks(); }

@@ -11,17 +11,18 @@ class Game {
     Game(void);
 
     Player                        *_player;
-    std::list <IEntity *>          _food;
-    std::list <IEntity *>          _walls;
+    std::list <IEntity *>         _food;
+    std::list <IEntity *>         _walls;
     IGraphism                     *_engine;
-
-    std::list <IEntity *>         mergeEntities(void) const;
 
   public:
     ~Game(void);
 
     static Game                   &singleton(void);
 
+    std::list <IEntity *>         mergeEntities(void) const;
+    std::list <IEntity *>         _map;
+    void                          initMap(unsigned int width, unsigned int height);
     void                          *getBinaryLib(void) const;
     IGraphism                     *getEngine(void) const;
     void                          setEngine(IGraphism  *engine);
@@ -31,7 +32,7 @@ class Game {
     void                          pause(void) const;
     void                          save(void) const;
     void                          quit(void) const;
-    void                          initFood(void);
+    void                          initFood(unsigned int x, unsigned int y);
     void                          initMode(int mode);
     void                          switchEngine(eHook engine);
 };
