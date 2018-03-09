@@ -18,7 +18,7 @@ Window::Window(unsigned int width, unsigned int height) :
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth,
-      this->wHeight + CELL_UNITY,
+      this->wHeight + CELL_UNITY * 2,
       SDL_WINDOW_RESIZABLE
     );
     this->pWindow = pWindow;
@@ -82,10 +82,10 @@ void    Window::drawMenu(int lives) const {
   SDL_Surface *surface = nullptr;
   SDL_Texture *texture = nullptr;
   int x = CELL_UNITY;
-  int y = this->wHeight;
+  int y = this->wHeight + CELL_UNITY;
 
   form.x = 0;
-  form.y = this->wHeight - CELL_UNITY;
+  form.y = this->wHeight;
   form.w = this->wWidth;
   form.h = CELL_UNITY * 2;
   texture = SDL_CreateTextureFromSurface(this->pRenderer, this->_textures.find(NoImg)->second);
@@ -108,7 +108,7 @@ void    Window::drawMenu(int lives) const {
   surface = TTF_RenderText_Blended(this->pFont, "4", White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  this->wWidth - 140;
-  form.y = this->wHeight - 15;
+  form.y = this->wHeight + CELL_UNITY / 2;
   form.w = 40;
   form.h = 30;
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);

@@ -10,7 +10,7 @@ Window::Window(unsigned int width, unsigned int height) :
     sf::Image icon;
     try {
         this->window = new sf::RenderWindow(
-            sf::VideoMode(this->wWidth, this->wHeight + CELL_UNITY),
+            sf::VideoMode(this->wWidth, this->wHeight + CELL_UNITY * 2),
             "Nibbler"
         );
     }
@@ -67,14 +67,14 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
 void    Window::drawMenu(int lives) const {
     sf::Sprite  sprite;
     int x = CELL_UNITY;
-    int y = this->wHeight - CELL_UNITY / 2;
+    int y = this->wHeight + CELL_UNITY;
 
-    sprite.setPosition(sf::Vector2f(0, this->wHeight - CELL_UNITY));
+    sprite.setPosition(sf::Vector2f(0, this->wHeight));
     sprite.setTexture(this->_textures.find(NoImg)->second);
     sprite.setScale(CELL_UNITY, 0.2f);
     this->window->draw(sprite);
     while (lives != 0) {
-        sprite.setPosition(sf::Vector2f(x, y));
+        sprite.setPosition(sf::Vector2f(x, y - CELL_UNITY /2));
         sprite.setTexture(this->_textures.find(Life)->second);
         sprite.setScale(1, 1);
         this->window->draw(sprite);
@@ -86,7 +86,10 @@ void    Window::drawMenu(int lives) const {
     text.setString("754");
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
-    text.setPosition(sf::Vector2f(this->wWidth - 140, this->wHeight - 20));
+    text.setPosition(sf::Vector2f(
+        this->wWidth - 140,
+        this->wHeight + CELL_UNITY /2
+    ));
     this->window->draw(text);
   return;
 }
