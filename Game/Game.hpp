@@ -27,11 +27,12 @@ class Game {
     void                          setEngine(IGraphism  *engine);
     std::list <IEntity *>         getFood(void) const;
     void                          refresh(void);
-    void                          start(unsigned int with, unsigned int height);
+    void                          start(unsigned int with, unsigned int height, int mode);
     void                          pause(void) const;
     void                          save(void) const;
     void                          quit(void) const;
     void                          initFood(void);
+    void                          initMode(int mode);
 };
 
 #endif

@@ -24,6 +24,7 @@ IEntity     *createEntity(
   eTexture texture
 );
 
+bool        openBinaryLib(char *path);
 void        deleteEngine(IGraphism *engine);
 void        deleteEntity(IEntity *entity);
 void        dlerror_wrapper(void);

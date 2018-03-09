@@ -36,6 +36,8 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
     std::list<IEntity *> tmp;
     tmp = this->_player->getSnake();
     tmp.insert(tmp.end(), this->_food.begin(), this->_food.end());
+    tmp.insert(tmp.end(), this->_walls.begin(), this->_walls.end());
+
   return tmp;
 }
 
@@ -48,13 +50,14 @@ void  Game::initFood(void) {
   return;
 }
 
-void  Game::start(unsigned int width, unsigned int height) {
+void  Game::start(unsigned int width, unsigned int height, int mode) {
 
     Timer frame(33);
     Timer hooks(33);
     Timer speed(100);
     int   tmp = 0;
     this->_engine = createEngine(width, height);
+    this->initMode(mode);
 
     while (1) {
       if (frame.update()) { this->refresh(); }
@@ -76,6 +79,28 @@ void  Game::start(unsigned int width, unsigned int height) {
 void  Game::refresh(void) {
   this->_engine->drawFrame(this->mergeEntities());
   return;
+}
+
+void Game::initMode(int mode) {
+    switch(mode) {
+        case 0 : break;
+        case 1 : {
+
+
+            for (unsigned int x = 0; x <= this->_engine->getWidth(); x += CELL_UNITY) {
+                this->_walls.push_back(createEntity(x, 0, Wall, NoDir, tWall));
+                this->_walls.push_back(createEntity(x, this->_engine->getHeight() - CELL_UNITY, Wall, NoDir, tWall));
+            }
+            for (unsigned int y = 0; y <= this->_engine->getHeight(); y += CELL_UNITY) {
+                this->_walls.push_back(createEntity(0, y, Wall, NoDir, tWall));
+                this->_walls.push_back(createEntity(this->_engine->getHeight() - CELL_UNITY, y, Wall, NoDir, tWall));
+            }
+
+
+        }
+        default: break;
+    }
+    return;
 }
 
 

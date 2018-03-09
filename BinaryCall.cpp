@@ -6,6 +6,14 @@
   std::cout << "Error: " << dlerror() << std::endl;
 }
 
+bool   openBinaryLib(char *path) {
+    if (!(BINARY_LIB = dlopen(path, RTLD_LAZY | RTLD_LOCAL))) {
+      dlerror_wrapper();
+      return false;
+    }
+    else {return true;}
+}
+
 IGraphism   *createEngine(unsigned int width, unsigned int height) {
   std::string symbol = "createWindow";
   IGraphism   *(*windowCreator)(unsigned int, unsigned int);
