@@ -42,13 +42,13 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 void  Game::initFood(unsigned int x, unsigned int y) {
   IEntity *food = createEntity(CELL_UNITY * x, CELL_UNITY * y, Food, NoDir, tFood );
   std::list <IEntity *> foodList;
-  // std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
-  // while (check != Game::singleton()._map.end()) {
-  //     if ((*check)->getPosX() == CELL_UNITY * x && (*check)->getPosY() == CELL_UNITY * y) {
-  //         Game::singleton()._map.erase(check);
-  //     }
-  //     check++;
-  // }
+  std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
+  while (check != Game::singleton()._map.end()) {
+      if ((*check)->getPosX() == CELL_UNITY * x && (*check)->getPosY() == CELL_UNITY * y) {
+          Game::singleton()._map.erase(check);
+      }
+      check++;
+  }
   foodList.push_front(food);
   this->_food = foodList;
   return;
@@ -68,8 +68,8 @@ void  Game::initMap(unsigned int width, unsigned int height) {
 void  Game::start(unsigned int width, unsigned int height) {
     int   tmp = 0;
     Timer frame(33);
-    Timer hooks(300);
-    Timer speed(300);
+    Timer hooks(100);
+    Timer speed(100);
     this->_engine = createEngine(width, height);
     this->initMode(mode);
     this->initMap(width, height);

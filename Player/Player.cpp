@@ -183,6 +183,7 @@ void  Player::_updateSnake(eHook direction) {
         std::mt19937 engine(seed());
         std::uniform_int_distribution<int> choose(0, static_cast<int>(Game::singleton()._map.size() - 1));
         std::advance(it, choose(engine));
+        std::cout << "x     " << (*it)->getPosX() <<  "y    " << (*it)->getPosY() << std::endl;
         Game::singleton().initFood((*it)->getPosX() / CELL_UNITY
         , (*it)->getPosY() / CELL_UNITY
         );
