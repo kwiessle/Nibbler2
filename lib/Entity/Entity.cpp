@@ -3,12 +3,12 @@
 Entity::Entity(void) { return; }
 
 Entity::Entity(unsigned int x, unsigned int y, eType type, eHook direction, eTexture texture) :
-  _posX(x),
-  _posY(y),
-  _type(type),
-  _direction(direction),
-  _texture(texture)
-  { return; }
+    _posX(x),
+    _posY(y),
+    _type(type),
+    _direction(direction),
+    _texture(texture)
+ { return; }
 
 Entity::~Entity(void) { return; }
 
@@ -24,7 +24,7 @@ unsigned int    Entity::getPosY(void) const
 eType           Entity::getType(void) const
                   { return this->_type; }
 
-eHook      Entity::getDirection(void) const
+eHook           Entity::getDirection(void) const
                   { return this->_direction; }
 
 eTexture        Entity::getTexture(void) const

@@ -22,6 +22,7 @@ class Window : public IGraphism {
     Window(unsigned int width, unsigned int height);
     ~Window(void);
     eHook                               hook;
+    eHook                               engine;
     unsigned int                        wWidth;
     unsigned int                        wHeight;
     sf::RenderWindow                    *window;

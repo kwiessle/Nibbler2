@@ -13,7 +13,6 @@ int   main(int ac, char **av) {
     case 5: {
       unsigned int width = atoi(av[1]);
       unsigned int height = atoi(av[2]);
-      std::cout << "hello" <<std::endl;
       std::string flag = "--hardcore";
       int mode = 0;
       char *path = av[3];

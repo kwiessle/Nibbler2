@@ -11,11 +11,12 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(COMPILATOR) -fPIC $(OBJ) -shared $(SFML) -o $(NAME)
+	@echo "✏️ \033[33;5m[SFML] Creating extern lib\033[0m"
+	@$(COMPILATOR) -fPIC $(OBJ) -shared $(SFML) -o $(NAME)
 
 
 %.o: %.cpp
-	$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)
+	@$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)
 
 clean:
 	@rm -rf $(OBJ)

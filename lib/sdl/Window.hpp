@@ -29,6 +29,7 @@ class Window : public IGraphism {
     unsigned int      wWidth;
     unsigned int      wHeight;
     eHook             hook;
+    eHook             engine;
 
     std::map <eTexture, SDL_Surface *>      _textures;
 

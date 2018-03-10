@@ -5,7 +5,8 @@ Window::Window(void) { return; }
 Window::Window(unsigned int width, unsigned int height) :
   wWidth(width * CELL_UNITY),
   wHeight(height * CELL_UNITY),
-  hook(Right)
+  hook(Right),
+  engine(SDL)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -19,7 +20,7 @@ Window::Window(unsigned int width, unsigned int height) :
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth,
       this->wHeight + CELL_UNITY * 2,
-      SDL_WINDOW_RESIZABLE
+      SDL_WINDOW_SHOWN
     );
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
@@ -50,6 +51,9 @@ void   Window::setHooks(void) {
     else if (event.key.keysym.sym == 1073741905  && this->hook != Up) { this->hook = Down; }
     else if (event.key.keysym.sym == 1073741904 && this->hook != Right) { this->hook = Left; }
     else if (event.key.keysym.sym == 1073741903 && this->hook != Left) { this->hook = Right; }
+    else if (event.key.keysym.sym == 102 && this->engine != SDL) { this->hook = SDL; this->engine = SDL;}
+    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->hook = SFML; this->engine = SFML;}
+
   }
 }
 
@@ -105,7 +109,7 @@ void    Window::drawMenu(int lives) const {
   }
 
   SDL_Color White = {255, 255, 255, 0};
-  surface = TTF_RenderText_Blended(this->pFont, "4", White);
+  surface = TTF_RenderText_Blended(this->pFont, "666", White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  this->wWidth - 140;
   form.y = this->wHeight + CELL_UNITY / 2;
@@ -136,10 +140,11 @@ void       Window::initTextures(void) {
     eTexture texture;
 
     for (int i = 1; i <= 22; i++) {
-      std::string name = "/assets/";
-      name += std::to_string(i);
-      name += ".bmp";
-      this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam 
+        std::string name = "/assets/";
+        name += std::to_string(i);
+        name += ".bmp";
+        this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
     }
     return;
 }

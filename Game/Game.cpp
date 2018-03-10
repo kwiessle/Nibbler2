@@ -53,7 +53,7 @@ void  Game::initFood(void) {
 void  Game::start(unsigned int width, unsigned int height, int mode) {
 
     Timer frame(33);
-    Timer hooks(33);
+    Timer hooks(1);
     Timer speed(100);
     int   tmp = 0;
     this->_engine = createEngine(width, height);
@@ -69,6 +69,8 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
           case Down : this->_player->move(Down); break;
           case Left : this->_player->move(Left); break;
           case Right : this->_player->move(Right); break;
+          case SDL : switchEngine(SDL); break;
+          case SFML : switchEngine(SFML); break;
           default : break;
         }
       }
@@ -85,20 +87,40 @@ void Game::initMode(int mode) {
     switch(mode) {
         case 0 : break;
         case 1 : {
-
-
-            for (unsigned int x = 0; x <= this->_engine->getWidth(); x += CELL_UNITY) {
+            for (unsigned int x = 0; x < this->_engine->getWidth(); x += CELL_UNITY) {
                 this->_walls.push_back(createEntity(x, 0, Wall, NoDir, tWall));
                 this->_walls.push_back(createEntity(x, this->_engine->getHeight() - CELL_UNITY, Wall, NoDir, tWall));
             }
-            for (unsigned int y = 0; y <= this->_engine->getHeight(); y += CELL_UNITY) {
+            for (unsigned int y = 0; y < this->_engine->getHeight(); y += CELL_UNITY) {
                 this->_walls.push_back(createEntity(0, y, Wall, NoDir, tWall));
                 this->_walls.push_back(createEntity(this->_engine->getHeight() - CELL_UNITY, y, Wall, NoDir, tWall));
             }
-
-
         }
         default: break;
+    }
+    return;
+}
+
+void    Game::switchEngine(eHook engine) {
+    unsigned int tmpWidth = this->_engine->getWidth() / CELL_UNITY;
+    unsigned int tmpHeight = this->_engine->getHeight() / CELL_UNITY;
+    std::string path;
+
+    deleteEngine(this->_engine);
+    switch(engine) {
+        case SDL :
+            path = "lib/sdl/sdl.so";
+            openBinaryLib(const_cast<char*>(path.c_str()));
+            this->_engine = createEngine(tmpWidth, tmpHeight);
+            std::cout << "SDL : " << BINARY_LIB << std::endl;
+            return;
+        case SFML :
+            path = "lib/sfml/sfml.so";
+            openBinaryLib(const_cast<char*>(path.c_str()));
+            this->_engine = createEngine(tmpWidth, tmpHeight);
+            std::cout << "SFML : " << BINARY_LIB << std::endl;
+            return;
+        default : return;
     }
     return;
 }
