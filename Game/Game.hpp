@@ -33,6 +33,7 @@ class Game {
     void                          quit(void) const;
     void                          initFood(void);
     void                          initMode(int mode);
+    void                          switchEngine(eHook engine);
 };
 
 #endif

@@ -11,7 +11,7 @@ class Entity : public IEntity  {
     unsigned int          _posX;
     unsigned int          _posY;
     eType                 _type;
-    eHook            _direction;
+    eHook                 _direction;
     eTexture              _texture;
 
   public:
@@ -22,7 +22,7 @@ class Entity : public IEntity  {
     unsigned int          getPosX(void) const;
     unsigned int          getPosY(void) const;
     eType                 getType(void) const;
-    eHook            getDirection(void) const;
+    eHook                 getDirection(void) const;
     eTexture              getTexture(void) const;
     void                  setPosX(unsigned int x);
     void                  setPosY(unsigned int y);

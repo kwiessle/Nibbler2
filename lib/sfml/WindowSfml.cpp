@@ -5,7 +5,8 @@ Window::Window(void) { return; }
 Window::Window(unsigned int width, unsigned int height) :
  wWidth(width * CELL_UNITY),
  wHeight(height * CELL_UNITY),
- hook(Right)
+ hook(Right),
+ engine(SFML)
 {
     sf::Image icon;
     try {
@@ -22,7 +23,6 @@ Window::Window(unsigned int width, unsigned int height) :
     this->pFont.loadFromFile("./assets/roboto.ttf");
     icon.loadFromFile("./assets/appicon.bmp");
     this->window->setIcon(512, 512, icon.getPixelsPtr());
-    std::cout << "SFML dynamicly charged" << std::endl;
     return;
 }
 
@@ -44,6 +44,9 @@ void   Window::setHooks(void) {
         if (event.key.code == sf::Keyboard::Down && this->hook != Up) { this->hook = Down; }
         if (event.key.code == sf::Keyboard::Left && this->hook != Right) { this->hook = Left; }
         if (event.key.code == sf::Keyboard::Right && this->hook != Left) { this->hook = Right; }
+        if (event.key.code == sf::Keyboard::F && this->engine != SDL) { this->hook = SDL; this->engine = SDL; }
+        if (event.key.code == sf::Keyboard::G && this->engine != SFML) { this->hook = SFML; this->engine = SFML;  }
+
     }
 }
 
@@ -111,6 +114,7 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 22; i++) {
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam 
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);
