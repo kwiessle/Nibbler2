@@ -14,15 +14,15 @@ bool   openBinaryLib(char *path) {
     else {return true;}
 }
 
-IGraphism   *createEngine(unsigned int width, unsigned int height) {
+IGraphism   *createEngine(unsigned int width, unsigned int height, eHook hook) {
   std::string symbol = "createWindow";
-  IGraphism   *(*windowCreator)(unsigned int, unsigned int);
-  windowCreator = (IGraphism *(*)(unsigned int, unsigned int)) dlsym(BINARY_LIB, symbol.c_str());
+  IGraphism   *(*windowCreator)(unsigned int, unsigned int, eHook);
+  windowCreator = (IGraphism *(*)(unsigned int, unsigned int, eHook)) dlsym(BINARY_LIB, symbol.c_str());
 
   if (!windowCreator)
     dlerror_wrapper();
 
-  IGraphism *window = windowCreator(width, height);
+  IGraphism *window = windowCreator(width, height, hook);
   return window;
 }
 

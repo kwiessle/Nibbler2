@@ -3,9 +3,9 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height) :
-    wWidth(width * CELL_UNITY),
-    wHeight(height * CELL_UNITY),
-    hook(Right),
+    wWidth(width),
+    wHeight(height),
+    hook(hook),
     engine(SFML)
 {
     if (!glfwInit()) { std::cout << "OpenGL init failed" << std::endl; exit(0);}
@@ -45,6 +45,9 @@ void    Window::drawFrame(std::list <IEntity *> data) const {
 
 eHook   Window::getHooks(void) const {
     return this->hook;
+}
+eHook   Window::getHooksEngine(void) const {
+    return this->engine;
 }
 
 void   Window::setHooks(void) {
@@ -86,8 +89,8 @@ void       Window::initTextures(void) {
 }
 
 
-Window    *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
+Window    *createWindow(unsigned int width, unsigned int height, eHook hook) {
+    return new Window(width, height, hook);
 }
 
 void      deleteWindow(Window *window) {

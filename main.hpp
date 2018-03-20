@@ -15,7 +15,8 @@ class Game;
 
 IGraphism   *createEngine(
   unsigned int width,
-  unsigned int height
+  unsigned int height,
+  eHook hook
 );
 
 IEntity     *createEntity(

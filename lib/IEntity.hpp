@@ -1,15 +1,17 @@
 #ifndef IENTITY_HPP
 # define IENTITY_HPP
+# include <iostream>
+
 
 enum eHook { NoDir, Up, Down, Left, Right, Exit, SDL, SFML };
 
-enum eType { Snake, Food, Wall };
+enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };
 
 enum eTexture {
   uHead = 1, uHeadMiam = 5, luCorner = 9, uQueue = 13, vBody = 17, NoImg = 21,
   dHead = 2, dHeadMiam = 6, ldCorner = 10, dQueue = 14, hBody = 18, Life = 22,
-  lHead = 3, lHeadMiam = 7, ruCorner = 11, lQueue = 15, tFood = 19,
-  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20
+  lHead = 3, lHeadMiam = 7, ruCorner = 11, lQueue = 15, tFood = 19, tFire = 23,
+  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20, None = 24
 };
 
 class IEntity {

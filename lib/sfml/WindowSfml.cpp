@@ -2,16 +2,17 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) :
- wWidth(width * CELL_UNITY),
- wHeight(height * CELL_UNITY),
- hook(Right),
- engine(SFML)
+Window::Window(unsigned int width, unsigned int height, eHook hook) :
+ wWidth(width),
+ wHeight(height),
+ hook(hook)
 {
     sf::Image icon;
     try {
         this->window = new sf::RenderWindow(
-            sf::VideoMode(this->wWidth, this->wHeight + CELL_UNITY * 2),
+            sf::VideoMode(
+                this->wWidth * CELL_UNITY,
+                this->wHeight * CELL_UNITY + CELL_UNITY * 2),
             "Nibbler"
         );
     }
@@ -34,45 +35,67 @@ eHook   Window::getHooks(void) const {
     return this->hook;
 }
 
+eHook   Window::getHooksEngine(void) const {
+    return this->engine;
+}
+
 void   Window::setHooks(void) {
     sf::Event   event;
     this->window->pollEvent(event);
     if (event.type == sf::Event::Closed) { this->hook = Exit; return;}
+    std::cout << event.key.code << std::endl << this->hook << std::endl;
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) { this->hook = Exit; }
-        if (event.key.code == sf::Keyboard::Up && this->hook != Down) { this->hook = Up; }
-        if (event.key.code == sf::Keyboard::Down && this->hook != Up) { this->hook = Down; }
-        if (event.key.code == sf::Keyboard::Left && this->hook != Right) { this->hook = Left; }
-        if (event.key.code == sf::Keyboard::Right && this->hook != Left) { this->hook = Right; }
-        if (event.key.code == sf::Keyboard::F && this->engine != SDL) { this->hook = SDL; this->engine = SDL; }
-        if (event.key.code == sf::Keyboard::G && this->engine != SFML) { this->hook = SFML; this->engine = SFML;  }
-
+        switch(event.key.code) {
+            case sf::Keyboard::Escape :
+                this->hook = Exit;
+                break;
+            case sf::Keyboard::Up :
+                this->hook = this->hook != Down ? Up :Down;
+                break;
+            case sf::Keyboard::Down :
+                this->hook = this->hook != Up ? Down : Up;
+                break;
+            case sf::Keyboard::Left :
+                this->hook = this->hook != Right ? Left : Right;
+                break;
+            case sf::Keyboard::Right :
+                this->hook = this->hook != Left ? Right : Left;
+                break;
+            case sf::Keyboard::F :
+                this->engine = SDL;
+                break;
+            case sf::Keyboard::G :
+                this->engine = SFML;
+                break;
+            default : break;
+        }
     }
+    return;
 }
 
-void      Window::drawFrame(std::list <IEntity *> data) const {
+void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
     sf::Sprite sprite;
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
-        sprite.setPosition(sf::Vector2f((*iter)->getPosX(), (*iter)->getPosY())); // position absolue
+        sprite.setPosition(sf::Vector2f((*iter)->getPosX() * CELL_UNITY, (*iter)->getPosY() * CELL_UNITY)); // position absolue
         eTexture img = (*iter)->getTexture();
         sprite.setTexture(this->_textures.find(img)->second);
         this->window->draw(sprite);
         iter++;
     }
-    this->drawMenu(3);
+    this->drawMenu(lives, score);
     this->window->display();
     return;
 }
-void    Window::drawMenu(int lives) const {
+void    Window::drawMenu(int lives, int score) const {
     sf::Sprite  sprite;
     int x = CELL_UNITY;
-    int y = this->wHeight + CELL_UNITY;
+    int y = this->wHeight * CELL_UNITY + CELL_UNITY;
 
-    sprite.setPosition(sf::Vector2f(0, this->wHeight));
+    sprite.setPosition(sf::Vector2f(0, this->wHeight * CELL_UNITY));
     sprite.setTexture(this->_textures.find(NoImg)->second);
     sprite.setScale(CELL_UNITY, 0.2f);
     this->window->draw(sprite);
@@ -86,12 +109,13 @@ void    Window::drawMenu(int lives) const {
     }
     sf::Text text;
     text.setFont(this->pFont);
-    text.setString("754");
+    std::string sScore = std::to_string(score);
+    text.setString(sScore.c_str());
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(
-        this->wWidth - 140,
-        this->wHeight + CELL_UNITY /2
+        this->wWidth * CELL_UNITY - 140,
+        this->wHeight * CELL_UNITY + CELL_UNITY /2
     ));
     this->window->draw(text);
   return;
@@ -104,8 +128,8 @@ unsigned int    Window::getHeight(void) const {
     return this->wHeight;
 }
 
-Window      *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
+Window      *createWindow(unsigned int width, unsigned int height, eHook hook) {
+    return new Window(width, height, hook);
 }
 
 void        deleteWindow(Window *window) {
@@ -113,8 +137,8 @@ void        deleteWindow(Window *window) {
 }
 
 void       Window::initTextures(void) {
-    for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam 
+    for (int i = 1; i <= 23; i++) {
+        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);

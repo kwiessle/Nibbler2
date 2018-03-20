@@ -29,7 +29,6 @@ class Entity : public IEntity  {
     void                  setType(eType type);
     void                  setDirection(eHook direction);
     void                  setTexture(eTexture texture);
-
 };
 
 extern "C" {

@@ -1,6 +1,6 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
-COMPILATOR = g++
+COMPILATOR = g++ -g
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
 # LDFLAGS = -rdynamic  -L ~/.brew/lib/

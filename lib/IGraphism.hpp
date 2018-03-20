@@ -10,8 +10,9 @@ class IGraphism {
   public:
     virtual ~IGraphism(void) {}
 
-    virtual void            drawFrame(std::list <IEntity *> data) const = 0;
+    virtual void            drawFrame(std::list <IEntity *> data, int lives, int score) const = 0;
     virtual eHook           getHooks(void) const = 0;
+    virtual eHook           getHooksEngine(void) const = 0;
     virtual void            setHooks(void) = 0;
     virtual unsigned int    getWidth(void) const = 0;
     virtual unsigned int    getHeight(void) const = 0;

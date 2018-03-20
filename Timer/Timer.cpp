@@ -20,6 +20,9 @@ int 		Timer::_getMilliCount(void) {
 	return nCount;
 }
 
+void        Timer::changeDiff(int newDiff) {
+    this->_diffTime = newDiff;
+}
 
 bool		Timer::update(void) {
 	this->_newTimer = _getMilliCount();
