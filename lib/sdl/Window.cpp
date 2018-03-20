@@ -128,23 +128,23 @@ unsigned int    Window::getHeight(void) const {
     return this->wHeight;
 }
 
-Window    *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
-}
-
-void      deleteWindow(Window *window) {
-  delete window;
-}
-
 void       Window::initTextures(void) {
     eTexture texture;
 
     for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam 
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";
         this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
     }
     return;
+}
+
+Window    *createWindow(unsigned int width, unsigned int height) {
+    return new Window(width, height);
+}
+
+void      deleteWindow(Window *window) {
+  delete window;
 }

@@ -3,7 +3,8 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = g++
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-LDFLAGS = -rpath ~/.brew/lib
+# LDFLAGS = -rdynamic  -L ~/.brew/lib/
+LDFLAGS = -rpath ~/.brew/lib/
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -17,11 +18,11 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: sdl sfml $(NAME)
+all: sdl sfml allegro $(NAME)
 
 
 $(NAME): $(OBJ)
-	@$(COMPILATOR) $(FLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
+	@$(COMPILATOR) $(FLAGS) $(OBJ) $(LDFLAGS)  -o $(NAME)
 	@echo "\033[36;5m✅ Nibbler compiled"
 
 %.o: %.cpp
@@ -68,5 +69,9 @@ sdl:
 	@make re -C ./lib/sdl
 sfml:
 	@make re -C ./lib/sfml
+opengl:
+	@make re -C ./lib/opengl
+allegro:
+	@make re -C ./lib/allegro
 
 .PHONY : re fclean clean all install assets aclean dsclean sdl sfml
