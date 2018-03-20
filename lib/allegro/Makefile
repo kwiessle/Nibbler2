@@ -1,7 +1,7 @@
 NAME = allegro.so
 COMPILATOR = g++
 INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-SFML = -L ~/.brew/lib  -lallegro -lallegro_image
+SFML = -L ~/.brew/lib  -lallegro -lallegro_image -lallegro_main
 
 SRC = WindowAllegro.cpp \
 	../Entity/Entity.cpp
