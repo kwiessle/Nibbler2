@@ -2,7 +2,10 @@
 #include "Game.hpp"
 #include <random>
 
-Player::Player(void) { return; }
+Player::Player(int life, int score) :
+  _life(life),
+  _score(score)
+ { return; }
 
 Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
   _snake(snake),
@@ -16,41 +19,28 @@ Player::~Player(void) { return; }
 std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
+int Player::getLife(void) const { return this->_life; }
+int Player::getScore(void) const { return this->_score; }
+
 void  Player::initSnake(void) {
-  IEntity *head = createEntity(150, 0, Snake, Right, rHead);
-  IEntity *body = createEntity(120, 0, Snake, Right, hBody);
-  IEntity *body2 = createEntity(90, 0, Snake, Right, hBody);
-  IEntity *body3 = createEntity(60, 0, Snake, Right, hBody);
-  IEntity *body4 = createEntity(30, 0, Snake, Right, hBody);
-  IEntity *queue = createEntity(0, 0, Snake, Right, rHead);
-  std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
-  while (check != Game::singleton()._map.end()) {
-      if ((*check)->getPosX() == 0 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      if ((*check)->getPosX() == 30 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      if ((*check)->getPosX() == 60 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      if ((*check)->getPosX() == 90 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      if ((*check)->getPosX() == 120 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      if ((*check)->getPosX() == 150 && (*check)->getPosY() == 0) {
-          Game::singleton()._map.erase(check);
-      }
-      check++;
-  }
-  this->_snake.push_front(head);
-  this->_snake.push_front(body);
-  this->_snake.push_front(body2);
-  this->_snake.push_front(body3);
-  this->_snake.push_front(body4);
-  this->_snake.push_front(queue);
+  Game::singleton().listErase(Game::singleton().getFreePos(), 5, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(5, 0, Snake, Right, rHead));
+
+  Game::singleton().listErase(Game::singleton().getFreePos(), 4, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(4, 0, Snake, Right, hBody));
+
+  Game::singleton().listErase(Game::singleton().getFreePos(), 3, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(3, 0, Snake, Right, hBody));
+
+  Game::singleton().listErase(Game::singleton().getFreePos(), 2, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(2, 0, Snake, Right, hBody));
+
+  Game::singleton().listErase(Game::singleton().getFreePos(), 1, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(1, 0, Snake, Right, hBody));
+
+  Game::singleton().listErase(Game::singleton().getFreePos(), 0, 0);
+  Game::singleton().listAdd(this->_snake, createEntity(0, 0, Snake, Right, rHead));
+
   return;
 }
 
@@ -121,76 +111,58 @@ void  Player::_fillHead(void) {
 void  Player::_grow(void) {
     IEntity *queue = this->_snake.front();
     IEntity *piece = nullptr;
-    std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
+
     switch ( queue->getDirection() ) {
       case Up :
-        piece = createEntity( queue->getPosX(), queue->getPosY() + 30, Snake, queue->getDirection(), queue->getTexture() );
-        while (check != Game::singleton()._map.end()) {
-            if ((*check)->getPosX() == queue->getPosX() && (*check)->getPosY() == queue->getPosY() + 30) {
-                Game::singleton()._map.erase(check);
-            }
-            check++;
-        }
+        piece = createEntity( queue->getPosX(), queue->getPosY() + 1, Snake, queue->getDirection(), queue->getTexture() );
         break;
       case Down :
-        piece = createEntity( queue->getPosX(), queue->getPosY() - 30, Snake, queue->getDirection(), queue->getTexture() );
-
-        while (check != Game::singleton()._map.end()) {
-            if ((*check)->getPosX() == queue->getPosX() && (*check)->getPosY() == queue->getPosY() - 30) {
-                Game::singleton()._map.erase(check);
-            }
-            check++;
-        }
+        piece = createEntity( queue->getPosX(), queue->getPosY() - 1, Snake, queue->getDirection(), queue->getTexture() );
         break;
       case Left :
-        piece = createEntity( queue->getPosX() + 30, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
-
-        while (check != Game::singleton()._map.end()) {
-            if ((*check)->getPosX() == queue->getPosX() + 30 && (*check)->getPosY() == queue->getPosY()) {
-                Game::singleton()._map.erase(check);
-            }
-            check++;
-        }
+        piece = createEntity( queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
          break;
       case Right :
-        piece = createEntity( queue->getPosX() - 30, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
-
-        while (check != Game::singleton()._map.end()) {
-            if ((*check)->getPosX() == queue->getPosX() - 30 && (*check)->getPosY() == queue->getPosY()) {
-                Game::singleton()._map.erase(check);
-            }
-            check++;
-        }
-         break;
+        piece = createEntity( queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
+        break;
       default:
         break;
     }
-    this->_snake.push_front( piece );
+    Game::singleton().listAdd(this->_snake, piece);
+    Game::singleton().listErase(Game::singleton().getFreePos(), piece->getPosX(),  piece->getPosY());
+
 }
 
 void  Player::_updateSnake(eHook direction) {
     std::list<IEntity *>::iterator iter = this->_snake.begin();
-    Game::singleton()._map.push_front(createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
-    this->_snake.pop_front();
-    deleteEntity(*iter);
+    Game::singleton().listAdd(Game::singleton().getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
+    Game::singleton().listErase(this->_snake, (*iter)->getPosX(), (*iter)->getPosY());
+
     IEntity *newHead = this->_createHead(direction);
-    if (newHead->getPosX() == Game::singleton().getFood().front()->getPosX() &&
-        newHead->getPosY() == Game::singleton().getFood().front()->getPosY()) {
+    if (Game::singleton().listCheck(Game::singleton().getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
         this->_grow();
-        std::list<IEntity *>::iterator it = Game::singleton()._map.begin();
+        std::list<IEntity *>::iterator it =
+            Game::singleton().getFreePos().begin();
         std::random_device seed;
         std::mt19937 engine(seed());
-        std::uniform_int_distribution<int> choose(0, static_cast<int>(Game::singleton()._map.size() - 1));
-        std::advance(it, choose(engine));
-        std::cout << "x     " << (*it)->getPosX() <<  "y    " << (*it)->getPosY() << std::endl;
-        Game::singleton().initFood((*it)->getPosX() / CELL_UNITY
-        , (*it)->getPosY() / CELL_UNITY
+        std::uniform_int_distribution<int> choose(
+            0,
+            static_cast<int>(Game::singleton().getFreePos().size() - 1)
         );
+        std::advance(it, choose(engine));
+        Game::singleton().initFood((*it)->getPosX(), (*it)->getPosY());
+    }
+    if (Game::singleton().listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
+        exit(0);
+    }
+    if (Game::singleton().listCheck(Game::singleton().getWalls(), newHead->getPosX(), newHead->getPosY())) {
+        exit(0);
     }
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());
     this->_snake.push_back(newHead);
+    Game::singleton().listErase(Game::singleton().getFreePos(), newHead->getPosX(), newHead->getPosY());
     this->_fillHead();
     return;
 }
@@ -205,29 +177,22 @@ IEntity *   Player::_createHead(eHook direction) {
     switch(direction) {
         case Up :
             x = neck->getPosX();
-            y = neck->getPosY() <= 0 ? height - CELL_UNITY : neck->getPosY() - CELL_UNITY;
+            y = neck->getPosY() <= 0 ? height - 1 : neck->getPosY() - 1;
             break;
         case Down :
             x = neck->getPosX() % width;
-            y = (neck->getPosY() + CELL_UNITY) % height;
+            y = (neck->getPosY() + 1) % height;
             break;
         case Left :
-            x = neck->getPosX() <= 0 ? width - CELL_UNITY : neck->getPosX() - CELL_UNITY;
+            x = neck->getPosX() <= 0 ? width - 1 : neck->getPosX() - 1;
             y = neck->getPosY();
             break;
         case Right :
-            x = (neck->getPosX() + CELL_UNITY ) % width;
+            x = (neck->getPosX() + 1 ) % width;
             y = neck->getPosY() % height;
             break;
         default: break;
     }
     newHead = createEntity(x, y, Snake, direction, rHead );
-    std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
-    while (check != Game::singleton()._map.end()) {
-        if ((*check)->getPosX() == x && (*check)->getPosY() == y) {
-            Game::singleton()._map.erase(check);
-        }
-        check++;
-    }
     return newHead;
 }

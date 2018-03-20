@@ -14,8 +14,8 @@ class Window : public IGraphism {
 
     void              setHooks(void);
     eHook             getHooks(void) const;
-    void              drawFrame(std::list <IEntity *> data) const;
-    void              drawMenu(int lives) const;
+    void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
+    void              drawMenu(int lives, int score) const;
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
     void              initTextures(void);

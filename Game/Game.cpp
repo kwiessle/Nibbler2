@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 Game::Game(void) {
-  this->_player = new Player();
+  this->_player = new Player(4, 0);
   return;
 }
 
@@ -28,7 +28,9 @@ void   Game::setEngine(IGraphism  *engine)
   return;
 }
 
-std::list <IEntity *>  Game::getFood(void) const { return this->_food; }
+std::list <IEntity *>  &Game::getFood(void) { return this->_food; }
+std::list <IEntity *>  &Game::getFreePos(void) { return this->_freePos; }
+std::list <IEntity *>  &Game::getWalls(void) { return this->_walls; }
 
 std::list <IEntity *>  Game::mergeEntities(void) const {
     std::list<IEntity *> tmp;
@@ -40,35 +42,30 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 }
 
 void  Game::initFood(unsigned int x, unsigned int y) {
-  IEntity *food = createEntity(CELL_UNITY * x, CELL_UNITY * y, Food, NoDir, tFood );
-  std::list <IEntity *> foodList;
-  std::list<IEntity *>::iterator check = Game::singleton()._map.begin();
-  while (check != Game::singleton()._map.end()) {
-      if ((*check)->getPosX() == CELL_UNITY * x && (*check)->getPosY() == CELL_UNITY * y) {
-          Game::singleton()._map.erase(check);
-      }
-      check++;
-  }
-  foodList.push_front(food);
-  this->_food = foodList;
-  return;
+    IEntity *food = createEntity(x, y, Food, NoDir, tFood );
+    if (this->_food.size()) {
+        deleteEntity(this->_food.front());
+        this->_food.pop_back();
+    }
+    this->listAdd(this->_food, food);
+    this->listErase(this->_freePos, x, y);
+    return;
 }
 
 void  Game::initMap(unsigned int width, unsigned int height) {
-    for(unsigned int x = 0; x < width - 1; x++) {
-        for (unsigned int y = 0; y < height - 1; y++) {
-            IEntity *tmp = createEntity(x * CELL_UNITY, y * CELL_UNITY, Free, NoDir, None);
-            this->_map.push_front(tmp);
+    for(unsigned int x = 0; x < width; x++) {
+        for (unsigned int y = 0; y < height; y++) {
+            IEntity *tmp = createEntity(x, y, Free, NoDir, None);
+            this->listAdd(this->_freePos, tmp);
         }
     }
-
     return;
 }
 
 void  Game::start(unsigned int width, unsigned int height) {
     int   tmp = 0;
     Timer frame(33);
-    Timer hooks(100);
+    Timer hooks(1);
     Timer speed(100);
     this->_engine = createEngine(width, height);
     this->initMode(mode);
@@ -95,7 +92,7 @@ void  Game::start(unsigned int width, unsigned int height) {
 }
 
 void  Game::refresh(void) {
-  this->_engine->drawFrame(this->mergeEntities());
+  this->_engine->drawFrame(this->mergeEntities(), this->_player->getLife(), this->_player->getScore());
   return;
 }
 
@@ -141,5 +138,32 @@ void    Game::switchEngine(eHook engine) {
     return;
 }
 
+void    Game::listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y) {
+    std::list<IEntity *>::iterator check = list.begin();
+    while (check != list.end()) {
+        if ((*check)->getPosX() == x && (*check)->getPosY() == y) {
+            list.erase(check);
+            delete *check;
+            return;
+        }
+        check++;
+    }
+    return;
+}
 
+void    Game::listAdd(std::list <IEntity *> &list, IEntity *entity) {
+    list.push_front(entity);
+    return;
+}
+
+bool    Game::listCheck(std::list <IEntity *> &list, unsigned int x, unsigned int y) {
+    std::list<IEntity *>::iterator check = list.begin();
+    while (check != list.end()) {
+        if ((*check)->getPosX() == x && (*check)->getPosY() == y) {
+            return true;
+        }
+        check++;
+    }
+    return false;
+}
 // EXTERNAL FUNCTS

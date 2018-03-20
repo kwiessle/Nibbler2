@@ -54,15 +54,15 @@ void   Window::setHooks(void) {
     else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->hook = SFML; this->engine = SFML;}
 
   }
+  return;
 }
 
-void      Window::drawFrame(std::list <IEntity *> data) const {
+void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
     SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
     SDL_RenderClear(this->pRenderer);
     SDL_Rect    form;
     SDL_Texture *texture = nullptr;
     std::list <IEntity *>::iterator iter = data.begin();
-
     while (iter != data.end()) {
       form.x = (*iter)->getPosX() * CELL_UNITY;
       form.y = (*iter)->getPosY() * CELL_UNITY;
@@ -75,12 +75,12 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
       SDL_DestroyTexture( texture );
       iter++;
     }
-    this->drawMenu(3);
+    this->drawMenu(lives, score);
     SDL_RenderPresent( this->pRenderer );
     return;
 }
 
-void    Window::drawMenu(int lives) const {
+void    Window::drawMenu(int lives, int score) const {
   SDL_Rect    form;
   SDL_Surface *surface = nullptr;
   SDL_Texture *texture = nullptr;
@@ -108,7 +108,8 @@ void    Window::drawMenu(int lives) const {
   }
 
   SDL_Color White = {255, 255, 255, 0};
-  surface = TTF_RenderText_Blended(this->pFont, "666", White);
+  std::string sScore = std::to_string(score);
+  surface = TTF_RenderText_Blended(this->pFont, sScore.c_str(), White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  this->wWidth * CELL_UNITY - 140;
   form.y = this->wHeight * CELL_UNITY + CELL_UNITY / 2;

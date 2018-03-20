@@ -13,6 +13,7 @@ class Game {
     Player                        *_player;
     std::list <IEntity *>         _food;
     std::list <IEntity *>         _walls;
+    std::list <IEntity *>         _freePos;
     IGraphism                     *_engine;
 
   public:
@@ -21,12 +22,13 @@ class Game {
     static Game                   &singleton(void);
 
     std::list <IEntity *>         mergeEntities(void) const;
-    std::list <IEntity *>         _map;
     void                          initMap(unsigned int width, unsigned int height);
     void                          *getBinaryLib(void) const;
     IGraphism                     *getEngine(void) const;
     void                          setEngine(IGraphism  *engine);
-    std::list <IEntity *>         getFood(void) const;
+    std::list <IEntity *>         &getFood(void);
+    std::list <IEntity *>         &getFreePos(void);
+    std::list <IEntity *>         &getWalls(void);
     void                          refresh(void);
     void                          start(unsigned int with, unsigned int height, int mode);
     void                          pause(void) const;
@@ -35,6 +37,10 @@ class Game {
     void                          initFood(unsigned int x, unsigned int y);
     void                          initMode(int mode);
     void                          switchEngine(eHook engine);
+    void                          listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y);
+    void                          listAdd(std::list <IEntity *> &list, IEntity * entity);
+    bool                          listCheck(std::list <IEntity *> &list, unsigned int x, unsigned int y);
+
 };
 
 #endif

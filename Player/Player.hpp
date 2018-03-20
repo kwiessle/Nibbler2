@@ -20,10 +20,10 @@ class Player {
     void                                    _fillQueue(void);
     void                                    _fillHead(void);
     IEntity *                               _createHead(eHook direction);
-
+    Player(void);
 
   public:
-    Player(void);                                                               //Use this constructor for default game.
+    Player(int life, int score); //Use this constructor for default game.ß
     Player(std::list <IEntity *> snake, int life, int score, int speed);         //Use this constructor for load a saved game.
     ~Player(void);
 

@@ -51,7 +51,7 @@ void   Window::setHooks(void) {
     }
 }
 
-void      Window::drawFrame(std::list <IEntity *> data) const {
+void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
     sf::Sprite sprite;
@@ -64,11 +64,11 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
         this->window->draw(sprite);
         iter++;
     }
-    this->drawMenu(3);
+    this->drawMenu(lives, score);
     this->window->display();
     return;
 }
-void    Window::drawMenu(int lives) const {
+void    Window::drawMenu(int lives, int score) const {
     sf::Sprite  sprite;
     int x = CELL_UNITY;
     int y = this->wHeight * CELL_UNITY + CELL_UNITY;
@@ -87,7 +87,8 @@ void    Window::drawMenu(int lives) const {
     }
     sf::Text text;
     text.setFont(this->pFont);
-    text.setString("754");
+    std::string sScore = std::to_string(score);
+    text.setString(sScore.c_str());
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(
