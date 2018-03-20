@@ -5,6 +5,8 @@
 # include "main.hpp"
 # include "Player.hpp"
 # include "Timer.hpp"
+# include <random>
+
 
 class Game {
   private:
@@ -13,6 +15,7 @@ class Game {
     Player                        *_player;
     std::list <IEntity *>         _food;
     std::list <IEntity *>         _walls;
+    std::list <IEntity *>         _fire;
     std::list <IEntity *>         _freePos;
     IGraphism                     *_engine;
 
@@ -29,14 +32,16 @@ class Game {
     std::list <IEntity *>         &getFood(void);
     std::list <IEntity *>         &getFreePos(void);
     std::list <IEntity *>         &getWalls(void);
+    std::list <IEntity *>         &getFire(void);
     void                          refresh(void);
     void                          start(unsigned int with, unsigned int height, int mode);
     void                          pause(void) const;
     void                          save(void) const;
     void                          quit(void) const;
-    void                          initFood(unsigned int x, unsigned int y);
+    void                          initFood(void);
+    void                          initFire(void);
     void                          initMode(int mode);
-    void                          switchEngine(eHook engine);
+    void                          switchEngine(eHook engine, eHook hook);
     void                          listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y);
     void                          listAdd(std::list <IEntity *> &list, IEntity * entity);
     bool                          listCheck(std::list <IEntity *> &list, unsigned int x, unsigned int y);

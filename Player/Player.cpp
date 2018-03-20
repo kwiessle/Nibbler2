@@ -1,6 +1,5 @@
 #include "Player.hpp"
 #include "Game.hpp"
-#include <random>
 
 Player::Player(int life, int score) :
   _life(life),
@@ -23,23 +22,23 @@ int Player::getLife(void) const { return this->_life; }
 int Player::getScore(void) const { return this->_score; }
 
 void  Player::initSnake(void) {
-  Game::singleton().listErase(Game::singleton().getFreePos(), 5, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(5, 0, Snake, Right, rHead));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 6, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(6, 1, Snake, Right, rHead));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 4, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(4, 0, Snake, Right, hBody));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 5, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(5, 1, Snake, Right, hBody));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 3, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(3, 0, Snake, Right, hBody));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 4, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(4, 1, Snake, Right, hBody));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 2, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(2, 0, Snake, Right, hBody));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 3, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(3, 1, Snake, Right, hBody));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 1, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(1, 0, Snake, Right, hBody));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 2, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 0, 0);
-  Game::singleton().listAdd(this->_snake, createEntity(0, 0, Snake, Right, rHead));
+  Game::singleton().listErase(Game::singleton().getFreePos(), 1, 1);
+  Game::singleton().listAdd(this->_snake, createEntity(1, 1, Snake, Right, rHead));
 
   return;
 }
@@ -142,22 +141,21 @@ void  Player::_updateSnake(eHook direction) {
     if (Game::singleton().listCheck(Game::singleton().getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
         this->_grow();
-        std::list<IEntity *>::iterator it =
-            Game::singleton().getFreePos().begin();
-        std::random_device seed;
-        std::mt19937 engine(seed());
-        std::uniform_int_distribution<int> choose(
-            0,
-            static_cast<int>(Game::singleton().getFreePos().size() - 1)
-        );
-        std::advance(it, choose(engine));
-        Game::singleton().initFood((*it)->getPosX(), (*it)->getPosY());
+        Game::singleton().initFood();
     }
     if (Game::singleton().listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
         exit(0);
     }
     if (Game::singleton().listCheck(Game::singleton().getWalls(), newHead->getPosX(), newHead->getPosY())) {
         exit(0);
+    }
+    if (Game::singleton().listCheck(Game::singleton().getFire(), newHead->getPosX(), newHead->getPosY())) {
+        this->_life--;
+        deleteEntity(Game::singleton().getFire().front());
+        Game::singleton().getFire().clear();
+        if (this->_life == 0) {
+            exit(0);
+        }
     }
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());

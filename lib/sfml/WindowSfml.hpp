@@ -14,12 +14,13 @@ class Window : public IGraphism {
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
     void              drawMenu(int lives, int score) const;
     eHook           getHooks(void) const;
+    eHook           getHooksEngine(void) const;
     void            setHooks(void);
     unsigned int    getWidth(void) const;
     unsigned int    getHeight(void) const;
     void            initTextures(void);
   public:
-    Window(unsigned int width, unsigned int height);
+    Window(unsigned int width, unsigned int height, eHook hook);
     ~Window(void);
     eHook                               hook;
     eHook                               engine;
@@ -33,7 +34,7 @@ class Window : public IGraphism {
 };
 
 extern "C" {
-  Window              *createWindow(unsigned int width, unsigned int height);
+  Window              *createWindow(unsigned int width, unsigned int height, eHook hook);
   void                 deleteWindow(Window *window);
 }
 

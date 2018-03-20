@@ -2,10 +2,10 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) :
+Window::Window(unsigned int width, unsigned int height, eHook hook) :
  wWidth(width),
  wHeight(height),
- hook(Right)
+ hook(hook)
 {
     sf::Image icon;
     try {
@@ -35,20 +35,42 @@ eHook   Window::getHooks(void) const {
     return this->hook;
 }
 
+eHook   Window::getHooksEngine(void) const {
+    return this->engine;
+}
+
 void   Window::setHooks(void) {
     sf::Event   event;
     this->window->pollEvent(event);
     if (event.type == sf::Event::Closed) { this->hook = Exit; return;}
+    std::cout << event.key.code << std::endl << this->hook << std::endl;
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) { this->hook = Exit; }
-        if (event.key.code == sf::Keyboard::Up && this->hook != Down) { this->hook = Up; }
-        if (event.key.code == sf::Keyboard::Down && this->hook != Up) { this->hook = Down; }
-        if (event.key.code == sf::Keyboard::Left && this->hook != Right) { this->hook = Left; }
-        if (event.key.code == sf::Keyboard::Right && this->hook != Left) { this->hook = Right; }
-        if (event.key.code == sf::Keyboard::F && this->engine != SDL) { this->hook = SDL; this->engine = SDL; }
-        if (event.key.code == sf::Keyboard::G && this->engine != SFML) { this->hook = SFML; this->engine = SFML;  }
-
+        switch(event.key.code) {
+            case sf::Keyboard::Escape :
+                this->hook = Exit;
+                break;
+            case sf::Keyboard::Up :
+                this->hook = this->hook != Down ? Up :Down;
+                break;
+            case sf::Keyboard::Down :
+                this->hook = this->hook != Up ? Down : Up;
+                break;
+            case sf::Keyboard::Left :
+                this->hook = this->hook != Right ? Left : Right;
+                break;
+            case sf::Keyboard::Right :
+                this->hook = this->hook != Left ? Right : Left;
+                break;
+            case sf::Keyboard::F :
+                this->engine = SDL;
+                break;
+            case sf::Keyboard::G :
+                this->engine = SFML;
+                break;
+            default : break;
+        }
     }
+    return;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {
@@ -106,8 +128,8 @@ unsigned int    Window::getHeight(void) const {
     return this->wHeight;
 }
 
-Window      *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
+Window      *createWindow(unsigned int width, unsigned int height, eHook hook) {
+    return new Window(width, height, hook);
 }
 
 void        deleteWindow(Window *window) {
@@ -115,8 +137,8 @@ void        deleteWindow(Window *window) {
 }
 
 void       Window::initTextures(void) {
-    for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+    for (int i = 1; i <= 23; i++) {
+        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);

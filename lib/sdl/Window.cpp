@@ -2,10 +2,10 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) :
+Window::Window(unsigned int width, unsigned int height, eHook hook) :
   wWidth(width),
   wHeight(height),
-  hook(Right)
+  hook(hook)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -40,18 +40,24 @@ eHook   Window::getHooks(void) const {
     return this->hook;
 }
 
+eHook   Window::getHooksEngine(void) const {
+    return this->engine;
+}
+
+
 void   Window::setHooks(void) {
   SDL_Event event;
   SDL_PollEvent(&event);
 
   if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { this->hook = Exit; }
   else if (event.type == SDL_KEYDOWN) {
+      std::cout << event.key.keysym.sym << std::endl << this->hook << std::endl;
     if (event.key.keysym.sym == 1073741906 && this->hook != Down) { this->hook = Up; }
     else if (event.key.keysym.sym == 1073741905  && this->hook != Up) { this->hook = Down; }
     else if (event.key.keysym.sym == 1073741904 && this->hook != Right) { this->hook = Left; }
     else if (event.key.keysym.sym == 1073741903 && this->hook != Left) { this->hook = Right; }
-    else if (event.key.keysym.sym == 102 && this->engine != SDL) { this->hook = SDL; this->engine = SDL;}
-    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->hook = SFML; this->engine = SFML;}
+    else if (event.key.keysym.sym == 102 && this->engine != SDL) {  this->engine = SDL;}
+    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->engine = SFML;}
 
   }
   return;
@@ -63,6 +69,7 @@ void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) co
     SDL_Rect    form;
     SDL_Texture *texture = nullptr;
     std::list <IEntity *>::iterator iter = data.begin();
+    std::cout << (*iter)->getTexture() << std::endl;
     while (iter != data.end()) {
       form.x = (*iter)->getPosX() * CELL_UNITY;
       form.y = (*iter)->getPosY() * CELL_UNITY;
@@ -131,8 +138,8 @@ unsigned int    Window::getHeight(void) const {
 void       Window::initTextures(void) {
     eTexture texture;
 
-    for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+    for (int i = 1; i <= 23; i++) {
+        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";
@@ -141,8 +148,8 @@ void       Window::initTextures(void) {
     return;
 }
 
-Window    *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
+Window    *createWindow(unsigned int width, unsigned int height, eHook hook) {
+    return new Window(width, height, hook);
 }
 
 void      deleteWindow(Window *window) {

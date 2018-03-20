@@ -2,10 +2,10 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) :
-    wWidth(width * CELL_UNITY),
-    wHeight(height * CELL_UNITY),
-    hook(Right),
+Window::Window(unsigned int width, unsigned int height, eHook hook) :
+    wWidth(width),
+    wHeight(height),
+    hook(hook),
     engine(SFML)
 {
     // al_init();
@@ -34,7 +34,7 @@ Window::~Window(void) {
     return;
 }
 
-void    Window::drawFrame(std::list <IEntity *> data) const {
+void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
     // ALLEGRO_BITMAP * bitmap = al_load_bitmap("./assets/1.bmp");
     // std::cout << bitmap <<std::endl;
     // // al_clear_to_color(al_map_rgb(22,22,24));
@@ -49,6 +49,9 @@ void    Window::drawFrame(std::list <IEntity *> data) const {
 
 eHook   Window::getHooks(void) const {
     return this->hook;
+}
+eHook   Window::getHooksEngine(void) const {
+    return this->engine;
 }
 
 void   Window::setHooks(void) {
@@ -77,8 +80,8 @@ unsigned int    Window::getHeight(void) const {
 // }
 
 
-Window    *createWindow(unsigned int width, unsigned int height) {
-    return new Window(width, height);
+Window    *createWindow(unsigned int width, unsigned int height, eHook hook) {
+    return new Window(width, height, hook);
 }
 
 void      deleteWindow(Window *window) {
