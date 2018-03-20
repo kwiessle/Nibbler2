@@ -3,10 +3,9 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height) :
-  wWidth(width * CELL_UNITY),
-  wHeight(height * CELL_UNITY),
-  hook(Right),
-  engine(SDL)
+  wWidth(width),
+  wHeight(height),
+  hook(Right)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -18,9 +17,9 @@ Window::Window(unsigned int width, unsigned int height) :
       "Nibbler",
       SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
-      this->wWidth,
-      this->wHeight + CELL_UNITY * 2,
-      SDL_WINDOW_SHOWN
+      this->wWidth * CELL_UNITY,
+      this->wHeight * CELL_UNITY + CELL_UNITY * 2,
+      SDL_WINDOW_RESIZABLE
     );
     this->pWindow = pWindow;
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
@@ -65,8 +64,8 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
-      form.x = (*iter)->getPosX();
-      form.y = (*iter)->getPosY();
+      form.x = (*iter)->getPosX() * CELL_UNITY;
+      form.y = (*iter)->getPosY() * CELL_UNITY;
       form.w = CELL_UNITY;
       form.h = CELL_UNITY;
       eTexture img = (*iter)->getTexture();
@@ -86,11 +85,11 @@ void    Window::drawMenu(int lives) const {
   SDL_Surface *surface = nullptr;
   SDL_Texture *texture = nullptr;
   int x = CELL_UNITY;
-  int y = this->wHeight + CELL_UNITY;
+  int y = this->wHeight * CELL_UNITY + CELL_UNITY;
 
   form.x = 0;
-  form.y = this->wHeight;
-  form.w = this->wWidth;
+  form.y = this->wHeight * CELL_UNITY;
+  form.w = this->wWidth * CELL_UNITY;
   form.h = CELL_UNITY * 2;
   texture = SDL_CreateTextureFromSurface(this->pRenderer, this->_textures.find(NoImg)->second);
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
@@ -111,8 +110,8 @@ void    Window::drawMenu(int lives) const {
   SDL_Color White = {255, 255, 255, 0};
   surface = TTF_RenderText_Blended(this->pFont, "666", White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
-  form.x =  this->wWidth - 140;
-  form.y = this->wHeight + CELL_UNITY / 2;
+  form.x =  this->wWidth * CELL_UNITY - 140;
+  form.y = this->wHeight * CELL_UNITY + CELL_UNITY / 2;
   form.w = 40;
   form.h = 30;
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);

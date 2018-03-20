@@ -3,15 +3,16 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height) :
- wWidth(width * CELL_UNITY),
- wHeight(height * CELL_UNITY),
- hook(Right),
- engine(SFML)
+ wWidth(width),
+ wHeight(height),
+ hook(Right)
 {
     sf::Image icon;
     try {
         this->window = new sf::RenderWindow(
-            sf::VideoMode(this->wWidth, this->wHeight + CELL_UNITY * 2),
+            sf::VideoMode(
+                this->wWidth * CELL_UNITY,
+                this->wHeight * CELL_UNITY + CELL_UNITY * 2),
             "Nibbler"
         );
     }
@@ -57,7 +58,7 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
     std::list <IEntity *>::iterator iter = data.begin();
 
     while (iter != data.end()) {
-        sprite.setPosition(sf::Vector2f((*iter)->getPosX(), (*iter)->getPosY())); // position absolue
+        sprite.setPosition(sf::Vector2f((*iter)->getPosX() * CELL_UNITY, (*iter)->getPosY() * CELL_UNITY)); // position absolue
         eTexture img = (*iter)->getTexture();
         sprite.setTexture(this->_textures.find(img)->second);
         this->window->draw(sprite);
@@ -70,9 +71,9 @@ void      Window::drawFrame(std::list <IEntity *> data) const {
 void    Window::drawMenu(int lives) const {
     sf::Sprite  sprite;
     int x = CELL_UNITY;
-    int y = this->wHeight + CELL_UNITY;
+    int y = this->wHeight * CELL_UNITY + CELL_UNITY;
 
-    sprite.setPosition(sf::Vector2f(0, this->wHeight));
+    sprite.setPosition(sf::Vector2f(0, this->wHeight * CELL_UNITY));
     sprite.setTexture(this->_textures.find(NoImg)->second);
     sprite.setScale(CELL_UNITY, 0.2f);
     this->window->draw(sprite);
@@ -90,8 +91,8 @@ void    Window::drawMenu(int lives) const {
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(
-        this->wWidth - 140,
-        this->wHeight + CELL_UNITY /2
+        this->wWidth * CELL_UNITY - 140,
+        this->wHeight * CELL_UNITY + CELL_UNITY /2
     ));
     this->window->draw(text);
   return;
@@ -114,7 +115,7 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam 
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);
