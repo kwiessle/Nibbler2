@@ -1,8 +1,10 @@
 #include "Game.hpp"
 
 Game::Game(void) {
-  this->_player = new Player(4, 0);
-  return;
+    this->_gamePause = false;
+    this->_gameQuit = false;
+    this->_player = new Player(4, 0);
+    return;
 }
 
 Game::~Game(void) {
@@ -93,36 +95,47 @@ void  Game::initMap(unsigned int width, unsigned int height) {
 }
 
 void  Game::start(unsigned int width, unsigned int height, int mode) {
-    int   tmp = 0;
     Timer frame(33);
-    Timer hooks(1);
-    Timer speed(200);
+    Timer speed(100);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
     this->initMap(width, height);
     this->initMode(mode);
     this->_player->initSnake();
     this->initFood();
-    while (1) {
-      if (fire.update()) { this->initFire(); }
-      if (frame.update()) { this->_engine->setHooks(); this->refresh(); }
-      if (speed.update()) {
-        switch(tmp = this->_engine->getHooks()) {
-          case Exit : return;
-          case Up : this->_player->move(Up); break;
-          case Down : this->_player->move(Down); break;
-          case Left : this->_player->move(Left); break;
-          case Right : this->_player->move(Right); break;
-          default : break;
+    while (!this->_gameQuit) {
+        if (this->_engine->engineHasChanged()) {
+            this->_gamePause = true;
+            switch(this->_engine->getEngine()) {
+                case SDL : switchEngine(SDL, this->_engine->getHooks()); break;
+                case SFML : switchEngine(SFML, this->_engine->getHooks()); break;
+                default : break;
+            }
         }
-        switch(tmp = this->_engine->getHooksEngine()) {
-          case SDL : switchEngine(SDL, this->_engine->getHooks()); break;
-          case SFML : switchEngine(SFML, this->_engine->getHooks()); break;
-          default : break;
+        if( !this->_gamePause) {
+            if (frame.update()) {this->_engine->setHooks(); this->refresh();}
+            if (fire.update()) {  this->initFire(); }
+            if (speed.update()) {
+                switch(this->_engine->getHooks()) {
+                    case Exit : return;
+                    case Up : this->_player->move(Up); break;
+                    case Down : this->_player->move(Down); break;
+                    case Left : this->_player->move(Left); break;
+                    case Right : this->_player->move(Right); break;
+                    case Pause : this->_gamePause = true; break;
+                    default : break;
+                }
+            }
         }
-      }
+        else
+            this->pause();
     }
-    return;
+   return;
+}
+
+void  Game::pause(void) {
+    //Handle mouse hooks with button!
+
 }
 
 void  Game::refresh(void) {
@@ -153,7 +166,7 @@ void Game::initMode(int mode) {
     return;
 }
 
-void    Game::switchEngine(eHook engine, eHook hook) {
+void    Game::switchEngine(eEngine engine, eHook hook) {
     unsigned int tmpWidth = this->_engine->getWidth();
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
@@ -165,16 +178,17 @@ void    Game::switchEngine(eHook engine, eHook hook) {
             deleteEngine(this->_engine);
             this->_engine = createEngine(tmpWidth, tmpHeight, hook);
             std::cout << "SDL : " << BINARY_LIB << std::endl;
-            return;
+            break;
         case SFML :
             path = "lib/sfml/sfml.so";
             openBinaryLib(const_cast<char*>(path.c_str()));
             deleteEngine(this->_engine);
             this->_engine = createEngine(tmpWidth, tmpHeight, hook);
             std::cout << "SFML : " << BINARY_LIB << std::endl;
-            return;
-        default : return;
+            break;
+        default : break;
     }
+    this->_gamePause = false;
     return;
 }
 

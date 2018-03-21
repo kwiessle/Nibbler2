@@ -14,7 +14,8 @@ class Window : public IGraphism {
 
     void              setHooks(void);
     eHook             getHooks(void) const;
-    eHook             getHooksEngine(void) const;
+    eEngine           getEngine(void) const;
+    bool              engineHasChanged(void) const;
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
     void              drawMenu(int lives, int score) const;
     unsigned int      getWidth(void) const;
@@ -30,7 +31,9 @@ class Window : public IGraphism {
     unsigned int      wWidth;
     unsigned int      wHeight;
     eHook             hook;
-    eHook             engine;
+    eEngine           engine;
+    bool              engineChecker;
+
 
     std::map <eTexture, SDL_Surface *>      _textures;
 

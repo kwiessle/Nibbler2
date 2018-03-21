@@ -3,7 +3,9 @@
 # include <iostream>
 
 
-enum eHook { NoDir, Up, Down, Left, Right, Exit, SDL, SFML };
+enum eHook { NoDir, Up, Down, Left, Right, Exit, Pause };
+
+enum eEngine { SDL, SFML };
 
 enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };
 
@@ -18,7 +20,6 @@ class IEntity {
   public:
     virtual ~IEntity(void) {}
 
-    virtual void               randomizePosition(void) = 0;
     virtual unsigned int       getPosX(void) const = 0;
     virtual unsigned int       getPosY(void) const = 0;
     virtual eType              getType(void) const = 0;

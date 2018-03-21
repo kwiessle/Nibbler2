@@ -12,16 +12,16 @@ class Timer {
 	private:
 		int		_refTimer;
 		int		_newTimer;
-		int		_diffTime;
+		float	_diffTime;
 
 		int 	_getMilliCount();
 
 	public:
 		Timer();
-		Timer(int diff);
+		Timer(float diff);
 		// Timer(Timer const & src);
 		~Timer();
-		void 				changeDiff(int newdiff);
+		void 				changeDiff(float newdiff);
 		bool				update();
 
 		// Timer &			operator=(Timer const & rhs);

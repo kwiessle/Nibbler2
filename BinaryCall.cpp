@@ -1,7 +1,5 @@
 #include "main.hpp"
 
-
-
  void  dlerror_wrapper(void) {
   std::cout << "Error: " << dlerror() << std::endl;
 }

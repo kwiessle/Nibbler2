@@ -6,6 +6,7 @@ Window::Window(unsigned int width, unsigned int height) :
     wWidth(width),
     wHeight(height),
     hook(hook),
+    engineChecker(false),
     engine(SFML)
 {
     if (!glfwInit()) { std::cout << "OpenGL init failed" << std::endl; exit(0);}
@@ -46,8 +47,12 @@ void    Window::drawFrame(std::list <IEntity *> data) const {
 eHook   Window::getHooks(void) const {
     return this->hook;
 }
-eHook   Window::getHooksEngine(void) const {
+eEngine  Window::getEngine(void) const {
     return this->engine;
+}
+
+bool    Window::engineHasChanged(void) const{
+    return this->engineChecker;
 }
 
 void   Window::setHooks(void) {

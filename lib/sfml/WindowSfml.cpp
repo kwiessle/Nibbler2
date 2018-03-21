@@ -5,6 +5,8 @@ Window::Window(void) { return; }
 Window::Window(unsigned int width, unsigned int height, eHook hook) :
  wWidth(width),
  wHeight(height),
+ engine(SFML),
+ engineChecker(false),
  hook(hook)
 {
     sf::Image icon;
@@ -28,47 +30,35 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
 }
 
 Window::~Window(void) {
-     this->window->close();
+    this->window->close();
+    delete this->window;
 }
 
 eHook   Window::getHooks(void) const {
     return this->hook;
 }
 
-eHook   Window::getHooksEngine(void) const {
+eEngine  Window::getEngine(void) const {
     return this->engine;
+}
+
+bool    Window::engineHasChanged(void) const{
+    return this->engineChecker;
 }
 
 void   Window::setHooks(void) {
     sf::Event   event;
     this->window->pollEvent(event);
-    if (event.type == sf::Event::Closed) { this->hook = Exit; return;}
-    std::cout << event.key.code << std::endl << this->hook << std::endl;
-    if (event.type == sf::Event::KeyPressed) {
-        switch(event.key.code) {
-            case sf::Keyboard::Escape :
-                this->hook = Exit;
-                break;
-            case sf::Keyboard::Up :
-                this->hook = this->hook != Down ? Up :Down;
-                break;
-            case sf::Keyboard::Down :
-                this->hook = this->hook != Up ? Down : Up;
-                break;
-            case sf::Keyboard::Left :
-                this->hook = this->hook != Right ? Left : Right;
-                break;
-            case sf::Keyboard::Right :
-                this->hook = this->hook != Left ? Right : Left;
-                break;
-            case sf::Keyboard::F :
-                this->engine = SDL;
-                break;
-            case sf::Keyboard::G :
-                this->engine = SFML;
-                break;
-            default : break;
-        }
+    if (event.type == sf::Event::Closed) { this->hook = Exit;}
+    else if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape) { this->hook = Exit; }
+        else if (event.key.code == sf::Keyboard::Space) { this->hook = Pause; }
+        else if (event.key.code == sf::Keyboard::Up && this->hook != Down) { this->hook = Up; }
+        else if (event.key.code ==sf::Keyboard::Down  && this->hook != Up) { this->hook = Down; }
+        else if (event.key.code == sf::Keyboard::Left && this->hook != Right) { this->hook = Left; }
+        else if (event.key.code == sf::Keyboard::Right && this->hook != Left) { this->hook = Right; }
+        else if (event.key.code == sf::Keyboard::F && this->engine != SDL) {  this->engine = SDL; this->engineChecker = true; }
+        else if (event.key.code == sf::Keyboard::G && this->engine != SFML) { this->engine = SFML; this->engineChecker = true;}
     }
     return;
 }

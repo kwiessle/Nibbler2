@@ -19,7 +19,8 @@ private:
   void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
   // void            drawMenu(int lives) const;
   eHook           getHooks(void) const;
-  eHook           getHooksEngine(void) const;
+  eEngine         getEngine(void) const;
+  bool            engineHasChanged(void) const;
   void            setHooks(void);
   unsigned int    getWidth(void) const;
   unsigned int    getHeight(void) const;
@@ -29,7 +30,8 @@ public:
   Window(unsigned int width, unsigned int height, eHook hook);
   ~Window(void);
   eHook                               hook;
-  eHook                               engine;
+  eEngine                             engine;
+  bool                                engineChecker;
   unsigned int                        wWidth;
   unsigned int                        wHeight;
   ALLEGRO_DISPLAY                     *pWindow;

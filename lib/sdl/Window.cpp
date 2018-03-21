@@ -5,6 +5,8 @@ Window::Window(void) { return; }
 Window::Window(unsigned int width, unsigned int height, eHook hook) :
   wWidth(width),
   wHeight(height),
+  engine(SDL),
+  engineChecker(false),
   hook(hook)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
@@ -33,17 +35,29 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
 }
 
 Window::~Window(void) {
-  SDL_Quit();
+    std::map<eTexture, SDL_Surface *>::iterator it = this->_textures.begin();
+    while(it != this->_textures.end()){
+        SDL_FreeSurface(it->second);
+        it++;
+    }
+    SDL_DestroyRenderer(this->pRenderer);
+	SDL_DestroyWindow(this->pWindow);
+    TTF_CloseFont(this->pFont);
+    TTF_Quit();
+    SDL_Quit();
 }
 
 eHook   Window::getHooks(void) const {
     return this->hook;
 }
 
-eHook   Window::getHooksEngine(void) const {
+eEngine  Window::getEngine(void) const {
     return this->engine;
 }
 
+bool    Window::engineHasChanged(void) const{
+    return this->engineChecker;
+}
 
 void   Window::setHooks(void) {
   SDL_Event event;
@@ -51,14 +65,13 @@ void   Window::setHooks(void) {
 
   if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { this->hook = Exit; }
   else if (event.type == SDL_KEYDOWN) {
-      std::cout << event.key.keysym.sym << std::endl << this->hook << std::endl;
-    if (event.key.keysym.sym == 1073741906 && this->hook != Down) { this->hook = Up; }
-    else if (event.key.keysym.sym == 1073741905  && this->hook != Up) { this->hook = Down; }
-    else if (event.key.keysym.sym == 1073741904 && this->hook != Right) { this->hook = Left; }
-    else if (event.key.keysym.sym == 1073741903 && this->hook != Left) { this->hook = Right; }
-    else if (event.key.keysym.sym == 102 && this->engine != SDL) {  this->engine = SDL;}
-    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->engine = SFML;}
-
+    if (event.key.keysym.sym == SDLK_UP && this->hook != Down) { this->hook = Up; }
+    else if (event.key.keysym.sym == SDLK_DOWN  && this->hook != Up) { this->hook = Down; }
+    else if (event.key.keysym.sym == SDLK_LEFT && this->hook != Right) { this->hook = Left; }
+    else if (event.key.keysym.sym == SDLK_RIGHT && this->hook != Left) { this->hook = Right; }
+    else if (event.key.keysym.sym == 102 && this->engine != SDL) { this->engine = SDL; this->engineChecker = true; }
+    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->engine = SFML; this->engineChecker = true; }
+    else if (event.key.keysym.sym == SDLK_SPACE) {this->hook = Pause;}
   }
   return;
 }
@@ -69,7 +82,6 @@ void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) co
     SDL_Rect    form;
     SDL_Texture *texture = nullptr;
     std::list <IEntity *>::iterator iter = data.begin();
-    std::cout << (*iter)->getTexture() << std::endl;
     while (iter != data.end()) {
       form.x = (*iter)->getPosX() * CELL_UNITY;
       form.y = (*iter)->getPosY() * CELL_UNITY;

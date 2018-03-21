@@ -2,7 +2,7 @@
 
 Timer::Timer(void) { return; }
 
-Timer::Timer(int diff):
+Timer::Timer(float diff):
   _diffTime(diff)
 {
 	   this->_refTimer = _getMilliCount();
@@ -20,8 +20,8 @@ int 		Timer::_getMilliCount(void) {
 	return nCount;
 }
 
-void        Timer::changeDiff(int newDiff) {
-    this->_diffTime = newDiff;
+void        Timer::changeDiff(float newDiff) {
+    this->_diffTime /= newDiff;
 }
 
 bool		Timer::update(void) {

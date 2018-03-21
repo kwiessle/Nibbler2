@@ -6,6 +6,7 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
     wWidth(width),
     wHeight(height),
     hook(hook),
+    engineChecker(false),
     engine(SFML)
 {
     // al_init();
@@ -50,13 +51,18 @@ void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) cons
 eHook   Window::getHooks(void) const {
     return this->hook;
 }
-eHook   Window::getHooksEngine(void) const {
+eEngine   Window::getEngine(void) const {
     return this->engine;
+}
+
+bool    Window::engineHasChanged(void) const{
+    return this->engineChecker;
 }
 
 void   Window::setHooks(void) {
 
 }
+
 
 unsigned int    Window::getWidth(void) const {
     return this->wWidth;

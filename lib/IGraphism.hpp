@@ -12,7 +12,8 @@ class IGraphism {
 
     virtual void            drawFrame(std::list <IEntity *> data, int lives, int score) const = 0;
     virtual eHook           getHooks(void) const = 0;
-    virtual eHook           getHooksEngine(void) const = 0;
+    virtual eEngine         getEngine(void) const = 0;
+    virtual bool            engineHasChanged(void) const = 0;
     virtual void            setHooks(void) = 0;
     virtual unsigned int    getWidth(void) const = 0;
     virtual unsigned int    getHeight(void) const = 0;
