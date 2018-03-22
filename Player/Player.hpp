@@ -23,7 +23,7 @@ class Player {
     Player(void);
 
   public:
-    Player(int life, int score); //Use this constructor for default game.ß
+    Player(int life, int score); //Use this constructor for default game.
     Player(std::list <IEntity *> snake, int life, int score, int speed);         //Use this constructor for load a saved game.
     ~Player(void);
 

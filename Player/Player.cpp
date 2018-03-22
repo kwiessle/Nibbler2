@@ -13,7 +13,14 @@ Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
   _speed(speed)
 { return; }
 
-Player::~Player(void) { return; }
+Player::~Player(void) {
+    std::list<IEntity *>::iterator it = this->_snake.begin();
+    while (it != this->_snake.end()) {
+        deleteEntity(*it);
+        it++;
+    }
+    return;
+}
 
 std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
@@ -22,9 +29,6 @@ int Player::getLife(void) const { return this->_life; }
 int Player::getScore(void) const { return this->_score; }
 
 void  Player::initSnake(void) {
-    if (!this->_snake.empty()) {
-        this->_snake.clear();
-    }
   Game::singleton().listErase(Game::singleton().getFreePos(), 6, 1);
   Game::singleton().listAdd(this->_snake, createEntity(6, 1, Snake, Right, rHead));
 
@@ -169,7 +173,6 @@ void  Player::_updateSnake(eHook direction) {
 }
 
 IEntity *   Player::_createHead(eHook direction) {
-    IEntity *newHead;
     IEntity *neck = this->_snake.back();
     unsigned int x = 0;
     unsigned int y = 0;
@@ -194,6 +197,6 @@ IEntity *   Player::_createHead(eHook direction) {
             break;
         default: break;
     }
-    newHead = createEntity(x, y, Snake, direction, rHead );
+    IEntity *newHead = createEntity(x, y, Snake, direction, rHead);
     return newHead;
 }

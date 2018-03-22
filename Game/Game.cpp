@@ -8,8 +8,28 @@ Game::Game(void) {
 }
 
 Game::~Game(void) {
+    std::list<IEntity *>::iterator itPos = this->_freePos.begin();
+    while (itPos != this->_freePos.end()) {
+        deleteEntity(*itPos);
+        itPos++;
+    }
+    std::list<IEntity *>::iterator itWalls = this->_walls.begin();
+    while (itWalls != this->_walls.end()) {
+        deleteEntity(*itWalls);
+        itWalls++;
+    }
+    std::list<IEntity *>::iterator itFire = this->_fire.begin();
+    while (itFire != this->_fire.end()) {
+        deleteEntity(*itFire);
+        itFire++;
+    }
+    std::list<IEntity *>::iterator itFood = this->_food.begin();
+    while (itFood != this->_food.end()) {
+        deleteEntity(*itFood);
+        itFood++;
+    }
+    delete this->_player;
     dlclose(BINARY_LIB);
-  delete this->_player;
 }
 
 Game   &Game::singleton(void) {
@@ -54,7 +74,7 @@ void  Game::initFood(void) {
     std::advance(it, choose(engine));
     IEntity *food = createEntity( (*it)->getPosX(), (*it)->getPosY(), Food, NoDir, tFood );
     if (this->_food.size()) {
-        deleteEntity( this->_food.front());
+        deleteEntity(this->_food.front());
         this->_food.pop_back();
     }
     this->listAdd(this->_food, food);
@@ -94,10 +114,12 @@ void  Game::initMap(unsigned int width, unsigned int height) {
 }
 
 void Game::initGame(unsigned int width, unsigned int height, int mode) {
-    this->initMap(width, height);
-    this->initMode(mode);
     delete this->_player;
     this->_player = new Player(4, 0);
+    this->_gamePause = false;
+    this->_gameQuit = false;
+    this->initMap(width, height);
+    this->initMode(mode);
     this->_player->initSnake();
     this->initFood();
 }
