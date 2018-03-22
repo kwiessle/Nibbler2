@@ -153,9 +153,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
 }
 
 void  Game::pause(int status) {
-    while(this->_gamePause) {
         this->_gamePause = this->_engine->displayPause(status);
-    }
 }
 
 void  Game::refresh(void) {

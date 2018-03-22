@@ -163,6 +163,13 @@ bool            Window::displayPause(int status)  {
             return false;
         }
     }
+    else if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
+        else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
+            { this->engine = SDL; this->engineChecker = true; }
+        else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
+            { this->engine = SFML; this->engineChecker = true; }
+    }
     return true;
 }
 
