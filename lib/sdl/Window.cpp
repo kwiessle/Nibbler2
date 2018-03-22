@@ -35,20 +35,32 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
 }
 
 Window::~Window(void) {
+    SDL_RenderClear(this->pRenderer);
     std::map<eTexture, SDL_Surface *>::iterator it = this->_textures.begin();
-    while(it != this->_textures.end()){
+    while (it != this->_textures.end()) {
+        if (it->first >= 5 && it->first <= 8) {it++; continue;}
         SDL_FreeSurface(it->second);
         it++;
     }
-    SDL_DestroyRenderer(this->pRenderer);
-	SDL_DestroyWindow(this->pWindow);
     TTF_CloseFont(this->pFont);
     TTF_Quit();
+    this->_textures.clear();
+    SDL_DestroyRenderer(this->pRenderer);
+    SDL_DestroyWindow(this->pWindow);
     SDL_Quit();
 }
 
 eHook   Window::getHooks(void) const {
     return this->hook;
+}
+
+eHook   Window::getStatus(void) const {
+    return this->status;
+}
+
+void   Window::setStatus(eHook status) {
+    this->status = status;
+    return;
 }
 
 eEngine  Window::getEngine(void) const {
@@ -63,7 +75,7 @@ void   Window::setHooks(void) {
   SDL_Event event;
   SDL_PollEvent(&event);
 
-  if (event.type == SDL_QUIT || event.key.keysym.sym == 27) { this->hook = Exit; }
+  if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27)) { this->status = Exit; }
   else if (event.type == SDL_KEYDOWN) {
     if (event.key.keysym.sym == SDLK_UP && this->hook != Down) { this->hook = Up; }
     else if (event.key.keysym.sym == SDLK_DOWN  && this->hook != Up) { this->hook = Down; }
@@ -71,7 +83,7 @@ void   Window::setHooks(void) {
     else if (event.key.keysym.sym == SDLK_RIGHT && this->hook != Left) { this->hook = Right; }
     else if (event.key.keysym.sym == 102 && this->engine != SDL) { this->engine = SDL; this->engineChecker = true; }
     else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->engine = SFML; this->engineChecker = true; }
-    else if (event.key.keysym.sym == SDLK_SPACE) {this->hook = Pause;}
+    else if (event.key.keysym.sym == SDLK_SPACE) {this->status = Pause;}
   }
   return;
 }
@@ -135,8 +147,16 @@ void    Window::drawMenu(int lives, int score) const {
   form.w = 40;
   form.h = 30;
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+  SDL_DestroyTexture(texture);
   SDL_FreeSurface(surface);
   return;
+}
+
+bool            Window::displayPause(int status) {
+    SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
+    SDL_RenderClear(this->pRenderer);
+    SDL_RenderPresent( this->pRenderer );
+    return true;
 }
 
 unsigned int    Window::getWidth(void) const {

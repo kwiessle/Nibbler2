@@ -3,7 +3,7 @@
 # include <iostream>
 
 
-enum eHook { NoDir, Up, Down, Left, Right, Exit, Pause };
+enum eHook { NoDir, Up, Down, Left, Right, Exit, Pause, Start };
 
 enum eEngine { SDL, SFML };
 

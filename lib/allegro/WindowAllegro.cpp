@@ -48,9 +48,23 @@ void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) cons
     return;
 }
 
+bool    Window::displayPause(int status) {
+    return true;
+}
+
 eHook   Window::getHooks(void) const {
     return this->hook;
 }
+
+eHook   Window::getStatus(void) const {
+    return this->status;
+}
+
+void   Window::setStatus(eHook status) {
+    this->status = status;
+    return;
+}
+
 eEngine   Window::getEngine(void) const {
     return this->engine;
 }

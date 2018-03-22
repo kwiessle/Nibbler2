@@ -5,7 +5,7 @@
 }
 
 bool   openBinaryLib(char *path) {
-    if (!(BINARY_LIB = dlopen(path, RTLD_LAZY | RTLD_LOCAL))) {
+    if (!(BINARY_LIB = dlopen(path, RTLD_NOW | RTLD_GLOBAL))) {
       dlerror_wrapper();
       return false;
     }

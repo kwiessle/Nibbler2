@@ -22,6 +22,9 @@ int Player::getLife(void) const { return this->_life; }
 int Player::getScore(void) const { return this->_score; }
 
 void  Player::initSnake(void) {
+    if (!this->_snake.empty()) {
+        this->_snake.clear();
+    }
   Game::singleton().listErase(Game::singleton().getFreePos(), 6, 1);
   Game::singleton().listAdd(this->_snake, createEntity(6, 1, Snake, Right, rHead));
 
@@ -38,7 +41,7 @@ void  Player::initSnake(void) {
   Game::singleton().listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
 
   Game::singleton().listErase(Game::singleton().getFreePos(), 1, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(1, 1, Snake, Right, rHead));
+  Game::singleton().listAdd(this->_snake, createEntity(1, 1, Snake, Right, rQueue));
 
   return;
 }

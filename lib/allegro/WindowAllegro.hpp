@@ -17,8 +17,11 @@ private:
   Window(void);
 
   void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
+  bool            displayPause(int status);
   // void            drawMenu(int lives) const;
   eHook           getHooks(void) const;
+  eHook           getStatus(void) const;
+  void            setStatus(eHook status) ;
   eEngine         getEngine(void) const;
   bool            engineHasChanged(void) const;
   void            setHooks(void);
@@ -30,6 +33,7 @@ public:
   Window(unsigned int width, unsigned int height, eHook hook);
   ~Window(void);
   eHook                               hook;
+  eHook                               status;
   eEngine                             engine;
   bool                                engineChecker;
   unsigned int                        wWidth;

@@ -11,7 +11,10 @@ class IGraphism {
     virtual ~IGraphism(void) {}
 
     virtual void            drawFrame(std::list <IEntity *> data, int lives, int score) const = 0;
+    virtual bool            displayPause(int status)  = 0;
     virtual eHook           getHooks(void) const = 0;
+    virtual eHook           getStatus(void) const = 0;
+    virtual void            setStatus(eHook status)  = 0;
     virtual eEngine         getEngine(void) const = 0;
     virtual bool            engineHasChanged(void) const = 0;
     virtual void            setHooks(void) = 0;

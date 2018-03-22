@@ -14,9 +14,13 @@ class Window : public IGraphism {
 
     void              setHooks(void);
     eHook             getHooks(void) const;
+    eHook             getStatus(void) const;
+    void            setStatus(eHook status);
+
     eEngine           getEngine(void) const;
     bool              engineHasChanged(void) const;
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
+    bool              displayPause(int status);
     void              drawMenu(int lives, int score) const;
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;
@@ -31,6 +35,7 @@ class Window : public IGraphism {
     unsigned int      wWidth;
     unsigned int      wHeight;
     eHook             hook;
+    eHook             status;
     eEngine           engine;
     bool              engineChecker;
 
