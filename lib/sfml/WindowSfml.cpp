@@ -167,6 +167,7 @@ bool            Window::displayPause(int status)  {
                 return false;
             }
         }
+        else if (event.type == sf::Event::Closed) { this->status = Exit; }
         else if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
             else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
