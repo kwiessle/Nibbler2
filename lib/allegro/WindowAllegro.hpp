@@ -21,6 +21,8 @@ private:
   // void            drawMenu(int lives) const;
   eHook           getHooks(void) const;
   eHook           getStatus(void) const;
+  void            changeHook(eHook status);
+
   void            setStatus(eHook status) ;
   eEngine         getEngine(void) const;
   bool            engineHasChanged(void) const;

@@ -15,12 +15,17 @@ class Window : public IGraphism {
     void              setHooks(void);
     eHook             getHooks(void) const;
     eHook             getStatus(void) const;
+    void            changeHook(eHook status);
     void            setStatus(eHook status);
 
     eEngine           getEngine(void) const;
     bool              engineHasChanged(void) const;
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
     bool              displayPause(int status);
+    SDL_Rect          drawStart(SDL_Color color) const;
+    SDL_Rect          drawResume(SDL_Color color) const;
+    SDL_Rect          drawExit(SDL_Color color) const;
+    bool              checkMousePos(SDL_Rect button, int x, int y) const;
     void              drawMenu(int lives, int score) const;
     unsigned int      getWidth(void) const;
     unsigned int      getHeight(void) const;

@@ -66,26 +66,39 @@ void   Window::setStatus(eHook status) {
 eEngine  Window::getEngine(void) const {
     return this->engine;
 }
+void    Window::changeHook(eHook hook){
+    this->hook = hook;
+}
 
 bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
 }
 
 void   Window::setHooks(void) {
-  SDL_Event event;
-  SDL_PollEvent(&event);
+    SDL_Event event;
 
-  if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27)) { this->status = Exit; }
-  else if (event.type == SDL_KEYDOWN) {
-    if (event.key.keysym.sym == SDLK_UP && this->hook != Down) { this->hook = Up; }
-    else if (event.key.keysym.sym == SDLK_DOWN  && this->hook != Up) { this->hook = Down; }
-    else if (event.key.keysym.sym == SDLK_LEFT && this->hook != Right) { this->hook = Left; }
-    else if (event.key.keysym.sym == SDLK_RIGHT && this->hook != Left) { this->hook = Right; }
-    else if (event.key.keysym.sym == 102 && this->engine != SDL) { this->engine = SDL; this->engineChecker = true; }
-    else if (event.key.keysym.sym == 103 && this->engine != SFML) { this->engine = SFML; this->engineChecker = true; }
-    else if (event.key.keysym.sym == SDLK_SPACE) {this->status = Pause;}
-  }
-  return;
+    while(SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT ||
+         (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27))
+            { this->status = Exit; }
+        else if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == SDLK_UP && this->hook != Down)
+                { this->hook = Up; }
+            else if (event.key.keysym.sym == SDLK_DOWN  && this->hook != Up)
+                { this->hook = Down; }
+            else if (event.key.keysym.sym == SDLK_LEFT && this->hook != Right)
+                { this->hook = Left; }
+            else if (event.key.keysym.sym == SDLK_RIGHT && this->hook != Left)
+                { this->hook = Right; }
+            else if (event.key.keysym.sym == 102 && this->engine != SDL)
+                { this->engine = SDL; this->engineChecker = true; }
+            else if (event.key.keysym.sym == 103 && this->engine != SFML)
+                { this->engine = SFML; this->engineChecker = true; }
+            else if (event.key.keysym.sym == SDLK_SPACE)
+                {this->status = Pause;}
+        }
+    }
+    return;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
@@ -153,10 +166,108 @@ void    Window::drawMenu(int lives, int score) const {
 }
 
 bool            Window::displayPause(int status) {
+    SDL_Rect  start;
+    SDL_Rect  resume;
+    SDL_Rect  exit;
+    SDL_Event event;
+    SDL_Color background = { 22, 22, 24, 0};
+
     SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
     SDL_RenderClear(this->pRenderer);
+    switch (status) {
+        case 2 :
+            resume = this->drawResume(background);
+        case 1 :
+            start = this->drawStart(background);
+            exit = this->drawExit(background);
+            break;
+    }
     SDL_RenderPresent( this->pRenderer );
+    while(SDL_PollEvent(&event)) {
+        if (event.type ==  SDL_MOUSEBUTTONDOWN) {
+            if ( this->checkMousePos(resume, event.button.x, event.button.y) ) {
+                this->status = NoDir;
+                return false;
+            }
+            if ( this->checkMousePos(exit, event.button.x, event.button.y) ) {
+                this->status = Exit;
+                return false;
+            }
+            if ( this->checkMousePos(start, event.button.x, event.button.y) ) {
+                this->status = Start;
+                return false;
+            }
+        }
+        else if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == 27) { this->status = Exit; }
+            else if (event.key.keysym.sym == 102 && this->engine != SDL) {
+                this->engine = SDL; this->engineChecker = true; }
+            else if (event.key.keysym.sym == 103 && this->engine != SFML) {
+                this->engine = SFML; this->engineChecker = true; }
+        }
+    }
     return true;
+}
+
+bool    Window::checkMousePos(SDL_Rect button, int x, int y) const {
+    if (x >= button.x && x <= (button.x + button.w)
+        && y >= button.y && y <= (button.y + button.h))
+        return true;
+    return false;
+}
+
+SDL_Rect Window::drawStart(SDL_Color color) const {
+    SDL_Rect start;
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+    (void)color;
+    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
+    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+    start.x = wWidth * CELL_UNITY / 5;
+    start.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    start.w = CELL_UNITY * 3;
+    start.h = CELL_UNITY * 2;
+    SDL_FillRect(surface, &start, SDL_MapRGB(surface->format, 255, 0, 0));
+    SDL_RenderCopy(this->pRenderer, texture, nullptr, &start);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    return start;
+}
+
+SDL_Rect Window::drawResume(SDL_Color color) const {
+    SDL_Rect resume;
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+    (void)color;
+    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
+    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+    resume.x = (wWidth * CELL_UNITY / 5) * 2;
+    resume.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    resume.w = CELL_UNITY * 3;
+    resume.h = CELL_UNITY * 2;
+    SDL_FillRect(surface, &resume, SDL_MapRGB(surface->format, 255, 0, 0));
+    SDL_RenderCopy(this->pRenderer, texture, nullptr, &resume);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    return resume;
+}
+
+SDL_Rect Window::drawExit(SDL_Color color) const {
+    SDL_Rect exit;
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+    (void)color;
+    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
+    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+    exit.x = (wWidth * CELL_UNITY / 5) * 3;
+    exit.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    exit.w = CELL_UNITY * 3;
+    exit.h = CELL_UNITY * 2;
+    SDL_FillRect(surface, &exit, SDL_MapRGB(surface->format, 255, 0, 0));
+    SDL_RenderCopy(this->pRenderer, texture, nullptr, &exit);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    return exit;
 }
 
 unsigned int    Window::getWidth(void) const {

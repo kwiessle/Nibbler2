@@ -15,6 +15,7 @@ class IGraphism {
     virtual eHook           getHooks(void) const = 0;
     virtual eHook           getStatus(void) const = 0;
     virtual void            setStatus(eHook status)  = 0;
+    virtual void            changeHook(eHook status)  = 0;
     virtual eEngine         getEngine(void) const = 0;
     virtual bool            engineHasChanged(void) const = 0;
     virtual void            setHooks(void) = 0;

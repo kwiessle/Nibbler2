@@ -23,6 +23,7 @@ class Window : public IGraphism {
     eEngine         getEngine(void) const;
     bool            engineHasChanged(void) const;
     void            setHooks(void);
+    void            changeHook(eHook hook);
     unsigned int    getWidth(void) const;
     unsigned int    getHeight(void) const;
     void            initTextures(void);

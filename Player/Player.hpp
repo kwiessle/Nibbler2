@@ -11,9 +11,9 @@ class Player {
     int                                     _life;
     int                                     _score;
     int                                     _speed;
+    bool                                    _dead;
 
     void                                    _grow(void);
-    void                                    _death(void);
     void                                    _updateSnake(eHook direction);
     void                                    _detectCollision(eHook direction);
     void                                    _fillNeck(eHook headDirection);
@@ -33,6 +33,7 @@ class Player {
     int                          getLife(void) const;
     int                          getScore(void) const;
     int                          getSpeed(void) const;
+    bool                         checkDeath(void) const;
     void                         initSnake(void);
 
 

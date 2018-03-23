@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 Game::Game(void) {
-    this->_gamePause = false;
+    this->_gamePause = true;
     this->_gameQuit = false;
     this->_player = new Player(4, 0);
     return;
@@ -64,12 +64,12 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
 
 void  Game::initFood(void) {
     std::list<IEntity *>::iterator it =
-        Game::singleton().getFreePos().begin();
+        this->_freePos.begin();
     std::random_device seed;
     std::mt19937 engine(seed());
     std::uniform_int_distribution<int> choose(
         0,
-        static_cast<int>(Game::singleton().getFreePos().size() - 1)
+        static_cast<int>(this->_freePos.size() - 1)
     );
     std::advance(it, choose(engine));
     IEntity *food = createEntity( (*it)->getPosX(), (*it)->getPosY(), Food, NoDir, tFood );
@@ -84,18 +84,18 @@ void  Game::initFood(void) {
 
 void  Game::initFire(void) {
     std::list<IEntity *>::iterator it =
-        Game::singleton().getFreePos().begin();
+        this->_freePos.begin();
     std::random_device seed;
     std::mt19937 engine(seed());
     std::uniform_int_distribution<int> choose(
         0,
-        static_cast<int>(Game::singleton().getFreePos().size() - 1)
+        static_cast<int>(this->_freePos.size() - 1)
     );
     std::advance(it, choose(engine));
     IEntity *fire = createEntity( (*it)->getPosX(), (*it)->getPosY(), Fire, NoDir, tFire );
     if (this->_fire.size()) {
-        Game::singleton().listAdd(Game::singleton().getFreePos(), createEntity(this->_fire.front()->getPosX(), this->_fire.front()->getPosY(), Free, NoDir, None));
-        deleteEntity( this->_fire.front());
+        this->listAdd(this->_freePos, createEntity(this->_fire.front()->getPosX(), this->_fire.front()->getPosY(), Free, NoDir, None));
+        deleteEntity(this->_fire.front());
         this->_fire.pop_back();
     }
     this->listAdd(this->_fire, fire);
@@ -115,8 +115,8 @@ void  Game::initMap(unsigned int width, unsigned int height) {
 
 void Game::initGame(unsigned int width, unsigned int height, int mode) {
     delete this->_player;
+    this->_engine->changeHook(Right);
     this->_player = new Player(4, 0);
-    this->_gamePause = false;
     this->_gameQuit = false;
     this->initMap(width, height);
     this->initMode(mode);
@@ -128,14 +128,16 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer frame(33);
     Timer speed(100);
     Timer fire(4000);
-    this->_engine = createEngine( width, height, Right);
-    this->initGame(width, height, mode);
+    this->_engine = createEngine(width, height, Right);
     while (!this->_gameQuit) {
-        if (frame.update()) {this->_engine->setHooks(); }
+        this->_engine->setHooks();
         switch(this->_engine->getStatus()) {
             case Exit : this->_gameQuit = true; break;
-            case Start : this->initGame(width, height, mode);
-            this->_engine->setStatus(NoDir); break;
+            case Start :
+                this->initGame(width, height, mode);
+                speed.resetDiff(100);
+                this->_engine->setStatus(NoDir);
+                break;
             default : break;
         }
         if (this->_engine->engineHasChanged()) {
@@ -148,12 +150,16 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             }
             this->_gamePause = tmp;
         }
-        if( !this->_gamePause ) {
+        if ( !this->_gamePause ) {
             if (fire.update()) {  this->initFire(); }
             if (speed.update()) {
-                // if ((this->_player->getScore() +1) % 10 == 0) {
-                //     speed.changeDiff(1.01);
-                // }
+                if ((this->_player->getScore() + 1) % 10 == 0) {
+                    speed.changeDiff(1.001);
+                }
+                switch(this->_engine->getStatus()) {
+                    case Pause : this->_gamePause = true; break;
+                    default : break;
+                }
                 switch(this->_engine->getHooks()) {
                     case Up : this->_player->move(Up); break;
                     case Down : this->_player->move(Down); break;
@@ -161,17 +167,21 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                     case Right : this->_player->move(Right); break;
                     default : break;
                 }
-                switch(this->_engine->getStatus()) {
-                    case Pause : this->_gamePause = true; break;
-                    default : break;
-                }
             }
             this->refresh();
         }
         else
-            this->pause(2);
+            if (this->_player->checkDeath())
+                this->pause(1);
+            else
+                this->pause(2);
     }
    return;
+}
+
+void  Game::setPause(void) {
+    this->_gamePause = true;
+    return;
 }
 
 void  Game::pause(int status) {

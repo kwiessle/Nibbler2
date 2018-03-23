@@ -64,6 +64,9 @@ void   Window::setStatus(eHook status) {
     this->status = status;
     return;
 }
+void    Window::changeHook(eHook hook){
+    this->hook = hook;
+}
 
 eEngine   Window::getEngine(void) const {
     return this->engine;

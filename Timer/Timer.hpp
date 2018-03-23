@@ -22,6 +22,7 @@ class Timer {
 		// Timer(Timer const & src);
 		~Timer();
 		void 				changeDiff(float newdiff);
+		void        		resetDiff(float diff);
 		bool				update();
 
 		// Timer &			operator=(Timer const & rhs);

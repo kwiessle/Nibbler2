@@ -25,7 +25,7 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
 
 Window::~Window(void) {
     this->window->close();
-    // delete this->window;
+    delete this->window;
 }
 
 eHook   Window::getHooks(void) const {
@@ -39,7 +39,9 @@ void   Window::setStatus(eHook status)  {
     this->status = status;
     return;
 }
-
+void    Window::changeHook(eHook hook){
+    this->hook = hook;
+}
 eEngine  Window::getEngine(void) const {
     return this->engine;
 }
@@ -50,25 +52,25 @@ bool    Window::engineHasChanged(void) const{
 
 void   Window::setHooks(void) {
     sf::Event   event;
-    this->window->pollEvent(event);
-
-    if (event.type == sf::Event::Closed) { this->status = Exit;}
-    else if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
-        else if (event.key.code == sf::Keyboard::Space)
-            { this->status = Pause; }
-        else if (event.key.code == sf::Keyboard::Up && this->hook != Down)
-            { this->hook = Up; }
-        else if (event.key.code ==sf::Keyboard::Down  && this->hook != Up)
-            { this->hook = Down; }
-        else if (event.key.code == sf::Keyboard::Left && this->hook != Right)
-            { this->hook = Left; }
-        else if (event.key.code == sf::Keyboard::Right && this->hook != Left)
-            { this->hook = Right; }
-        else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
-            {  this->engine = SDL; this->engineChecker = true; }
-        else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
-            { this->engine = SFML; this->engineChecker = true;}
+    while(this->window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) { this->status = Exit;}
+        else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
+            else if (event.key.code == sf::Keyboard::Space)
+                { this->status = Pause; }
+            else if (event.key.code == sf::Keyboard::Up && this->hook != Down)
+                { this->hook = Up; }
+            else if (event.key.code ==sf::Keyboard::Down  && this->hook != Up)
+                { this->hook = Down; }
+            else if (event.key.code == sf::Keyboard::Left && this->hook != Right)
+                { this->hook = Left; }
+            else if (event.key.code == sf::Keyboard::Right && this->hook != Left)
+                { this->hook = Right; }
+            else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
+                {  this->engine = SDL; this->engineChecker = true; }
+            else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
+                { this->engine = SFML; this->engineChecker = true;}
+        }
     }
     return;
 }
@@ -130,11 +132,10 @@ bool            Window::displayPause(int status)  {
     sf::RectangleShape  start;
     sf::RectangleShape  resume;
     sf::RectangleShape  exit;
-
     background.setPosition(sf::Vector2f(0, 0));
     img.loadFromFile("./assets/appicon.bmp");
     background.setTexture(img);
-    background.setScale(CELL_UNITY * wWidth / 512, CELL_UNITY * wHeight / 512);
+    background.setScale(static_cast<float>(CELL_UNITY * wWidth) / 512 , static_cast<float>(CELL_UNITY * wHeight) / 512 );
     this->window->clear(color);
     this->window->draw(background);
     switch (status) {
@@ -146,29 +147,33 @@ bool            Window::displayPause(int status)  {
             break;
     }
     this->window->display();
-    this->window->pollEvent(event);
-    if (event.type == sf::Event::MouseButtonPressed) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition( *this->window );
-        sf::Vector2f mousePosF( static_cast<float>( mousePos.x ), static_cast<float>( mousePos.y ) );
-        if ( resume.getGlobalBounds().contains( mousePosF ) ) {
-            this->status = NoDir;
-            return false;
+    while(this->window->pollEvent(event)) {
+        if (event.type == sf::Event::MouseButtonPressed) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition( *this->window );
+            sf::Vector2f mousePosF(
+                static_cast<float>(mousePos.x),
+                static_cast<float>(mousePos.y)
+            );
+            if ( resume.getGlobalBounds().contains( mousePosF ) ) {
+                this->status = NoDir;
+                return false;
+            }
+            if ( exit.getGlobalBounds().contains( mousePosF ) ) {
+                this->status = Exit;
+                return false;
+            }
+            if ( start.getGlobalBounds().contains( mousePosF ) ) {
+                this->status = Start;
+                return false;
+            }
         }
-        if ( exit.getGlobalBounds().contains( mousePosF ) ) {
-            this->status = Exit;
-            return false;
+        else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
+            else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
+                { this->engine = SDL; this->engineChecker = true; }
+            else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
+                { this->engine = SFML; this->engineChecker = true; }
         }
-        if ( start.getGlobalBounds().contains( mousePosF ) ) {
-             this->status = Start;
-            return false;
-        }
-    }
-    else if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
-        else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
-            { this->engine = SDL; this->engineChecker = true; }
-        else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
-            { this->engine = SFML; this->engineChecker = true; }
     }
     return true;
 }
@@ -176,9 +181,9 @@ bool            Window::displayPause(int status)  {
 sf::RectangleShape            Window::drawStart(sf::Color color) const {
     sf::RectangleShape start;
     start.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    start.setOutlineColor(sf::Color::Red);
+    start.setOutlineColor(sf::Color::Green);
     start.setOutlineThickness(5);
-    start.setPosition(wWidth * CELL_UNITY / 4 , wHeight * CELL_UNITY / 2 - CELL_UNITY);
+    start.setPosition(wWidth * CELL_UNITY / 5 ,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     start.setFillColor(color);
     this->window->draw(start);
     return start;
@@ -187,9 +192,9 @@ sf::RectangleShape            Window::drawStart(sf::Color color) const {
 sf::RectangleShape            Window::drawResume(sf::Color color) const {
     sf::RectangleShape resume;
     resume.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    resume.setOutlineColor(sf::Color::Red);
+    resume.setOutlineColor(sf::Color::Blue);
     resume.setOutlineThickness(5);
-    resume.setPosition((wWidth * CELL_UNITY / 4) * 2 , wHeight * CELL_UNITY / 2 - CELL_UNITY);
+    resume.setPosition((wWidth * CELL_UNITY / 5) * 2,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     resume.setFillColor(color);
     this->window->draw(resume);
     return resume;
@@ -199,7 +204,7 @@ sf::RectangleShape            Window::drawExit(sf::Color color) const {
     exit.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
     exit.setOutlineColor(sf::Color::Red);
     exit.setOutlineThickness(5);
-    exit.setPosition((wWidth * CELL_UNITY /4) * 3, wHeight * CELL_UNITY / 2 - CELL_UNITY);
+    exit.setPosition((wWidth * CELL_UNITY / 5) * 3, wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     exit.setFillColor(color);
     this->window->draw(exit);
     return exit;
