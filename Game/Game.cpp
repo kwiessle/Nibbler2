@@ -235,6 +235,13 @@ void    Game::switchEngine(eEngine engine, eHook hook) {
             this->_engine = createEngine( tmpWidth, tmpHeight, hook);
             std::cout << "SFML : " << BINARY_LIB << std::endl;
             break;
+        // case GL :
+        //     path = "lib/glfw/glfw.so";
+        //     deleteEngine( this->_engine);
+        //     openBinaryLib(const_cast<char*>(path.c_str()));
+        //     this->_engine = createEngine(tmpWidth, tmpHeight, hook);
+        //     std::cout << "GL : " << BINARY_LIB << std::endl;
+        //     break;
         default : break;
     }
     return;

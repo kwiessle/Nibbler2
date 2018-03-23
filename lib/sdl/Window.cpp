@@ -92,8 +92,8 @@ void   Window::setHooks(void) {
                 { this->hook = Right; }
             else if (event.key.keysym.sym == 102 && this->engine != SDL)
                 { this->engine = SDL; this->engineChecker = true; }
-            else if (event.key.keysym.sym == 103 && this->engine != SFML)
-                { this->engine = SFML; this->engineChecker = true; }
+            else if (event.key.keysym.sym == 103 && this->engine != GL)
+                { this->engine = GL; this->engineChecker = true; }
             else if (event.key.keysym.sym == SDLK_SPACE)
                 {this->status = Pause;}
         }
@@ -202,8 +202,8 @@ bool            Window::displayPause(int status) {
             if (event.key.keysym.sym == 27) { this->status = Exit; }
             else if (event.key.keysym.sym == 102 && this->engine != SDL) {
                 this->engine = SDL; this->engineChecker = true; }
-            else if (event.key.keysym.sym == 103 && this->engine != SFML) {
-                this->engine = SFML; this->engineChecker = true; }
+            else if (event.key.keysym.sym == 103 && this->engine != GL) {
+                this->engine = GL; this->engineChecker = true; }
         }
     }
     return true;

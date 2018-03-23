@@ -5,7 +5,7 @@
 
 enum eHook { NoDir, Up, Down, Left, Right, Exit, Pause, Start };
 
-enum eEngine { SDL, SFML };
+enum eEngine { SDL, SFML, GL };
 
 enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };
 

@@ -18,7 +18,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: sdl sfml allegro $(NAME)
+all: sdl sfml glfw $(NAME)
 
 
 $(NAME): $(OBJ)
@@ -32,12 +32,14 @@ clean:
 	@rm -rf $(OBJ)
 	@make clean -C ./lib/sdl
 	@make clean -C ./lib/sfml
+	@make clean -C ./lib/glfw
 	@echo "\033[38;5;204m🗑 Object files removed"
 
 fclean: clean
 	@rm -rf $(NAME)
 	@make fclean -C ./lib/sdl
 	@make fclean -C ./lib/sfml
+	@make fclean -C ./lib/glfw
 	@echo "\033[38;5;204m🗑 Nibbler removed"
 
 re: fclean all
@@ -69,9 +71,9 @@ sdl:
 	@make re -C ./lib/sdl
 sfml:
 	@make re -C ./lib/sfml
-opengl:
-	@make re -C ./lib/opengl
-allegro:
-	@make re -C ./lib/allegro
+glfw:
+	@make re -C ./lib/glfw
+# allegro:
+# 	@make re -C ./lib/allegro
 
-.PHONY : re fclean clean all install assets aclean dsclean sdl sfml
+.PHONY : re fclean clean all install assets aclean dsclean sdl sfml glfw

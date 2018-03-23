@@ -1,13 +1,13 @@
-#include "WindowOpengl.hpp"
+#include "WindowGlfw.hpp"
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height) :
+Window::Window(unsigned int width, unsigned int height, eHook hook) :
     wWidth(width),
     wHeight(height),
     hook(hook),
     engineChecker(false),
-    engine(SFML)
+    engine(GL)
 {
     if (!glfwInit()) { std::cout << "OpenGL init failed" << std::endl; exit(0);}
     else {
@@ -19,8 +19,8 @@ Window::Window(unsigned int width, unsigned int height) :
 
         // glewExperimental = true;
         this->pWindow = glfwCreateWindow(
-            this->wWidth,
-            this->wHeight,
+            this->wWidth * CELL_UNITY,
+            this->wHeight * CELL_UNITY + CELL_UNITY * 2,
             "Nibbler",
             NULL,
             NULL
@@ -39,13 +39,19 @@ Window::~Window(void) {
     return;
 }
 
-void    Window::drawFrame(std::list <IEntity *> data) const {
-    // std::cout << "OpenGl ha to paint" << std::endl;
-    return;
-}
-
 eHook   Window::getHooks(void) const {
     return this->hook;
+}
+
+eHook   Window::getStatus(void) const {
+    return this->status;
+}
+void   Window::setStatus(eHook status)  {
+    this->status = status;
+    return;
+}
+void    Window::changeHook(eHook hook){
+    this->hook = hook;
 }
 eEngine  Window::getEngine(void) const {
     return this->engine;
@@ -56,20 +62,52 @@ bool    Window::engineHasChanged(void) const{
 }
 
 void   Window::setHooks(void) {
-    // sf::Event   event;
     glfwPollEvents();
     // if (event.type == sf::Event::Closed) { this->hook = Exit; return;}
-    // if (event.type == sf::Event::KeyPressed) {
-        if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) ) { this->hook = Exit; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_UP) && this->hook != Down) { this->hook = Up; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_DOWN) && this->hook != Up) { this->hook = Down; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_LEFT) && this->hook != Right) { this->hook = Left; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_RIGHT) && this->hook != Left) { this->hook = Right; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_F) && this->engine != SDL) { this->hook = SDL; this->engine = SDL; }
-    //     if (glfwGetKey(this->pWindow, GLF_KEY_G) && this->engine != SFML) { this->hook = SFML; this->engine = SFML;  }
-    //
-    // }
+    if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS )
+        {this->status = Exit; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_UP) == GLFW_PRESS &&
+        this->hook != Down)
+        { this->hook = Up; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_DOWN) == GLFW_PRESS &&
+        this->hook != Up)
+        { this->hook = Down; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_LEFT) == GLFW_PRESS &&
+        this->hook != Right)
+        { this->hook = Left; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS &&
+        this->hook != Left)
+        { this->hook = Right; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_F) == GLFW_PRESS &&
+        this->engine != SDL)
+        { this->engine = SDL; this->engineChecker = true; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_G) == GLFW_PRESS &&
+        this->engine != SFML)
+        { this->engine = SFML; this->engineChecker = true; }
+    return;
 }
+
+void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    return;
+}
+bool   Window::displayPause(int status) {
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
+    glfwPollEvents();
+    if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS )
+        { this->status = Exit; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_F) == GLFW_PRESS &&
+        this->engine != SDL)
+        { this->engine = SDL; this->engineChecker = true; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_G) == GLFW_PRESS &&
+        this->engine != SFML)
+        { this->engine = SFML; this->engineChecker = true; }
+    return true;
+}
+
 
 unsigned int    Window::getWidth(void) const {
     return this->wWidth;
@@ -88,7 +126,6 @@ void       Window::initTextures(void) {
         name += std::to_string(i);
         name += ".bmp";
         this->_textures.insert(std::make_pair(static_cast<eTexture>(i), this->loadBMP(name.c_str())));
-        // std::cout << this->_textures[static_cast<eTexture>(i)] << std::endl;
     }
     return;
 }
@@ -141,7 +178,6 @@ GLuint Window::loadBMP(const char *filename) const {
    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT );
    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,GL_RGB, GL_UNSIGNED_BYTE, data );
    free( data );
-   std::cout << texture << std::endl;
    return texture;
 
 }
