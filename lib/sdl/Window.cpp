@@ -2,12 +2,12 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height, eHook hook) :
+Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   wWidth(width),
   wHeight(height),
   engine(SDL),
   engineChecker(false),
-  hook(hook)
+  direction(direction)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -50,55 +50,79 @@ Window::~Window(void) {
     SDL_Quit();
 }
 
-eHook   Window::getHooks(void) const {
-    return this->hook;
+void        Window::handleEvent(void) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        this->setDirection(event);
+        this->setEngine(event);
+        this->setStatus(event);
+    }
 }
 
-eHook   Window::getStatus(void) const {
+eDirection   Window::getDirection(void) const {
+    return this->direction;
+}
+
+void    Window::setDirection(SDL_Event event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_UP && this->direction != Down && this->direction != Up)
+            { this->directionChecker = true; this->direction = Up; return; }
+        else if (event.key.keysym.sym == SDLK_DOWN  && this->direction != Up && this->direction != Down)
+            { this->directionChecker = true; this->direction = Down; return; }
+        else if (event.key.keysym.sym == SDLK_LEFT && this->direction != Right && this->direction != Left)
+            { this->directionChecker = true; this->direction = Left; return; }
+        else if (event.key.keysym.sym == SDLK_RIGHT && this->direction != Left && this->direction != Right)
+            { this->directionChecker = true; this->direction = Right; return; }
+    }
+    return;
+}
+
+void    Window::updateDirection(eDirection direction){
+    this->direction = direction;
+}
+
+bool   Window::directionHasChanged(void) const {
+    return this->directionChecker;
+}
+
+void    Window::reverseDirectionChecker(void) {
+    this->directionChecker = false;
+}
+
+eStatus   Window::getStatus(void) const {
     return this->status;
 }
 
-void   Window::setStatus(eHook status) {
+void    Window::setStatus(SDL_Event event) {
+    if (event.type == SDL_QUIT ||
+     (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27))
+        { this->status = Exit; }
+    if (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN)
+        { this->status = Pause; }
+    return;
+}
+
+void    Window::updateStatus(eStatus status) {
     this->status = status;
+    return;
+}
+
+void    Window::setEngine(SDL_Event event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == 102 && this->engine != GL) {
+            this->engine = GL; this->engineChecker = true; }
+        if (event.key.keysym.sym == 103 && this->engine != SFML) {
+            this->engine = SFML; this->engineChecker = true; }
+    }
     return;
 }
 
 eEngine  Window::getEngine(void) const {
     return this->engine;
 }
-void    Window::changeHook(eHook hook){
-    this->hook = hook;
-}
 
 bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
-}
-
-void   Window::setHooks(void) {
-    SDL_Event event;
-
-    while(SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT ||
-         (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27))
-            { this->status = Exit; }
-        else if (event.type == SDL_KEYDOWN) {
-            if (event.key.keysym.sym == SDLK_UP && this->hook != Down)
-                { this->hook = Up; }
-            else if (event.key.keysym.sym == SDLK_DOWN  && this->hook != Up)
-                { this->hook = Down; }
-            else if (event.key.keysym.sym == SDLK_LEFT && this->hook != Right)
-                { this->hook = Left; }
-            else if (event.key.keysym.sym == SDLK_RIGHT && this->hook != Left)
-                { this->hook = Right; }
-            else if (event.key.keysym.sym == 102 && this->engine != SDL)
-                { this->engine = SDL; this->engineChecker = true; }
-            else if (event.key.keysym.sym == 103 && this->engine != GL)
-                { this->engine = GL; this->engineChecker = true; }
-            else if (event.key.keysym.sym == SDLK_SPACE)
-                {this->status = Pause;}
-        }
-    }
-    return;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
@@ -125,16 +149,12 @@ void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) co
 }
 
 void    Window::drawMenu(int lives, int score) const {
-  SDL_Rect    form;
+  SDL_Rect    form = {0, this->wHeight * CELL_UNITY, this->wWidth * CELL_UNITY, CELL_UNITY * 2};
   SDL_Surface *surface = nullptr;
   SDL_Texture *texture = nullptr;
   int x = CELL_UNITY;
   int y = this->wHeight * CELL_UNITY + CELL_UNITY;
 
-  form.x = 0;
-  form.y = this->wHeight * CELL_UNITY;
-  form.w = this->wWidth * CELL_UNITY;
-  form.h = CELL_UNITY * 2;
   texture = SDL_CreateTextureFromSurface(this->pRenderer, this->_textures.find(NoImg)->second);
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
   SDL_DestroyTexture(texture);
@@ -166,27 +186,35 @@ void    Window::drawMenu(int lives, int score) const {
 }
 
 bool            Window::displayPause(int status) {
+    SDL_Rect  background = {0, 0, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY };
     SDL_Rect  start;
     SDL_Rect  resume;
     SDL_Rect  exit;
     SDL_Event event;
-    SDL_Color background = { 22, 22, 24, 0};
+    SDL_Color color = { 22, 22, 24, 0};
+
+    SDL_Surface *img = SDL_LoadBMP("/assets/appicon.bmp");
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(this->pRenderer, img);
+    SDL_FreeSurface(img);
 
     SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
     SDL_RenderClear(this->pRenderer);
+    SDL_RenderCopy(this->pRenderer, texture, nullptr, &background);
+    SDL_DestroyTexture(texture);
+
     switch (status) {
         case 2 :
-            resume = this->drawResume(background);
+            resume = this->drawResume(color);
         case 1 :
-            start = this->drawStart(background);
-            exit = this->drawExit(background);
+            start = this->drawStart(color);
+            exit = this->drawExit(color);
             break;
     }
     SDL_RenderPresent( this->pRenderer );
-    while(SDL_PollEvent(&event)) {
+    if (SDL_WaitEvent(&event)) {
         if (event.type ==  SDL_MOUSEBUTTONDOWN) {
             if ( this->checkMousePos(resume, event.button.x, event.button.y) ) {
-                this->status = NoDir;
+                this->status = Play;
                 return false;
             }
             if ( this->checkMousePos(exit, event.button.x, event.button.y) ) {
@@ -198,13 +226,8 @@ bool            Window::displayPause(int status) {
                 return false;
             }
         }
-        else if (event.type == SDL_KEYDOWN) {
-            if (event.key.keysym.sym == 27) { this->status = Exit; }
-            else if (event.key.keysym.sym == 102 && this->engine != SDL) {
-                this->engine = SDL; this->engineChecker = true; }
-            else if (event.key.keysym.sym == 103 && this->engine != GL) {
-                this->engine = GL; this->engineChecker = true; }
-        }
+        this->setStatus(event);
+        this->setEngine(event);
     }
     return true;
 }
@@ -291,8 +314,8 @@ void       Window::initTextures(void) {
     return;
 }
 
-Window    *createWindow(unsigned int width, unsigned int height, eHook hook) {
-    return new Window(width, height, hook);
+Window    *createWindow(unsigned int width, unsigned int height, eDirection direction) {
+    return new Window(width, height, direction);
 }
 
 void      deleteWindow(Window *window) {

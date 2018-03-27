@@ -1,5 +1,13 @@
 #include "WindowAllegro.hpp"
 
+int real_main(int ac, char **av) {
+    return 0;
+}
+int Window::maintest(int ac, char **av) {
+    al_run_main(ac, av, real_main);
+    return 1;
+}
+
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height, eHook hook) :
@@ -9,24 +17,33 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
     engineChecker(false),
     engine(SFML)
 {
-    // al_init();
-    // al_init_image_addon();
-    // ALLEGRO_DISPLAY     *window = al_create_display(this->wWidth, this->wHeight);
+    al_init();
+
+    char *test;
+    if (maintest(1, &test)){
+        std::cout << "yo" << std::endl;
+        exit(0);
+    }
+    ALLEGRO_DISPLAY     *window = al_create_display(20 * CELL_UNITY, 20 * CELL_UNITY);
+    std::cout << "test2" << std::endl;
+    al_init_image_addon();
+    // ALLEGRO_DISPLAY     *window = al_create_display(this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY);
     // ALLEGRO_EVENT_QUEUE *events = al_create_event_queue();
-    // printf("w : %d  h : %d\n", this->wWidth, this->wHeight);
-    // this->pWindow = window;
+    printf("w : %d  h : %d\n", this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY);
+    sleep(5000);
+    this->pWindow = window;
     // this->pQueue = events;
     // al_install_keyboard();
-    //
+
 	// al_register_event_source(events, al_get_keyboard_event_source());
 	// al_register_event_source(events, al_get_display_event_source(window));
-    ALLEGRO_DISPLAY *display = NULL;
-    al_init();
-    display = al_create_display(600,600);
-    al_clear_to_color(al_map_rgb(22,22,24));
-    al_flip_display();
-    al_rest(10);
-    al_destroy_display(display);
+    // ALLEGRO_DISPLAY *display = NULL;
+    // al_init();
+    // display = al_create_display(600,600);
+    // al_clear_to_color(al_map_rgb(22,22,24));
+    // al_flip_display();
+    // al_rest(10);
+    // al_destroy_display(display);
     return;
 }
 
@@ -71,9 +88,15 @@ void    Window::changeHook(eHook hook){
 eEngine   Window::getEngine(void) const {
     return this->engine;
 }
-
 bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
+}
+
+bool   Window::hookHasChanged(void) const {
+    return this->hookChecker;
+}
+void    Window::reverseHookChecker(void) {
+    this->hookChecker = false;
 }
 
 void   Window::setHooks(void) {

@@ -44,7 +44,7 @@ class Game {
     void                          initFood(void);
     void                          initFire(void);
     void                          initMode(int mode);
-    void                          switchEngine(eEngine engine, eHook hook);
+    void                          switchEngine(eEngine engine, eDirection direction);
     void                          listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y);
     void                          listAdd(std::list <IEntity *> &list, IEntity * entity);
     bool                          listCheck(std::list <IEntity *> &list, unsigned int x, unsigned int y);

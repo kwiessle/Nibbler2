@@ -11,29 +11,39 @@ class Window : public IGraphism {
   private:
     Window(void);
 
-    void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
-    bool            displayPause(int status);
-    sf::RectangleShape            drawStart(sf::Color color) const;
-    sf::RectangleShape            drawResume(sf::Color color) const;
-    sf::RectangleShape            drawExit(sf::Color color) const;
-    void            drawMenu(int lives, int score) const;
-    eHook           getHooks(void) const;
-    eHook           getStatus(void) const;
-    void            setStatus(eHook status);
-    eEngine         getEngine(void) const;
-    bool            engineHasChanged(void) const;
-    void            setHooks(void);
-    void            changeHook(eHook hook);
-    unsigned int    getWidth(void) const;
-    unsigned int    getHeight(void) const;
-    void            initTextures(void);
+    void                drawFrame(std::list <IEntity *> data, int lives, int score) const;
+    bool                displayPause(int status);
+    sf::RectangleShape  drawStart(sf::Color color) const;
+    sf::RectangleShape  drawResume(sf::Color color) const;
+    sf::RectangleShape  drawExit(sf::Color color) const;
+    void                drawMenu(int lives, int score) const;
+    void                initTextures(void);
+
+    void                handleEvent(void);
+    eDirection          getDirection(void) const;
+    void                setDirection(sf::Event event);
+    void                updateDirection(eDirection direction);
+    bool                directionHasChanged(void) const;
+    void                reverseDirectionChecker(void);
+
+    eStatus             getStatus(void) const;
+    void                setStatus(sf::Event event);
+    void                updateStatus(eStatus status);
+
+    void                setEngine(sf::Event event);
+    eEngine             getEngine(void) const;
+    bool                engineHasChanged(void) const;
+
+    unsigned int        getWidth(void) const;
+    unsigned int        getHeight(void) const;
   public:
-    Window(unsigned int width, unsigned int height, eHook hook);
+    Window(unsigned int width, unsigned int height, eDirection direction);
     ~Window(void);
-    eHook                               hook;
-    eHook                               status;
+    eDirection                          direction;
+    eStatus                             status;
     eEngine                             engine;
     bool                                engineChecker;
+    bool                                directionChecker;
     unsigned int                        wWidth;
     unsigned int                        wHeight;
     sf::RenderWindow                    *window;
@@ -44,7 +54,7 @@ class Window : public IGraphism {
 };
 
 extern "C" {
-  Window              *createWindow(unsigned int width, unsigned int height, eHook hook);
+  Window              *createWindow(unsigned int width, unsigned int height, eDirection direction);
   void                 deleteWindow(Window *window);
 }
 

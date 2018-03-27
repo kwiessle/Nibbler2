@@ -1,7 +1,7 @@
 NAME = allegro.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-SFML = -L ~/.brew/lib  -lallegro -lallegro_image -lallegro_main
+INC	= -I .. -I . -I ../Entity -I ~/.brew/include/allegro5
+ALLEGRO = -L ~/.brew/lib  -lallegro -lallegro_image #-lallegro_main
 
 SRC = WindowAllegro.cpp \
 	../Entity/Entity.cpp
@@ -12,7 +12,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "✏️ \033[33;5m[ALLEGRO] Creating extern lib\033[0m"
-	@$(COMPILATOR) -fPIC $(OBJ) -shared $(SFML) -o $(NAME)
+	@$(COMPILATOR) -fPIC $(OBJ) -shared $(ALLEGRO) -o $(NAME)
 
 
 %.o: %.cpp

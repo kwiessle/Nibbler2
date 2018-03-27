@@ -3,8 +3,8 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = g++ -g
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-# LDFLAGS = -rdynamic  -L ~/.brew/lib/
-LDFLAGS = -rpath ~/.brew/lib/
+LDFLAGS = -rdynamic  -L ~/.brew/lib/
+LDFLAGS += -rpath ~/.brew/lib/
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -73,7 +73,7 @@ sfml:
 	@make re -C ./lib/sfml
 glfw:
 	@make re -C ./lib/glfw
-# allegro:
-# 	@make re -C ./lib/allegro
+allegro:
+	@make re -C ./lib/allegro
 
-.PHONY : re fclean clean all install assets aclean dsclean sdl sfml glfw
+.PHONY : re fclean clean all install assets aclean dsclean sdl sfml allegro glfw

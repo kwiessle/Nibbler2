@@ -14,14 +14,14 @@ class Game;
 IGraphism   *createEngine(
     unsigned int width,
     unsigned int height,
-    eHook hook
+    eDirection hook
 );
 
 IEntity     *createEntity(
     unsigned int x,
     unsigned int y,
     eType type,
-    eHook direction,
+    eDirection direction,
     eTexture texture
 );
 

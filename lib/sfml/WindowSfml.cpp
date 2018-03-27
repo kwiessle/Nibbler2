@@ -2,12 +2,12 @@
 
 Window::Window(void) { return; }
 
-Window::Window(unsigned int width, unsigned int height, eHook hook) :
+Window::Window(unsigned int width, unsigned int height, eDirection direction) :
  wWidth(width),
  wHeight(height),
  engine(SFML),
  engineChecker(false),
- hook(hook)
+ direction(direction)
 {
     sf::Image icon;
     this->window = new sf::RenderWindow(
@@ -24,24 +24,80 @@ Window::Window(unsigned int width, unsigned int height, eHook hook) :
 }
 
 Window::~Window(void) {
-    this->window->close();
+    if (this->window->isOpen()){
+        this->window->close();
+    }
     delete this->window;
 }
 
-eHook   Window::getHooks(void) const {
-    return this->hook;
+void        Window::handleEvent(void) {
+    sf::Event event;
+    while (this->window->pollEvent(event)) {
+        this->setDirection(event);
+        this->setEngine(event);
+        this->setStatus(event);
+    }
 }
 
-eHook   Window::getStatus(void) const {
+eDirection   Window::getDirection(void) const {
+    return this->direction;
+}
+
+void   Window::setDirection(sf::Event event) {
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Up && this->direction != Down && this->direction!= Up)
+            { this->directionChecker = true; this->direction = Up; }
+        else if (event.key.code ==sf::Keyboard::Down  && this->direction != Up && this->direction!= Down)
+            { this->directionChecker = true; this->direction = Down; }
+        else if (event.key.code == sf::Keyboard::Left && this->direction != Right && this->direction!= Left)
+            { this->directionChecker = true; this->direction = Left; }
+        else if (event.key.code == sf::Keyboard::Right && this->direction != Left && this->direction!= Right)
+            { this->directionChecker = true; this->direction = Right;}
+        }
+    return;
+}
+
+void    Window::updateDirection(eDirection direction){
+    this->direction = direction;
+}
+bool   Window::directionHasChanged(void) const {
+    return this->directionChecker;
+}
+
+void    Window::reverseDirectionChecker(void) {
+    this->directionChecker = false;
+}
+
+eStatus   Window::getStatus(void) const {
     return this->status;
 }
-void   Window::setStatus(eHook status)  {
+
+void    Window::setStatus(sf::Event event) {
+    if (event.type == sf::Event::Closed) { this->status = Exit; }
+    else if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape)
+            { this->status = Exit; }
+        if (event.key.code == sf::Keyboard::Space)
+           { this->status = Pause; }
+    }
+    return;
+}
+
+void    Window::updateStatus(eStatus status)  {
     this->status = status;
     return;
 }
-void    Window::changeHook(eHook hook){
-    this->hook = hook;
+
+void    Window::setEngine(sf::Event event) {
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::F && this->engine != SDL)
+            { this->engine = SDL; this->engineChecker = true; return;}
+        if (event.key.code == sf::Keyboard::G && this->engine != GL)
+            { this->engine = GL; this->engineChecker = true; return;}
+    }
+    return;
 }
+
 eEngine  Window::getEngine(void) const {
     return this->engine;
 }
@@ -50,34 +106,10 @@ bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
 }
 
-void   Window::setHooks(void) {
-    sf::Event   event;
-    while(this->window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) { this->status = Exit;}
-        else if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
-            else if (event.key.code == sf::Keyboard::Space)
-                { this->status = Pause; }
-            else if (event.key.code == sf::Keyboard::Up && this->hook != Down)
-                { this->hook = Up; }
-            else if (event.key.code ==sf::Keyboard::Down  && this->hook != Up)
-                { this->hook = Down; }
-            else if (event.key.code == sf::Keyboard::Left && this->hook != Right)
-                { this->hook = Left; }
-            else if (event.key.code == sf::Keyboard::Right && this->hook != Left)
-                { this->hook = Right; }
-            else if (event.key.code == sf::Keyboard::F && this->engine != GL)
-                {  this->engine = GL; this->engineChecker = true; }
-            else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
-                { this->engine = SFML; this->engineChecker = true;}
-        }
-    }
-    return;
-}
-
 void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
+    sf::Event event;
     sf::Sprite sprite;
     std::list <IEntity *>::iterator iter = data.begin();
 
@@ -147,7 +179,7 @@ bool            Window::displayPause(int status)  {
             break;
     }
     this->window->display();
-    while(this->window->pollEvent(event)) {
+    if(this->window->isOpen() && this->window->waitEvent(event)) {
         if (event.type == sf::Event::MouseButtonPressed) {
             sf::Vector2i mousePos = sf::Mouse::getPosition( *this->window );
             sf::Vector2f mousePosF(
@@ -155,7 +187,7 @@ bool            Window::displayPause(int status)  {
                 static_cast<float>(mousePos.y)
             );
             if ( resume.getGlobalBounds().contains( mousePosF ) ) {
-                this->status = NoDir;
+                this->status = Play;
                 return false;
             }
             if ( exit.getGlobalBounds().contains( mousePosF ) ) {
@@ -167,14 +199,8 @@ bool            Window::displayPause(int status)  {
                 return false;
             }
         }
-        else if (event.type == sf::Event::Closed) { this->status = Exit; }
-        else if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) { this->status = Exit; }
-        else if (event.key.code == sf::Keyboard::F && this->engine != SDL)
-            { this->engine = SDL; this->engineChecker = true; }
-        else if (event.key.code == sf::Keyboard::G && this->engine != SFML)
-            { this->engine = SFML; this->engineChecker = true; }
-        }
+        this->setStatus(event);
+        this->setEngine(event);
     }
     return true;
 }
@@ -218,12 +244,13 @@ unsigned int    Window::getHeight(void) const {
     return this->wHeight;
 }
 
-Window      *createWindow(unsigned int width, unsigned int height, eHook hook) {
-    return new Window(width, height, hook);
+Window      *createWindow(unsigned int width, unsigned int height, eDirection direction) {
+    return new Window(width, height, direction);
 }
 
 void        deleteWindow(Window *window) {
     delete window;
+    return;
 }
 
 void       Window::initTextures(void) {

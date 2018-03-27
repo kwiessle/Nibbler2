@@ -115,7 +115,7 @@ void  Game::initMap(unsigned int width, unsigned int height) {
 
 void Game::initGame(unsigned int width, unsigned int height, int mode) {
     delete this->_player;
-    this->_engine->changeHook(Right);
+    this->_engine->updateDirection(Right);
     this->_player = new Player(4, 0);
     this->_gameQuit = false;
     this->initMap(width, height);
@@ -130,53 +130,41 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
     while (!this->_gameQuit) {
-        this->_engine->setHooks();
+        this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
-            case Exit : this->_gameQuit = true; break;
+            case Exit : this->_gamePause = true; this->_gameQuit = true; break;
             case Start :
                 this->initGame(width, height, mode);
                 speed.resetDiff(100);
-                this->_engine->setStatus(NoDir);
+                this->_engine->updateStatus(Play);
                 break;
+            case Pause : this->_gamePause = true; break;
             default : break;
         }
         if (this->_engine->engineHasChanged()) {
             bool tmp = this->_gamePause;
             this->_gamePause = true;
-            switch(this->_engine->getEngine()) {
-                case SDL : switchEngine(SDL, this->_engine->getHooks()); break;
-                case SFML : switchEngine(SFML, this->_engine->getHooks()); break;
-                default : break;
-            }
+            switchEngine(
+                this->_engine->getEngine(),
+                this->_engine->getDirection()
+            );
             this->_gamePause = tmp;
         }
         if ( !this->_gamePause ) {
-            if (fire.update()) {  this->initFire(); }
+            if (fire.update()) { this->initFire(); }
+
             if (speed.update()) {
-                if ((this->_player->getScore() + 1) % 10 == 0) {
-                    speed.changeDiff(1.001);
-                }
-                switch(this->_engine->getStatus()) {
-                    case Pause : this->_gamePause = true; break;
-                    default : break;
-                }
-                switch(this->_engine->getHooks()) {
-                    case Up : this->_player->move(Up); break;
-                    case Down : this->_player->move(Down); break;
-                    case Left : this->_player->move(Left); break;
-                    case Right : this->_player->move(Right); break;
-                    default : break;
-                }
+                this->_player->move(this->_engine->getDirection());
+                this->_engine->reverseDirectionChecker();
+                this->refresh();
             }
-            this->refresh();
         }
+        else if (this->_player->checkDeath())
+            this->pause(1);
         else
-            if (this->_player->checkDeath())
-                this->pause(1);
-            else
-                this->pause(2);
+            this->pause(2);
     }
-   return;
+    return;
 }
 
 void  Game::setPause(void) {
@@ -215,7 +203,7 @@ void Game::initMode(int mode) {
     return;
 }
 
-void    Game::switchEngine(eEngine engine, eHook hook) {
+void    Game::switchEngine(eEngine engine, eDirection direction) {
     unsigned int tmpWidth = this->_engine->getWidth();
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
@@ -223,27 +211,19 @@ void    Game::switchEngine(eEngine engine, eHook hook) {
     switch(engine) {
         case SDL :
             path = "lib/sdl/sdl.so";
-            deleteEngine( this->_engine);
-            openBinaryLib(const_cast<char*>(path.c_str()));
-            this->_engine = createEngine( tmpWidth, tmpHeight, hook);
-            std::cout << "SDL : " << BINARY_LIB << std::endl;
             break;
         case SFML :
             path = "lib/sfml/sfml.so";
-            deleteEngine( this->_engine);
-            openBinaryLib(const_cast<char*>(path.c_str()));
-            this->_engine = createEngine( tmpWidth, tmpHeight, hook);
-            std::cout << "SFML : " << BINARY_LIB << std::endl;
             break;
-        // case GL :
-        //     path = "lib/glfw/glfw.so";
-        //     deleteEngine( this->_engine);
-        //     openBinaryLib(const_cast<char*>(path.c_str()));
-        //     this->_engine = createEngine(tmpWidth, tmpHeight, hook);
-        //     std::cout << "GL : " << BINARY_LIB << std::endl;
-        //     break;
+        case GL :
+            path = "lib/glfw/glfw.so";
+            break;
         default : break;
     }
+    deleteEngine( this->_engine);
+    openBinaryLib(const_cast<char*>(path.c_str()));
+    this->_engine = createEngine( tmpWidth, tmpHeight, direction);
+    std::cout <<std::boolalpha << engine << " : " << BINARY_LIB << std::endl;
     return;
 }
 

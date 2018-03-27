@@ -2,7 +2,7 @@
 
 Entity::Entity(void) { return; }
 
-Entity::Entity(unsigned int x, unsigned int y, eType type, eHook direction, eTexture texture) :
+Entity::Entity(unsigned int x, unsigned int y, eType type, eDirection direction, eTexture texture) :
     _posX(x),
     _posY(y),
     _type(type),
@@ -24,7 +24,7 @@ unsigned int    Entity::getPosY(void) const
 eType           Entity::getType(void) const
                   { return this->_type; }
 
-eHook           Entity::getDirection(void) const
+eDirection      Entity::getDirection(void) const
                   { return this->_direction; }
 
 eTexture        Entity::getTexture(void) const
@@ -39,7 +39,7 @@ void            Entity::setPosY(unsigned int y)
 void            Entity::setType(eType type)
                   { this->_type = type; return; }
 
-void            Entity::setDirection(eHook direction)
+void            Entity::setDirection(eDirection direction)
                   { this->_direction = direction; return; }
 
 void            Entity::setTexture(eTexture texture)
@@ -52,7 +52,7 @@ void            Entity::randomizePosition(void) { return; }
 
 // EXTERNAL FUNCS
 
-Entity          *createEntity(unsigned int x, unsigned int y, eType type, eHook direction, eTexture texture) {
+Entity          *createEntity(unsigned int x, unsigned int y, eType type, eDirection direction, eTexture texture) {
   return new Entity(x, y, type, direction, texture);
 }
 

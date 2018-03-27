@@ -3,8 +3,8 @@
 # include <iostream>
 
 
-enum eHook { NoDir, Up, Down, Left, Right, Exit, Pause, Start };
-
+enum eDirection { NoDir, Up, Down, Left, Right };
+enum eStatus {Play, Pause, Exit, Start };
 enum eEngine { SDL, SFML, GL };
 
 enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };
@@ -23,12 +23,12 @@ class IEntity {
     virtual unsigned int       getPosX(void) const = 0;
     virtual unsigned int       getPosY(void) const = 0;
     virtual eType              getType(void) const = 0;
-    virtual eHook              getDirection(void) const = 0;
+    virtual eDirection         getDirection(void) const = 0;
     virtual eTexture           getTexture(void) const = 0;
     virtual void               setPosX(unsigned int x) = 0;
     virtual void               setPosY(unsigned int y) = 0;
     virtual void               setType(eType type) = 0;
-    virtual void               setDirection(eHook direction) = 0;
+    virtual void               setDirection(eDirection direction) = 0;
     virtual void               setTexture(eTexture texture) = 0;
 
 };

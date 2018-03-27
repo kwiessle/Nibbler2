@@ -14,12 +14,12 @@ class Player {
     bool                                    _dead;
 
     void                                    _grow(void);
-    void                                    _updateSnake(eHook direction);
-    void                                    _detectCollision(eHook direction);
-    void                                    _fillNeck(eHook headDirection);
+    void                                    _updateSnake(eDirection direction);
+    void                                    _detectCollision(eDirection direction);
+    void                                    _fillNeck(eDirection headDirection);
     void                                    _fillQueue(void);
     void                                    _fillHead(void);
-    IEntity *                               _createHead(eHook direction);
+    IEntity *                               _createHead(eDirection direction);
     Player(void);
 
   public:
@@ -27,7 +27,7 @@ class Player {
     Player(std::list <IEntity *> snake, int life, int score, int speed);         //Use this constructor for load a saved game.
     ~Player(void);
 
-    void                         move(eHook direction);
+    void                         move(eDirection direction);
 
     std::list <IEntity *>        getSnake(void) const;
     int                          getLife(void) const;

@@ -3,52 +3,56 @@
 
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
-# include <iostream>
-// # include <stdio.h>
-# include <map>
-
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
 
 
 class Window  : public IGraphism {
-private:
-  Window(void);
+  private:
+    Window(void);
 
-  void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
-  void            drawMenu(int lives) const;
-  bool            displayPause(int status);
+    void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
+    bool            displayPause(int status);
+    void            drawMenu(int lives) const;
+    void            initTextures(void);
+    GLuint          loadBMP(const char * imagepath) const;
 
-  eHook           getHooks(void) const;
-  eHook           getStatus(void) const;
-  eEngine         getEngine(void) const;
-  unsigned int    getWidth(void) const;
-  unsigned int    getHeight(void) const;
-  bool            engineHasChanged(void) const;
+    void            handleEvent(void);
+    eDirection      getDirection(void) const;
+    void            setDirection(void);
+    void            updateDirection(eDirection direction);
+    bool            directionHasChanged(void) const;
+    void            reverseDirectionChecker(void);
 
-  void            setHooks(void);
-  void            setStatus(eHook status);
-  void            changeHook(eHook status);
-  void            initTextures(void);
-  GLuint          loadBMP(const char * imagepath) const;
-public:
-  Window(unsigned int width, unsigned int height, eHook hook);
-  ~Window(void);
-  eHook                               hook;
-  eHook                               status;
-  eEngine                             engine;
-  bool                                engineChecker;
-  unsigned int                        wWidth;
-  unsigned int                        wHeight;
-  GLFWwindow                         *pWindow;
-  // sf::Font                            pFont;
-  std::map <eTexture,  GLuint>        _textures;
+    eStatus         getStatus(void) const;
+    void            setStatus(void);
+    void            updateStatus(eStatus status);
+
+    void            setEngine(void);
+    eEngine         getEngine(void) const;
+    bool            engineHasChanged(void) const;
+
+    unsigned int    getWidth(void) const;
+    unsigned int    getHeight(void) const;
+  public:
+    Window(unsigned int width, unsigned int height, eDirection direction);
+    ~Window(void);
+    eDirection                          direction;
+    eStatus                             status;
+    eEngine                             engine;
+    bool                                engineChecker;
+    bool                                directionChecker;
+    unsigned int                        wWidth;
+    unsigned int                        wHeight;
+    GLFWwindow                          *pWindow;
+    // sf::Font                            pFont;
+    std::map <eTexture,  GLuint>        _textures;
 
 
 };
 
 extern "C" {
-Window              *createWindow(unsigned int width, unsigned int height, eHook hook);
+Window              *createWindow(unsigned int width, unsigned int height, eDirection direction);
 void                 deleteWindow(Window *window);
 }
 

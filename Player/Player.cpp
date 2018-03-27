@@ -34,17 +34,8 @@ int Player::getScore(void) const { return this->_score; }
 void  Player::initSnake(void) {
     Game &singleton = Game::singleton();
 
-    singleton.listErase(singleton.getFreePos(), 6, 1);
-    singleton.listAdd(this->_snake, createEntity(6, 1, Snake, Right, rHead));
-
-    singleton.listErase(singleton.getFreePos(), 5, 1);
-    singleton.listAdd(this->_snake, createEntity(5, 1, Snake, Right, hBody));
-
-    singleton.listErase(singleton.getFreePos(), 4, 1);
-    singleton.listAdd(this->_snake, createEntity(4, 1, Snake, Right, hBody));
-
     singleton.listErase(singleton.getFreePos(), 3, 1);
-    singleton.listAdd(this->_snake, createEntity(3, 1, Snake, Right, hBody));
+    singleton.listAdd(this->_snake, createEntity(3, 1, Snake, Right, rHead));
 
     singleton.listErase(singleton.getFreePos(), 2, 1);
     singleton.listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
@@ -55,13 +46,13 @@ void  Player::initSnake(void) {
     return;
 }
 
-void  Player::move(eHook direction) {
+void  Player::move(eDirection direction) {
   this->_updateSnake(direction);
   return;
 }
 
-void  Player::_fillNeck(eHook headDirection) {
-    eHook neckDirection = this->_snake.back()->getDirection();
+void  Player::_fillNeck(eDirection headDirection) {
+    eDirection neckDirection = this->_snake.back()->getDirection();
 
     switch ( headDirection ) {
         case Up : {
@@ -144,7 +135,7 @@ void  Player::_grow(void) {
 
 }
 
-void  Player::_updateSnake(eHook direction) {
+void  Player::_updateSnake(eDirection direction) {
     Game &singleton = Game::singleton();
     IEntity *newHead = this->_createHead(direction);
     if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
@@ -180,7 +171,7 @@ void  Player::_updateSnake(eHook direction) {
     return;
 }
 
-IEntity *   Player::_createHead(eHook direction) {
+IEntity *   Player::_createHead(eDirection direction) {
     Game &singleton = Game::singleton();
     IEntity *neck = this->_snake.back();
     unsigned int x = 0;
