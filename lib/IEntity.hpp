@@ -4,7 +4,7 @@
 
 
 enum eDirection { NoDir, Up, Down, Left, Right };
-enum eStatus {Play, Pause, Exit, Start };
+enum eStatus { Play, Pause, Exit, Start };
 enum eEngine { SDL, SFML, GL };
 
 enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };

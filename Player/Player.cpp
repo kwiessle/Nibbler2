@@ -144,11 +144,11 @@ void  Player::_updateSnake(eDirection direction) {
         singleton.initFood();
     }
     if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
-        singleton.setPause();
+        singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
     }
     if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
-        singleton.setPause();
+        singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
     }
     if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
@@ -156,7 +156,7 @@ void  Player::_updateSnake(eDirection direction) {
         deleteEntity(singleton.getFire().front());
         singleton.getFire().clear();
         if (this->_life == 0) {
-            singleton.setPause();
+            singleton.getEngine()->updateStatus(Pause);
             this->_dead = true;
         }
     }

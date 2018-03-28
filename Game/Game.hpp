@@ -18,8 +18,6 @@ class Game {
     std::list <IEntity *>         _fire;
     std::list <IEntity *>         _freePos;
     IGraphism                     *_engine;
-    bool                           _gamePause;
-    bool                           _gameQuit;
 
   public:
     ~Game(void);
@@ -38,7 +36,6 @@ class Game {
     void                          start(unsigned int with, unsigned int height, int mode);
     void                          initGame(unsigned int with, unsigned int height, int mode);
     void                          pause(int status);
-    void                          setPause(void);
     void                          save(void) const;
     void                          quit(void) const;
     void                          initFood(void);

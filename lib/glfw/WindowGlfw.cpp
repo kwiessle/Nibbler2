@@ -7,6 +7,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     wHeight(height),
     direction(direction),
     engineChecker(false),
+    status(Pause),
     engine(GL)
 {
     if (!glfwInit()) {
@@ -14,11 +15,6 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         glfwTerminate();
         exit(0);
     }
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     this->pWindow = glfwCreateWindow(
         this->wWidth * CELL_UNITY,
         this->wHeight * CELL_UNITY + CELL_UNITY * 2,
@@ -27,14 +23,15 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
-    glOrtho(0.0, this->wWidth * CELL_UNITY, 0.0, this->wHeight * CELL_UNITY + CELL_UNITY * 2, -1.0, 1.0);
-    glfwSetInputMode(this->pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-    glEnable(GL_TEXTURE_2D);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
     return;
 }
 
 Window::~Window(void) {
+    // glfwSetWindowShouldClose(this->pWindow, 1);
     glfwDestroyWindow(this->pWindow);
     glfwTerminate();
     return;
@@ -86,7 +83,7 @@ eStatus Window::getStatus(void) const {
 }
 
 void    Window::setStatus(void) {
-    if (glfwWindowShouldClose(this->pWindow) != 0) { this->status =Exit; }
+    if (glfwWindowShouldClose(this->pWindow) != 0) { this->status = Exit; }
     if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         { this->status = Exit; }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -120,46 +117,150 @@ bool    Window::engineHasChanged(void) const{
 void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {
     glClearColor(22/255.0, 22/255.0, 24/255.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_TEXTURE_2D);
     std::list <IEntity *>::iterator iter = data.begin();
-
-    while ( iter != data.end()) {
-        eTexture img = (*iter)->getTexture();
-        glBindTexture(GL_TEXTURE_2D, this->_textures.find(img)->second);
+    glEnable(GL_TEXTURE_2D);
+    while (iter != data.end()) {
+        GLfloat x = (*iter)->getPosX() * CELL_UNITY;
+        GLfloat y = (*iter)->getPosY() * CELL_UNITY;
+        glBindTexture(GL_TEXTURE_2D, this->_textures[((*iter)->getTexture())]);
         glBegin(GL_QUADS);
-        glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
+        glTexCoord2f(1,1);
+        glVertex2f(x, y);
+        glTexCoord2f(1,0);
+        glVertex2f(x, y + CELL_UNITY);
+        glTexCoord2f(0,0);
+        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+        glTexCoord2f(0,1);
+        glVertex2f(x+ CELL_UNITY,y);
         glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
         iter++;
     }
-    glLoadIdentity();
+    glDisable(GL_TEXTURE_2D);
+    this->drawMenu(lives, score);
     glfwSwapBuffers(this->pWindow);
-
-    std::cout << "drawFrame" << std::endl;
     return;
+}
+void    Window::drawMenu(int lives, int score) const {
+    int x = CELL_UNITY;
+    int y = this->wHeight * CELL_UNITY + CELL_UNITY;
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, this->_textures[21]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0,0);
+    glVertex2f(0, this->wHeight * CELL_UNITY);
+    glTexCoord2f(0,1);
+    glVertex2f(0, this->wHeight * CELL_UNITY + CELL_UNITY * 2);
+    glTexCoord2f(1,1);
+    glVertex2f(this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2);
+    glTexCoord2f(1,0);
+    glVertex2f(this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    while (lives != 0) {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, this->_textures[22]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(1,1);
+        glVertex2f(x, y - CELL_UNITY / 2);
+        glTexCoord2f(1,0);
+        glVertex2f(x,y - CELL_UNITY / 2 + CELL_UNITY);
+        glTexCoord2f(0,0);
+        glVertex2f(x + CELL_UNITY,y - CELL_UNITY / 2 + CELL_UNITY);
+        glTexCoord2f(0,1);
+        glVertex2f(x + CELL_UNITY, y - CELL_UNITY / 2);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+        x += CELL_UNITY + CELL_UNITY / 2;
+        lives--;
+    }
+    glRasterPos2i(this->wWidth * CELL_UNITY - 140,
+    this->wHeight * CELL_UNITY + CELL_UNITY / 2);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    std::string sScore = std::to_string(score);
+    const char *tmp = sScore.c_str();
+    for( int i = 0; i < sScore.length(); i++)
+    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18
+,tmp[i]);
 }
 
 bool   Window::displayPause(int status) {
     glClearColor(22/255.0, 22/255.0, 24/255.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_QUADS);
-        glColor3f(1,1,1);
-        glVertex2f(10, 50);
-        glColor3f(1,0,0);
-        glVertex2f(100, 50);
-        glColor3f(1,1,1);
-        glVertex2f(100, 100);
-        glColor3f(0,1,1);
-        glVertex2f(10, 50);
-    glEnd();
+    switch(status) {
+        case 2 :
+            this->drawResume();
+        case 1 :
+            this->drawStart();
+            this->drawExit();
+            break;
+    }
+    glColor3f(1, 1, 1);
     glfwSwapBuffers(this->pWindow);
     glfwWaitEvents();
+    if ( glfwGetMouseButton(this->pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        double xpos;
+        double ypos;
+        float ycheck = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+        glfwGetCursorPos(this->pWindow, &xpos, &ypos);
+        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2), ycheck)) {
+            this->status = Start;
+            return false;
+        }
+        if ( status == 2 && this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth), ycheck )) {
+            this->status = Play;
+            return false;
+        }
+        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth) * 2, ycheck)) {
+            this->status = Exit;
+            return false;
+        }
+    }
     this->setStatus();
     this->setEngine();
     return true;
+}
+
+bool    Window::checkMousePos(double x, double y, float xcheck, float ycheck) const {
+    if (x >= xcheck && x <= xcheck + CELL_UNITY * 3
+        && y >= ycheck && y <= ycheck + CELL_UNITY * 2)
+        return true;
+    return false;
+}
+
+void      Window::drawStart(void) const {
+    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2);
+    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    glBegin(GL_QUADS);
+    glColor3f(0,1,0);
+    glVertex2f(x, y);
+    glVertex2f(x + CELL_UNITY * 3, y);
+    glVertex2f(x + CELL_UNITY * 3, y + CELL_UNITY * 2);
+    glVertex2f(x, y + CELL_UNITY * 2);
+    glEnd();
+}
+
+void      Window::drawResume(void) const {
+    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth);
+    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    glBegin(GL_QUADS);
+    glColor3f(0, 0, 1);
+    glVertex2f(x, y);
+    glVertex2f(x + CELL_UNITY * 3, y);
+    glVertex2f(x + CELL_UNITY * 3, y + CELL_UNITY * 2);
+    glVertex2f(x, y + CELL_UNITY * 2);
+    glEnd();
+}
+
+void      Window::drawExit(void) const {
+    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth) * 2;
+    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
+    glBegin(GL_QUADS);
+    glColor3f(1, 0, 0);
+    glVertex2f(x, y);
+    glVertex2f(x + CELL_UNITY * 3, y);
+    glVertex2f(x+ CELL_UNITY * 3, y + CELL_UNITY * 2);
+    glVertex2f(x , y + CELL_UNITY * 2);
+    glEnd();
 }
 
 unsigned int    Window::getWidth(void) const {
@@ -171,18 +272,18 @@ unsigned int    Window::getHeight(void) const {
 }
 
 void       Window::initTextures(void) {
-    eTexture texture;
+    glGenTextures(23, this->_textures);
 
-    for (int i = 1; i <= 22; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+    for (int i = 1; i <= 23; i++) {
+        // if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
-        this->_textures.insert(std::make_pair(static_cast<eTexture>(i), this->loadBMP(name.c_str())));
+        glBindTexture(GL_TEXTURE_2D, this->_textures[i]);
+        this->loadBMP(name.c_str());
     }
     return;
 }
-
 
 Window    *createWindow(unsigned int width, unsigned int height, eDirection direction) {
     return new Window(width, height, direction);
@@ -194,47 +295,45 @@ void      deleteWindow(Window *window) {
 
 GLuint Window::loadBMP(const char *filename) const {
     GLuint texture;
-    int width, height;
+    // Data read from the header of the BMP file
+    unsigned char header[54]; // Each BMP file begins by a 54-bytes header
+    unsigned int dataPos;     // Position in the file where the actual data begins
+    unsigned int width;
+    unsigned int height;
+    unsigned int imageSize;
     unsigned char * data;
-    FILE * file;
 
-    file = fopen( filename, "rb" );
+    FILE * file = fopen(filename,"rb");
+    if (!file) {
+        std::cout << "Image could not be opened" << std::endl;
+        exit(0);
+    }
+    if ( fread(header, 1, 54, file) != 54 ){ // If not 54 bytes read : problem
+        std::cout << "Not a correct BMP file" << std::endl;
+        exit(0);
+    }
+    if ( header[0] != 'B' || header[1] != 'M' ){
+        std::cout << "Not a correct BMP file" << std::endl;
+        exit(0);
+    }
+    dataPos    = *(int*)&(header[0x0A]);
+    imageSize  = *(int*)&(header[0x22]);
+    width      = *(int*)&(header[0x12]);
+    height     = *(int*)&(header[0x16]);
 
-    if ( file == NULL ) return 0;
-    width = CELL_UNITY;
-    height = CELL_UNITY;
+    if (imageSize == 0)
+        imageSize= width * height * 3;
+    if (dataPos == 0)
+        dataPos = 54;
     data = (unsigned char *)malloc( width * height * 3 );
     fread( data, width * height * 3, 1, file );
-    fclose( file );
+    fclose(file);
 
-    for (int i = 0; i < width * height ; ++i)
-    {
-      int index = i*3;
-      unsigned char B,R;
-      B = data[index];
-      R = data[index+2];
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 
-      data[index] = R;
-      data[index+2] = B;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    free(data);
 
-   }
-
-   glGenTextures(1, &texture);
-   glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 30, 30, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-// texture_data is the source data of your texture, in this case
-// its size is sizeof(unsigned char) * texture_width * texture_height * 4
-
-    // glGenerateMipmap(GL_TEXTURE_2D); // Unavailable in OpenGL 2.1, use gluBuild2DMipmaps() insteads.
-
-    // glBindTexture(GL_TEXTURE_2D, 0);
    return texture;
 
 }

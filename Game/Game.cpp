@@ -1,8 +1,6 @@
 #include "Game.hpp"
 
 Game::Game(void) {
-    this->_gamePause = true;
-    this->_gameQuit = false;
     this->_player = new Player(4, 0);
     return;
 }
@@ -117,7 +115,6 @@ void Game::initGame(unsigned int width, unsigned int height, int mode) {
     delete this->_player;
     this->_engine->updateDirection(Right);
     this->_player = new Player(4, 0);
-    this->_gameQuit = false;
     this->initMap(width, height);
     this->initMode(mode);
     this->_player->initSnake();
@@ -129,28 +126,28 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer speed(100);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
-    while (!this->_gameQuit) {
+    while (this->_engine->getStatus() != Exit) {
         this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
-            case Exit : this->_gamePause = true; this->_gameQuit = true; break;
+            case Exit : this->_engine->updateStatus(Exit); break;
             case Start :
                 this->initGame(width, height, mode);
                 speed.resetDiff(100);
                 this->_engine->updateStatus(Play);
                 break;
-            case Pause : this->_gamePause = true; break;
+            case Pause : this->_engine->updateStatus(Pause); break;
             default : break;
         }
         if (this->_engine->engineHasChanged()) {
-            bool tmp = this->_gamePause;
-            this->_gamePause = true;
+            eStatus tmp = this->_engine->getStatus();
+            this->_engine->updateStatus(Pause);
             switchEngine(
                 this->_engine->getEngine(),
                 this->_engine->getDirection()
             );
-            this->_gamePause = tmp;
+            this->_engine->updateStatus(tmp);
         }
-        if ( !this->_gamePause ) {
+        if ( this->_engine->getStatus() == Play ) {
             if (fire.update()) { this->initFire(); }
 
             if (speed.update()) {
@@ -159,21 +156,19 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 this->refresh();
             }
         }
-        else if (this->_player->checkDeath())
-            this->pause(1);
-        else
-            this->pause(2);
+        if ( this->_engine->getStatus() == Pause ) {
+            if (this->_player->checkDeath())
+                this->pause(1);
+            else
+                this->pause(2);
+        }
     }
     return;
 }
 
-void  Game::setPause(void) {
-    this->_gamePause = true;
-    return;
-}
 
 void  Game::pause(int status) {
-        this->_gamePause = this->_engine->displayPause(status);
+    this->_engine->displayPause(status);
 }
 
 void  Game::refresh(void) {
@@ -220,8 +215,8 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
             break;
         default : break;
     }
-    deleteEngine( this->_engine);
     openBinaryLib(const_cast<char*>(path.c_str()));
+    deleteEngine( this->_engine);
     this->_engine = createEngine( tmpWidth, tmpHeight, direction);
     std::cout <<std::boolalpha << engine << " : " << BINARY_LIB << std::endl;
     return;

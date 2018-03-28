@@ -7,6 +7,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   wHeight(height),
   engine(SDL),
   engineChecker(false),
+  status(Pause),
   direction(direction)
  {
   if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
@@ -305,7 +306,7 @@ void       Window::initTextures(void) {
     eTexture texture;
 
     for (int i = 1; i <= 23; i++) {
-        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
+        // if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

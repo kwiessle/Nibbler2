@@ -3,6 +3,8 @@
 
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
+// # include <GLUT/glut.h>
+# include <GL/freeglut.h>
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
 
@@ -13,7 +15,11 @@ class Window  : public IGraphism {
 
     void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
     bool            displayPause(int status);
-    void            drawMenu(int lives) const;
+    void            drawStart(void) const;
+    void            drawResume(void) const;
+    void            drawExit(void) const;
+    bool            checkMousePos(double x, double y, float xcheck, float ycheck) const;
+    void            drawMenu(int lives, int score) const;
     void            initTextures(void);
     GLuint          loadBMP(const char * imagepath) const;
 
@@ -46,7 +52,7 @@ class Window  : public IGraphism {
     unsigned int                        wHeight;
     GLFWwindow                          *pWindow;
     // sf::Font                            pFont;
-    std::map <eTexture,  GLuint>        _textures;
+    GLuint                              _textures[23];
 
 
 };
