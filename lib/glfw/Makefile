@@ -1,7 +1,7 @@
 NAME = glfw.so
 COMPILATOR = g++
 INC	= -I .. -I . -I ../Entity -Iglfw/include -fPIC
-SFML =  -shared -undefined dynamic_lookup
+SFML =  -shared -undefined dynamic_lookup -force_load lib/glfw/glfw/src/libglfw3.a
 
 
 SRC = WindowGlfw.cpp \
