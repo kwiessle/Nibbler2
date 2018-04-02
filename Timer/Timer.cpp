@@ -11,15 +11,15 @@ Timer::Timer(float diff):
 
 Timer::~Timer() { return; }
 
-
-
 int 		Timer::_getMilliCount(void) {
 	timeb tb;
 	ftime(&tb);
 	int nCount = tb.millitm + tb.time * 1000;
 	return nCount;
 }
-
+void        Timer::resetDiff(float diff) {
+    this->_diffTime = diff;
+}
 void        Timer::changeDiff(float newDiff) {
     this->_diffTime /= newDiff;
 }

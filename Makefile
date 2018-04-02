@@ -3,8 +3,9 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = g++ -g
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-# LDFLAGS = -rdynamic  -L ~/.brew/lib/
-LDFLAGS = -rpath ~/.brew/lib/
+LDFLAGS = -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+LDFLAGS += -rdynamic  -L ~/.brew/lib/
+LDFLAGS += -rpath ~/.brew/lib/ -force_load lib/glfw/glfw/src/libglfw3.a
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -18,7 +19,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: sdl sfml allegro $(NAME)
+all: install sdl sfml glfw $(NAME)
 
 
 $(NAME): $(OBJ)
@@ -32,12 +33,14 @@ clean:
 	@rm -rf $(OBJ)
 	@make clean -C ./lib/sdl
 	@make clean -C ./lib/sfml
+	@make clean -C ./lib/glfw
 	@echo "\033[38;5;204m🗑 Object files removed"
 
 fclean: clean
 	@rm -rf $(NAME)
 	@make fclean -C ./lib/sdl
 	@make fclean -C ./lib/sfml
+	@make fclean -C ./lib/glfw
 	@echo "\033[38;5;204m🗑 Nibbler removed"
 
 re: fclean all
@@ -69,9 +72,9 @@ sdl:
 	@make re -C ./lib/sdl
 sfml:
 	@make re -C ./lib/sfml
-opengl:
-	@make re -C ./lib/opengl
+glfw:
+	@make re -C ./lib/glfw
 allegro:
 	@make re -C ./lib/allegro
 
-.PHONY : re fclean clean all install assets aclean dsclean sdl sfml
+.PHONY : re fclean clean all install assets aclean dsclean sdl sfml allegro glfw

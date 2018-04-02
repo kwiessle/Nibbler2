@@ -3,53 +3,56 @@
 
 Player::Player(int life, int score) :
   _life(life),
-  _score(score)
+  _score(score),
+  _dead(true)
  { return; }
 
 Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
   _snake(snake),
   _life(life),
   _score(score),
-  _speed(speed)
+  _speed(speed),
+  _dead(true)
 { return; }
 
-Player::~Player(void) { return; }
+Player::~Player(void) {
+    std::list<IEntity *>::iterator it = this->_snake.begin();
+    while (it != this->_snake.end()) {
+        deleteEntity(*it);
+        it++;
+    }
+    return;
+}
 
 std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
+bool    Player::checkDeath(void) const { return this->_dead; }
 int Player::getLife(void) const { return this->_life; }
 int Player::getScore(void) const { return this->_score; }
 
 void  Player::initSnake(void) {
-  Game::singleton().listErase(Game::singleton().getFreePos(), 6, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(6, 1, Snake, Right, rHead));
+    Game &singleton = Game::singleton();
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 5, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(5, 1, Snake, Right, hBody));
+    singleton.listErase(singleton.getFreePos(), 3, 1);
+    singleton.listAdd(this->_snake, createEntity(3, 1, Snake, Right, rHead));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 4, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(4, 1, Snake, Right, hBody));
+    singleton.listErase(singleton.getFreePos(), 2, 1);
+    singleton.listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
 
-  Game::singleton().listErase(Game::singleton().getFreePos(), 3, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(3, 1, Snake, Right, hBody));
-
-  Game::singleton().listErase(Game::singleton().getFreePos(), 2, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
-
-  Game::singleton().listErase(Game::singleton().getFreePos(), 1, 1);
-  Game::singleton().listAdd(this->_snake, createEntity(1, 1, Snake, Right, rHead));
-
-  return;
+    singleton.listErase(singleton.getFreePos(), 1, 1);
+    singleton.listAdd(this->_snake, createEntity(1, 1, Snake, Right, rQueue));
+    this->_dead = false;
+    return;
 }
 
-void  Player::move(eHook direction) {
+void  Player::move(eDirection direction) {
   this->_updateSnake(direction);
   return;
 }
 
-void  Player::_fillNeck(eHook headDirection) {
-    eHook neckDirection = this->_snake.back()->getDirection();
+void  Player::_fillNeck(eDirection headDirection) {
+    eDirection neckDirection = this->_snake.back()->getDirection();
 
     switch ( headDirection ) {
         case Up : {
@@ -110,68 +113,72 @@ void  Player::_fillHead(void) {
 void  Player::_grow(void) {
     IEntity *queue = this->_snake.front();
     IEntity *piece = nullptr;
-
+    Game &singleton = Game::singleton();
     switch ( queue->getDirection() ) {
       case Up :
-        piece = createEntity( queue->getPosX(), queue->getPosY() + 1, Snake, queue->getDirection(), queue->getTexture() );
+        piece = createEntity(queue->getPosX(), queue->getPosY() + 1, Snake, queue->getDirection(), queue->getTexture() );
         break;
       case Down :
-        piece = createEntity( queue->getPosX(), queue->getPosY() - 1, Snake, queue->getDirection(), queue->getTexture() );
+        piece = createEntity(queue->getPosX(), queue->getPosY() - 1, Snake, queue->getDirection(), queue->getTexture() );
         break;
       case Left :
-        piece = createEntity( queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
+        piece = createEntity(queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
          break;
       case Right :
-        piece = createEntity( queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
+        piece = createEntity(queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
         break;
       default:
         break;
     }
-    Game::singleton().listAdd(this->_snake, piece);
-    Game::singleton().listErase(Game::singleton().getFreePos(), piece->getPosX(),  piece->getPosY());
+    singleton.listAdd(this->_snake, piece);
+    singleton.listErase(singleton.getFreePos(), piece->getPosX(),  piece->getPosY());
 
 }
 
-void  Player::_updateSnake(eHook direction) {
-    std::list<IEntity *>::iterator iter = this->_snake.begin();
-    Game::singleton().listAdd(Game::singleton().getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
-    Game::singleton().listErase(this->_snake, (*iter)->getPosX(), (*iter)->getPosY());
-
+void  Player::_updateSnake(eDirection direction) {
+    Game &singleton = Game::singleton();
     IEntity *newHead = this->_createHead(direction);
-    if (Game::singleton().listCheck(Game::singleton().getFood(), newHead->getPosX(), newHead->getPosY())) {
+    if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
         this->_grow();
-        Game::singleton().initFood();
+        singleton.initFood();
     }
-    if (Game::singleton().listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
-        exit(0);
+    if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
+        singleton.getEngine()->updateStatus(Pause);
+        this->_dead = true;
     }
-    if (Game::singleton().listCheck(Game::singleton().getWalls(), newHead->getPosX(), newHead->getPosY())) {
-        exit(0);
+    if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
+        singleton.getEngine()->updateStatus(Pause);
+        this->_dead = true;
     }
-    if (Game::singleton().listCheck(Game::singleton().getFire(), newHead->getPosX(), newHead->getPosY())) {
+    if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
         this->_life--;
-        deleteEntity(Game::singleton().getFire().front());
-        Game::singleton().getFire().clear();
+        deleteEntity(singleton.getFire().front());
+        singleton.getFire().clear();
         if (this->_life == 0) {
-            exit(0);
+            singleton.getEngine()->updateStatus(Pause);
+            this->_dead = true;
         }
     }
+    std::list<IEntity *>::iterator iter = this->_snake.begin();
+    singleton.listAdd(singleton.getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
+    singleton.listErase(this->_snake, (*iter)->getPosX(), (*iter)->getPosY());
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());
     this->_snake.push_back(newHead);
-    Game::singleton().listErase(Game::singleton().getFreePos(), newHead->getPosX(), newHead->getPosY());
+    singleton.listErase(singleton.getFreePos(), newHead->getPosX(), newHead->getPosY());
     this->_fillHead();
     return;
 }
 
-IEntity *   Player::_createHead(eHook direction) {
-    IEntity *newHead;
+IEntity *   Player::_createHead(eDirection direction) {
+    Game &singleton = Game::singleton();
     IEntity *neck = this->_snake.back();
     unsigned int x = 0;
     unsigned int y = 0;
-    unsigned int width = Game::singleton().getEngine()->getWidth();
-    unsigned int height = Game::singleton().getEngine()->getHeight();
+    unsigned int width = singleton.getEngine()->getWidth();
+    unsigned int height = singleton.getEngine()->getHeight();
+
     switch(direction) {
         case Up :
             x = neck->getPosX();
@@ -191,6 +198,6 @@ IEntity *   Player::_createHead(eHook direction) {
             break;
         default: break;
     }
-    newHead = createEntity(x, y, Snake, direction, rHead );
+    IEntity *newHead = createEntity(x, y, Snake, direction, rHead);
     return newHead;
 }

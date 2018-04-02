@@ -5,22 +5,22 @@
 }
 
 bool   openBinaryLib(char *path) {
-    if (!(BINARY_LIB = dlopen(path, RTLD_LAZY | RTLD_LOCAL))) {
+    if (!(BINARY_LIB = dlopen(path, RTLD_NOW | RTLD_GLOBAL))) {
       dlerror_wrapper();
       return false;
     }
     else {return true;}
 }
 
-IGraphism   *createEngine(unsigned int width, unsigned int height, eHook hook) {
+IGraphism   *createEngine(unsigned int width, unsigned int height, eDirection direction) {
   std::string symbol = "createWindow";
-  IGraphism   *(*windowCreator)(unsigned int, unsigned int, eHook);
-  windowCreator = (IGraphism *(*)(unsigned int, unsigned int, eHook)) dlsym(BINARY_LIB, symbol.c_str());
+  IGraphism   *(*windowCreator)(unsigned int, unsigned int, eDirection);
+  windowCreator = (IGraphism *(*)(unsigned int, unsigned int, eDirection)) dlsym(BINARY_LIB, symbol.c_str());
 
   if (!windowCreator)
     dlerror_wrapper();
 
-  IGraphism *window = windowCreator(width, height, hook);
+  IGraphism *window = windowCreator(width, height, direction);
   return window;
 }
 
@@ -36,10 +36,10 @@ void      deleteEngine(IGraphism *engine) {
   return;
 }
 
-IEntity   *createEntity(unsigned int x, unsigned int y, eType type, eHook direction, eTexture texture) {
+IEntity   *createEntity(unsigned int x, unsigned int y, eType type, eDirection direction, eTexture texture) {
   std::string symbol = "createEntity";
-  IEntity   *(*entityCreator)(unsigned int, unsigned int, eType type, eHook direction, eTexture texture);
-  entityCreator = (IEntity *(*)(unsigned int, unsigned int, eType type, eHook direction, eTexture texture)) dlsym(BINARY_LIB, symbol.c_str());
+  IEntity   *(*entityCreator)(unsigned int, unsigned int, eType type, eDirection direction, eTexture texture);
+  entityCreator = (IEntity *(*)(unsigned int, unsigned int, eType type, eDirection direction, eTexture texture)) dlsym(BINARY_LIB, symbol.c_str());
   if (!entityCreator)
     dlerror_wrapper();
 

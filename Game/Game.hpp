@@ -18,8 +18,6 @@ class Game {
     std::list <IEntity *>         _fire;
     std::list <IEntity *>         _freePos;
     IGraphism                     *_engine;
-    bool                           _gamePause;
-    bool                           _gameQuit;
 
   public:
     ~Game(void);
@@ -28,7 +26,6 @@ class Game {
 
     std::list <IEntity *>         mergeEntities(void) const;
     void                          initMap(unsigned int width, unsigned int height);
-    void                          *getBinaryLib(void) const;
     IGraphism                     *getEngine(void) const;
     void                          setEngine(IGraphism  *engine);
     std::list <IEntity *>         &getFood(void);
@@ -37,13 +34,14 @@ class Game {
     std::list <IEntity *>         &getFire(void);
     void                          refresh(void);
     void                          start(unsigned int with, unsigned int height, int mode);
-    void                          pause(void);
+    void                          initGame(unsigned int with, unsigned int height, int mode);
+    void                          pause(int status);
     void                          save(void) const;
     void                          quit(void) const;
     void                          initFood(void);
     void                          initFire(void);
     void                          initMode(int mode);
-    void                          switchEngine(eEngine engine, eHook hook);
+    void                          switchEngine(eEngine engine, eDirection direction);
     void                          listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y);
     void                          listAdd(std::list <IEntity *> &list, IEntity * entity);
     bool                          listCheck(std::list <IEntity *> &list, unsigned int x, unsigned int y);

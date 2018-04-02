@@ -1,9 +1,10 @@
-NAME = opengl.so
+NAME = glfw.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-SFML = -L ~/.brew/lib -lglfw  -L /System/Library/Frameworks -framework GLUT -framework OpenGL
+INC	= -I .. -I . -I ../Entity -Iglfw/include -fPIC
+SFML =  -shared -undefined dynamic_lookup
 
-SRC = WindowOpengl.cpp \
+
+SRC = WindowGlfw.cpp \
 	../Entity/Entity.cpp
 
 OBJ = $(SRC:.cpp=.o)

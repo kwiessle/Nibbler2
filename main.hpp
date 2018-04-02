@@ -7,24 +7,22 @@
 # include "IEntity.hpp"
 # include <list>
 
-
-
 extern void *BINARY_LIB;
 
 class Game;
 
 IGraphism   *createEngine(
-  unsigned int width,
-  unsigned int height,
-  eHook hook
+    unsigned int width,
+    unsigned int height,
+    eDirection hook
 );
 
 IEntity     *createEntity(
-  unsigned int x,
-  unsigned int y,
-  eType type,
-  eHook direction,
-  eTexture texture
+    unsigned int x,
+    unsigned int y,
+    eType type,
+    eDirection direction,
+    eTexture texture
 );
 
 bool        openBinaryLib(char *path);
