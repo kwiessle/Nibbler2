@@ -23,11 +23,11 @@ all: install sdl sfml glfw $(NAME)
 
 
 $(NAME): $(OBJ)
-	@$(COMPILATOR) $(FLAGS) $(OBJ) $(LDFLAGS)  -o $(NAME)
+	@$(COMPILATOR)  $(OBJ) $(LDFLAGS)  -o $(NAME)
 	@echo "\033[36;5m✅ Nibbler compiled"
 
 %.o: %.cpp
-	@$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)
+	@$(COMPILATOR) $(FLAGS) $(INC) -o $@ -c $<
 
 clean:
 	@rm -rf $(OBJ)
@@ -46,7 +46,7 @@ fclean: clean
 re: fclean all
 
 install:
-	@sh install.sh
+	./install.sh
 
 assets:
 	@echo "📡 \033[36;5mDownloading archive...\033[0m"

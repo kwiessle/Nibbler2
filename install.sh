@@ -1,11 +1,7 @@
 #!/bin/sh
-brew install sdl2
-brew install sdl2_mixer
-brew install sdl2_ttf
-brew install sfml
 
-git submodule init ;
-git submodule update ;
+git submodule init;
+git submodule update;
 
 cmake --version;
 
@@ -15,3 +11,8 @@ if [[ $? == 127 ]]; then
 fi
 
 (cd lib/glfw/glfw && cmake . && make);
+
+brew install sdl2
+brew install sdl2_mixer
+brew install sdl2_ttf
+brew install sfml
