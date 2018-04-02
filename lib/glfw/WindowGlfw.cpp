@@ -23,16 +23,13 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    // glfwSetWindowIcon(this->pWindow, 1, icons);
     glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
     return;
 }
 
 Window::~Window(void) {
-    // glfwSetWindowShouldClose(this->pWindow, 1);
-    glfwDestroyWindow(this->pWindow);
     glfwTerminate();
     return;
 }

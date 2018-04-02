@@ -3,8 +3,9 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = g++ -g
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-LDFLAGS = -rdynamic  -L ~/.brew/lib/
-LDFLAGS += -rpath ~/.brew/lib/
+LDFLAGS = -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+LDFLAGS += -rdynamic  -L ~/.brew/lib/
+LDFLAGS += -rpath ~/.brew/lib/ -force_load lib/glfw/glfw/src/libglfw3.a
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -18,7 +19,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: sdl sfml glfw $(NAME)
+all: install sdl sfml glfw $(NAME)
 
 
 $(NAME): $(OBJ)

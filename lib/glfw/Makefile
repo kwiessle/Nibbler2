@@ -1,7 +1,8 @@
 NAME = glfw.so
 COMPILATOR = g++
-INC	= -I .. -I . -I ../Entity -I ~/.brew/include
-SFML = -L ~/.brew/lib -framework OpenGL -framework GLUT -lglfw -lglew
+INC	= -I .. -I . -I ../Entity -Iglfw/include -fPIC
+SFML =  -shared -undefined dynamic_lookup
+
 
 SRC = WindowGlfw.cpp \
 	../Entity/Entity.cpp

@@ -31,7 +31,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     SDL_FreeSurface(icon);
     this->initTextures();
     this->pFont = TTF_OpenFont("/assets/roboto.ttf", 35);
-  }
+}
   return;
 }
 
@@ -49,6 +49,7 @@ Window::~Window(void) {
     SDL_DestroyRenderer(this->pRenderer);
     SDL_DestroyWindow(this->pWindow);
     SDL_Quit();
+    return;
 }
 
 void        Window::handleEvent(void) {
@@ -212,7 +213,7 @@ bool            Window::displayPause(int status) {
             break;
     }
     SDL_RenderPresent( this->pRenderer );
-    if (SDL_WaitEvent(&event)) {
+    while (SDL_PollEvent(&event)) {
         if (event.type ==  SDL_MOUSEBUTTONDOWN) {
             if ( this->checkMousePos(resume, event.button.x, event.button.y) ) {
                 this->status = Play;
@@ -306,7 +307,6 @@ void       Window::initTextures(void) {
     eTexture texture;
 
     for (int i = 1; i <= 23; i++) {
-        // if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

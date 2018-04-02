@@ -180,7 +180,7 @@ bool            Window::displayPause(int status)  {
             break;
     }
     this->window->display();
-    if(this->window->isOpen() && this->window->waitEvent(event)) {
+    if (this->window->isOpen() && this->window->pollEvent(event)) {
         if (event.type == sf::Event::MouseButtonPressed) {
             sf::Vector2i mousePos = sf::Mouse::getPosition( *this->window );
             sf::Vector2f mousePosF(
@@ -202,7 +202,6 @@ bool            Window::displayPause(int status)  {
         }
         this->setStatus(event);
         this->setEngine(event);
-        // if (this->engineHasChanged() || this->)
     }
     return true;
 }
