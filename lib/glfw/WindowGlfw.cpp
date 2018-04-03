@@ -220,6 +220,23 @@ void    Window::drawMenu(int lives, int score) const {
 bool   Window::displayPause(int status) {
     glClearColor(22/255.0, 22/255.0, 24/255.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
+    GLuint background;
+    glGenTextures(1, &background);
+    glBindTexture(GL_TEXTURE_2D, background);
+    this->loadBMP("./assets/appicon.bmp");
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, background);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0,1);
+    glVertex2f(0, 0);
+    glTexCoord2f(1,1);
+    glVertex2f(this->wWidth * CELL_UNITY, 0);
+    glTexCoord2f(1,0);
+    glVertex2f(this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY);
+    glTexCoord2f(0,0);
+    glVertex2f(0, this->wHeight * CELL_UNITY);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
     switch(status) {
         case 2 :
             this->drawResume();
