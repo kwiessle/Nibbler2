@@ -10,7 +10,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   status(Pause),
   direction(direction)
  {
-  if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
     exit(0);
   }
@@ -22,9 +22,10 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
       SDL_WINDOWPOS_UNDEFINED,
       this->wWidth * CELL_UNITY,
       this->wHeight * CELL_UNITY + CELL_UNITY * 2,
-      SDL_WINDOW_RESIZABLE
-    );
+      SDL_WINDOW_SHOWN
+  );
     this->pWindow = pWindow;
+    SDL_SetWindowResizable(this->pWindow, SDL_FALSE);
     this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
     SDL_Surface *icon = SDL_LoadBMP("/assets/appicon.bmp");
     SDL_SetWindowIcon(pWindow, icon);
@@ -243,55 +244,38 @@ bool    Window::checkMousePos(SDL_Rect button, int x, int y) const {
 
 SDL_Rect Window::drawStart(SDL_Color color) const {
     SDL_Rect start;
-    SDL_Surface *surface;
-    SDL_Texture *texture;
     (void)color;
-    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
-    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
     start.x = wWidth * CELL_UNITY / 5;
     start.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     start.w = CELL_UNITY * 3;
     start.h = CELL_UNITY * 2;
-    SDL_FillRect(surface, &start, SDL_MapRGB(surface->format, 255, 0, 0));
-    SDL_RenderCopy(this->pRenderer, texture, nullptr, &start);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+    SDL_SetRenderDrawColor( this->pRenderer, 0, 255, 0, 0 );
+    SDL_RenderFillRect( this->pRenderer, &start);
     return start;
 }
 
 SDL_Rect Window::drawResume(SDL_Color color) const {
     SDL_Rect resume;
-    SDL_Surface *surface;
-    SDL_Texture *texture;
     (void)color;
-    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
-    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+
     resume.x = (wWidth * CELL_UNITY / 5) * 2;
     resume.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     resume.w = CELL_UNITY * 3;
     resume.h = CELL_UNITY * 2;
-    SDL_FillRect(surface, &resume, SDL_MapRGB(surface->format, 255, 0, 0));
-    SDL_RenderCopy(this->pRenderer, texture, nullptr, &resume);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+    SDL_SetRenderDrawColor( this->pRenderer, 0, 0, 255, 0 );
+    SDL_RenderFillRect( this->pRenderer, &resume);
     return resume;
 }
 
 SDL_Rect Window::drawExit(SDL_Color color) const {
     SDL_Rect exit;
-    SDL_Surface *surface;
-    SDL_Texture *texture;
     (void)color;
-    surface = SDL_CreateRGBSurface(0, CELL_UNITY * 3, CELL_UNITY * 2, 32, 0, 0, 0, 0);
-    texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
     exit.x = (wWidth * CELL_UNITY / 5) * 3;
     exit.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     exit.w = CELL_UNITY * 3;
     exit.h = CELL_UNITY * 2;
-    SDL_FillRect(surface, &exit, SDL_MapRGB(surface->format, 255, 0, 0));
-    SDL_RenderCopy(this->pRenderer, texture, nullptr, &exit);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+    SDL_SetRenderDrawColor( this->pRenderer, 255, 0, 0, 0 );
+    SDL_RenderFillRect( this->pRenderer, &exit);
     return exit;
 }
 

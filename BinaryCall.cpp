@@ -9,7 +9,7 @@ bool   openBinaryLib(char *path) {
       dlerror_wrapper();
       return false;
     }
-    else {return true;}
+    else { return true; }
 }
 
 IGraphism   *createEngine(unsigned int width, unsigned int height, eDirection direction) {
@@ -28,7 +28,6 @@ void      deleteEngine(IGraphism *engine) {
   std::string symbol = "deleteWindow";
   void      (*engineDestructor)(IGraphism *);
   engineDestructor = (void (*)(IGraphism *)) dlsym(BINARY_LIB, symbol.c_str());
-
   if (!engineDestructor)
     dlerror_wrapper();
 

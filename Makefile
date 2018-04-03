@@ -21,7 +21,7 @@ all: _assets _install sdl sfml glfw $(NAME)
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
-	@echo "\033[36;5m✅ Nibbler compiled"
+	@echo "\033[36;5m✅ Nibbler compiled\033[0m"
 
 %.o: %.cpp
 	@$(COMPILATOR) $(FLAGS) $(INC) -o $@ -c $<
@@ -31,14 +31,14 @@ clean:
 	@make clean -C ./lib/sdl
 	@make clean -C ./lib/sfml
 	@make clean -C ./lib/glfw
-	@echo "\033[38;5;204m🗑 Object files removed"
+	@echo "\033[38;5;204m🗑 Object files removed\033[0m"
 
 fclean: clean
 	@rm -rf $(NAME)
 	@make fclean -C ./lib/sdl
 	@make fclean -C ./lib/sfml
 	@make fclean -C ./lib/glfw
-	@echo "\033[38;5;204m🗑 Nibbler removed"
+	@echo "\033[38;5;204m🗑 Nibbler removed\033[0m"
 
 re: fclean all
 
@@ -54,16 +54,16 @@ _assets:
 	@unzip -q ./assets.zip  -d ./assets
 	@rm -rf  __MACOSX/\*
 	@rm ./assets.zip
-	@echo "\033[38;5;82m✅ Assets downloaded"
+	@echo "\033[38;5;82m✅ Assets downloaded\033[0m"
 
 aclean:
 	@rm -rf assets schemes.pdf
-	@echo "\033[38;5;204m🗑 Assets removed"
+	@echo "\033[38;5;204m🗑 Assets removed\033[0m"
 
 dsclean:
 	@rm -rf .DS_S*
 	@rm -rf */.DS_S*
-	@echo "\033[38;5;204m🗑 All '.DS_STORE' files removed"
+	@echo "\033[38;5;204m🗑 All '.DS_STORE' files removed\033[0m"
 
 sdl:
 	@make re -C ./lib/sdl

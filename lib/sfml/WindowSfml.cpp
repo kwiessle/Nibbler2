@@ -15,7 +15,8 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         sf::VideoMode(
             this->wWidth * CELL_UNITY,
             this->wHeight * CELL_UNITY + CELL_UNITY * 2),
-        "Nibbler"
+        "Nibbler",
+        sf::Style::Titlebar | sf::Style::Close
     );
     this->initTextures();
     this->pFont.loadFromFile("./assets/roboto.ttf");

@@ -15,6 +15,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         glfwTerminate();
         exit(0);
     }
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     this->pWindow = glfwCreateWindow(
         this->wWidth * CELL_UNITY,
         this->wHeight * CELL_UNITY + CELL_UNITY * 2,
@@ -31,15 +32,14 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
 
 Window::~Window(void) {
     glfwTerminate();
-    return;
 }
 
 void    Window::handleEvent(void) {
     if (!glfwWindowShouldClose(this->pWindow)) {
         glfwPollEvents();
 
-        this->setDirection();
         this->setEngine();
+        this->setDirection();
         this->setStatus();
     }
     return;
@@ -230,7 +230,7 @@ bool   Window::displayPause(int status) {
     }
     glColor3f(1, 1, 1);
     glfwSwapBuffers(this->pWindow);
-    glfwWaitEvents();
+    glfwPollEvents();
     if ( glfwGetMouseButton(this->pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
         double xpos;
         double ypos;

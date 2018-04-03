@@ -156,7 +156,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 this->refresh();
             }
         }
-        if ( this->_engine->getStatus() == Pause && !this->_engine->engineHasChanged()) {
+        if (this->_engine->getStatus() == Pause) {
             if (this->_player->checkDeath())
                 this->pause(1);
             else
@@ -202,7 +202,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     unsigned int tmpWidth = this->_engine->getWidth();
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
-
+    deleteEngine(this->_engine);
     switch(engine) {
         case SDL :
             path = "lib/sdl/sdl.so";
@@ -216,7 +216,6 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
         default : break;
     }
     openBinaryLib(const_cast<char*>(path.c_str()));
-    deleteEngine( this->_engine);
     this->_engine = createEngine( tmpWidth, tmpHeight, direction);
     return;
 }
