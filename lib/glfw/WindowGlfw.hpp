@@ -3,7 +3,6 @@
 
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
-// # include <GLUT/glut.h>
 # include <GL/freeglut.h>
 # include "IGraphism.hpp"
 # include "IEntity.hpp"

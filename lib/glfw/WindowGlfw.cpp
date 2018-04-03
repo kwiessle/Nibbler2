@@ -35,11 +35,13 @@ Window::~Window(void) {
 }
 
 void    Window::handleEvent(void) {
-    glfwPollEvents();
+    if (!glfwWindowShouldClose(this->pWindow)) {
+        glfwPollEvents();
 
-    this->setDirection();
-    this->setEngine();
-    this->setStatus();
+        this->setDirection();
+        this->setEngine();
+        this->setStatus();
+    }
     return;
 }
 
@@ -212,8 +214,7 @@ void    Window::drawMenu(int lives, int score) const {
     std::string sScore = std::to_string(score);
     const char *tmp = sScore.c_str();
     for( int i = 0; i < sScore.length(); i++)
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18
-,tmp[i]);
+    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
 }
 
 bool   Window::displayPause(int status) {

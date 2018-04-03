@@ -17,8 +17,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: install sdl sfml glfw $(NAME)
-
+all: _assets _install sdl sfml glfw $(NAME)
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
@@ -43,13 +42,14 @@ fclean: clean
 
 re: fclean all
 
-install:
+lib: sdl sfml glfw
+
+_install:
 	./install.sh
 
-assets:
+_assets:
 	@echo "📡 \033[36;5mDownloading archive...\033[0m"
 	@mkdir -p assets
-	@cd assets
 	@curl -o ./assets.zip -s https://transfer.sh/ZFcEp/assets.zip
 	@unzip -q ./assets.zip  -d ./assets
 	@rm -rf  __MACOSX/\*
@@ -74,4 +74,4 @@ glfw:
 allegro:
 	@make re -C ./lib/allegro
 
-.PHONY : re fclean clean all install assets aclean dsclean sdl sfml allegro glfw
+.PHONY : re fclean clean all libs aclean dsclean sdl sfml glfw
