@@ -212,7 +212,7 @@ sf::RectangleShape            Window::drawStart(sf::Color color) const {
     start.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
     start.setOutlineColor(sf::Color::Green);
     start.setOutlineThickness(5);
-    start.setPosition((wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) ,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
+    start.setPosition((wWidth * CELL_UNITY / 5),  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     start.setFillColor(color);
     this->window->draw(start);
     return start;
@@ -223,7 +223,7 @@ sf::RectangleShape            Window::drawResume(sf::Color color) const {
     resume.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
     resume.setOutlineColor(sf::Color::Blue);
     resume.setOutlineThickness(5);
-    resume.setPosition((wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth),  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
+    resume.setPosition((wWidth * CELL_UNITY / 5) * 2,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     resume.setFillColor(color);
     this->window->draw(resume);
     return resume;
@@ -233,7 +233,7 @@ sf::RectangleShape            Window::drawExit(sf::Color color) const {
     exit.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
     exit.setOutlineColor(sf::Color::Red);
     exit.setOutlineThickness(5);
-    exit.setPosition((wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2)  + ((CELL_UNITY * 3 + wWidth) * 2), wHeight * CELL_UNITY - CELL_UNITY * 1.5);
+    exit.setPosition((wWidth * CELL_UNITY / 5) * 3, wHeight * CELL_UNITY - CELL_UNITY * 1.5);
     exit.setFillColor(color);
     this->window->draw(exit);
     return exit;

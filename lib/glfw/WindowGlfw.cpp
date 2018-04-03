@@ -253,15 +253,15 @@ bool   Window::displayPause(int status) {
         double ypos;
         float ycheck = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
         glfwGetCursorPos(this->pWindow, &xpos, &ypos);
-        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2), ycheck)) {
+        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5), ycheck)) {
             this->status = Start;
             return false;
         }
-        if ( status == 2 && this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth), ycheck )) {
+        if ( status == 2 && this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5) * 2, ycheck )) {
             this->status = Play;
             return false;
         }
-        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth) * 2, ycheck)) {
+        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5) * 3, ycheck)) {
             this->status = Exit;
             return false;
         }
@@ -279,7 +279,7 @@ bool    Window::checkMousePos(double x, double y, float xcheck, float ycheck) co
 }
 
 void      Window::drawStart(void) const {
-    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2);
+    float x = (wWidth * CELL_UNITY / 5);
     float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     glBegin(GL_QUADS);
     glColor3f(0,1,0);
@@ -291,7 +291,7 @@ void      Window::drawStart(void) const {
 }
 
 void      Window::drawResume(void) const {
-    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth);
+    float x = (wWidth * CELL_UNITY / 5) * 2;
     float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     glBegin(GL_QUADS);
     glColor3f(0, 0, 1);
@@ -303,7 +303,7 @@ void      Window::drawResume(void) const {
 }
 
 void      Window::drawExit(void) const {
-    float x = (wWidth * CELL_UNITY / 3) - ((CELL_UNITY * 3) / 2) + (CELL_UNITY * 3 + wWidth) * 2;
+    float x = (wWidth * CELL_UNITY / 5) * 3;
     float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
     glBegin(GL_QUADS);
     glColor3f(1, 0, 0);
