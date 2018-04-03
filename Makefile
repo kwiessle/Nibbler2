@@ -50,12 +50,11 @@ install:
 assets:
 	@echo "📡 \033[36;5mDownloading archive...\033[0m"
 	@mkdir -p assets
-	@curl -o ./assets/scheme.pdf -s https://transfer.sh/uHJWo/scheme.pdf
-	@curl -o ./assets/assets.zip -s https://transfer.sh/10vY6n/assets.zip
-	@zip -dq ./assets/assets.zip __MACOSX/\*
-	@unzip -q ./assets/assets.zip
+	@cd assets
+	@curl -o ./assets.zip -s https://transfer.sh/ZFcEp/assets.zip
+	@unzip -q ./assets.zip  -d ./assets
 	@rm -rf  __MACOSX/\*
-	@rm ./assets/assets.zip
+	@rm ./assets.zip
 	@echo "\033[38;5;82m✅ Assets downloaded"
 
 aclean:

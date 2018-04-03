@@ -256,7 +256,7 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        // if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
+        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);

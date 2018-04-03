@@ -307,6 +307,7 @@ void       Window::initTextures(void) {
     eTexture texture;
 
     for (int i = 1; i <= 23; i++) {
+        if ( i >= 5 && i <= 8) {i++; continue;}
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

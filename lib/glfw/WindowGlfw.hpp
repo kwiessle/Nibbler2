@@ -14,6 +14,7 @@ class Window  : public IGraphism {
     Window(void);
 
     void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
+    void            displayTextures(std::list <IEntity *>::iterator iter) const;
     bool            displayPause(int status);
     void            drawStart(void) const;
     void            drawResume(void) const;

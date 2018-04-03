@@ -117,10 +117,51 @@ void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) cons
     std::list <IEntity *>::iterator iter = data.begin();
     glEnable(GL_TEXTURE_2D);
     while (iter != data.end()) {
-        GLfloat x = (*iter)->getPosX() * CELL_UNITY;
-        GLfloat y = (*iter)->getPosY() * CELL_UNITY;
-        glBindTexture(GL_TEXTURE_2D, this->_textures[((*iter)->getTexture())]);
-        glBegin(GL_QUADS);
+        this->displayTextures(iter);
+        iter++;
+    }
+    glDisable(GL_TEXTURE_2D);
+    this->drawMenu(lives, score);
+    glfwSwapBuffers(this->pWindow);
+    return;
+}
+
+void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
+    GLfloat x = (*iter)->getPosX() * CELL_UNITY;
+    GLfloat y = (*iter)->getPosY() * CELL_UNITY;
+    glBindTexture(GL_TEXTURE_2D, this->_textures[((*iter)->getTexture())]);
+    glBegin(GL_QUADS);
+    if ((*iter)->getTexture() == 3 || (*iter)->getTexture() == 4 || (*iter)->getTexture() == 15 || (*iter)->getTexture() == 16) {
+        glTexCoord2f(0,0);
+        glVertex2f(x, y);
+        glTexCoord2f(0,1);
+        glVertex2f(x, y + CELL_UNITY);
+        glTexCoord2f(1,1);
+        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+        glTexCoord2f(1,0);
+        glVertex2f(x+ CELL_UNITY,y);
+    }
+    else if ((*iter)->getTexture() == 9 || (*iter)->getTexture() == 12) {
+        glTexCoord2f(0,1);
+        glVertex2f(x, y);
+        glTexCoord2f(1,1);
+        glVertex2f(x, y + CELL_UNITY);
+        glTexCoord2f(1,0);
+        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+        glTexCoord2f(0, 0);
+        glVertex2f(x+ CELL_UNITY,y);
+    }
+    else if ((*iter)->getTexture() == 10 || (*iter)->getTexture() == 11) {
+        glTexCoord2f(1,0);
+        glVertex2f(x, y);
+        glTexCoord2f(0,0);
+        glVertex2f(x, y + CELL_UNITY);
+        glTexCoord2f(0,1);
+        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+        glTexCoord2f(1,1);
+        glVertex2f(x+ CELL_UNITY,y);
+    }
+    else {
         glTexCoord2f(1,1);
         glVertex2f(x, y);
         glTexCoord2f(1,0);
@@ -129,13 +170,8 @@ void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) cons
         glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
         glTexCoord2f(0,1);
         glVertex2f(x+ CELL_UNITY,y);
-        glEnd();
-        iter++;
     }
-    glDisable(GL_TEXTURE_2D);
-    this->drawMenu(lives, score);
-    glfwSwapBuffers(this->pWindow);
-    return;
+    glEnd();
 }
 void    Window::drawMenu(int lives, int score) const {
     int x = CELL_UNITY;
@@ -272,7 +308,7 @@ void       Window::initTextures(void) {
     glGenTextures(23, this->_textures);
 
     for (int i = 1; i <= 23; i++) {
-        // if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
@@ -319,7 +355,7 @@ GLuint Window::loadBMP(const char *filename) const {
     height     = *(int*)&(header[0x16]);
 
     if (imageSize == 0)
-        imageSize= width * height * 3;
+        imageSize = width * height * 3;
     if (dataPos == 0)
         dataPos = 54;
     data = (unsigned char *)malloc( width * height * 3 );
