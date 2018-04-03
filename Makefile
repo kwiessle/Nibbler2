@@ -3,8 +3,7 @@ LOGIN = kwiessle/vquesnel
 COMPILATOR = g++ -g
 INC	= -I . -I lib -I Game -I Player -I Timer
 FLAGS = -Werror -Wall -Wextra -std=c++11
-LDFLAGS = -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
-LDFLAGS += -rpath ~/.brew/lib/
+LDFLAGS = -rpath ./lib/sfml/sfml/lib
 SRC = main.cpp \
 			BinaryCall.cpp \
 			Game/Game.cpp \
@@ -22,7 +21,7 @@ all: install sdl sfml glfw $(NAME)
 
 
 $(NAME): $(OBJ)
-	@$(COMPILATOR)  $(OBJ) $(LDFLAGS)  -o $(NAME)
+	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
 	@echo "\033[36;5m✅ Nibbler compiled"
 
 %.o: %.cpp

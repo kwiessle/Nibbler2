@@ -11,8 +11,8 @@ if [[ $? == 127 ]]; then
 fi
 
 (cd lib/glfw/glfw && cmake . && make);
+(cd lib/sfml/sfml && cmake . && make);
 
 brew install sdl2
 brew install sdl2_mixer
 brew install sdl2_ttf
-brew install sfml
