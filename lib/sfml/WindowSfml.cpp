@@ -3,12 +3,12 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height, eDirection direction) :
- wWidth(width),
- wHeight(height),
- engine(SFML),
- engineChecker(false),
- status(Pause),
- direction(direction)
+  direction(direction),
+  status(Pause),
+  engine(SFML),
+  engineChecker(false),
+  wWidth(width),
+  wHeight(height)
 {
     sf::Image icon;
     this->window = new sf::RenderWindow(
@@ -111,7 +111,6 @@ bool    Window::engineHasChanged(void) const{
 void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {
     sf::Color color(22,22, 24, 0);
     this->window->clear(color);
-    sf::Event event;
     sf::Sprite sprite;
     std::list <IEntity *>::iterator iter = data.begin();
 

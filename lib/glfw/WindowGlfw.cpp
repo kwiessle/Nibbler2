@@ -3,12 +3,12 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height, eDirection direction) :
-    wWidth(width),
-    wHeight(height),
-    direction(direction),
-    engineChecker(false),
-    status(Pause),
-    engine(GL)
+  direction(direction),
+  status(Pause),
+  engine(GL),
+  engineChecker(false),
+  wWidth(width),
+  wHeight(height)
 {
     if (!glfwInit()) {
         std::cout << "OpenGL init failed" << std::endl;
@@ -213,7 +213,7 @@ void    Window::drawMenu(int lives, int score) const {
     glColor3f(1.0f, 1.0f, 1.0f);
     std::string sScore = std::to_string(score);
     const char *tmp = sScore.c_str();
-    for( int i = 0; i < sScore.length(); i++)
+    for( unsigned int i = 0; i < sScore.length(); i++)
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
 }
 
@@ -345,7 +345,7 @@ void      deleteWindow(Window *window) {
 }
 
 GLuint Window::loadBMP(const char *filename) const {
-    GLuint texture;
+    GLuint texture = 0;
     // Data read from the header of the BMP file
     unsigned char header[54]; // Each BMP file begins by a 54-bytes header
     unsigned int dataPos;     // Position in the file where the actual data begins

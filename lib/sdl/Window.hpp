@@ -40,16 +40,16 @@ class Window : public IGraphism {
     Window(unsigned int width, unsigned int height, eDirection direction);
     ~Window(void);
 
-    SDL_Window                          *pWindow;
-    SDL_Renderer                        *pRenderer;
-    TTF_Font                            *pFont;
-    unsigned int                        wWidth;
-    unsigned int                        wHeight;
     eDirection                          direction;
     eStatus                             status;
     eEngine                             engine;
     bool                                engineChecker;
     bool                                directionChecker;
+    unsigned int                        wWidth;
+    unsigned int                        wHeight;
+    SDL_Window                          *pWindow;
+    SDL_Renderer                        *pRenderer;
+    TTF_Font                            *pFont;
     std::map <eTexture, SDL_Surface *>  _textures;
 
 };

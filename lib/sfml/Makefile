@@ -1,7 +1,9 @@
 NAME = sfml.so
 COMPILATOR = g++
+FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I .. -I . -I ../Entity -I sfml/include
-SFML = -L sfml/lib -lsfml-system -lsfml-window -lsfml-graphics
+SFML = -fPIC -shared
+SFML += -Lsfml/lib -lsfml-system -lsfml-window -lsfml-graphics
 
 SRC = WindowSfml.cpp \
 	../Entity/Entity.cpp
@@ -12,8 +14,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "✏️ \033[33;5m[SFML] Creating extern lib\033[0m"
-	@$(COMPILATOR) -fPIC $(OBJ) -shared $(SFML) -o $(NAME)
-
+	@$(COMPILATOR) $(SFML) $(OBJ) -o $(NAME)
 
 %.o: %.cpp
 	@$(COMPILATOR) $(INC) -o $@ -c $< $(FLAGS)

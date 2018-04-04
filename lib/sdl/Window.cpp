@@ -3,12 +3,12 @@
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height, eDirection direction) :
-  wWidth(width),
-  wHeight(height),
+  direction(direction),
+  status(Pause),
   engine(SDL),
   engineChecker(false),
-  status(Pause),
-  direction(direction)
+  wWidth(width),
+  wHeight(height)
  {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
@@ -152,7 +152,7 @@ void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) co
 }
 
 void    Window::drawMenu(int lives, int score) const {
-  SDL_Rect    form = {0, this->wHeight * CELL_UNITY, this->wWidth * CELL_UNITY, CELL_UNITY * 2};
+  SDL_Rect    form = {0, static_cast<int>(this->wHeight * CELL_UNITY), static_cast<int>(this->wWidth * CELL_UNITY), CELL_UNITY * 2};
   SDL_Surface *surface = nullptr;
   SDL_Texture *texture = nullptr;
   int x = CELL_UNITY;
@@ -189,7 +189,7 @@ void    Window::drawMenu(int lives, int score) const {
 }
 
 bool            Window::displayPause(int status) {
-    SDL_Rect  background = {0, 0, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY };
+    SDL_Rect  background = {0, 0, static_cast<int>(this->wWidth * CELL_UNITY), static_cast<int>(this->wHeight * CELL_UNITY) };
     SDL_Rect  start;
     SDL_Rect  resume;
     SDL_Rect  exit;
@@ -288,8 +288,6 @@ unsigned int    Window::getHeight(void) const {
 }
 
 void       Window::initTextures(void) {
-    eTexture texture;
-
     for (int i = 1; i <= 23; i++) {
         if ( i >= 5 && i <= 8) {i++; continue;}
         std::string name = "/assets/";
