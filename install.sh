@@ -24,6 +24,7 @@ if brew ls --versions sdl2_mixer > /dev/null; then
 else
   brew install sdl2_mixer
 fi
+
 if brew ls --versions sdl2_ttf > /dev/null; then
   echo "\033[38;5;82m✅ sdl_2_ttf already install\033[0m"
 else
