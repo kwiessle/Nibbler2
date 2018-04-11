@@ -195,14 +195,14 @@ void Game::initMode(int mode) {
             for (unsigned int x = 0; x < this->_engine->getWidth(); x++) {
                 this->listAdd(this->_walls, createEntity( x, 0, Wall, NoDir, tWall));
                 this->listErase(this->_freePos, x, 0);
-                this->listAdd(this->_walls, createEntity( x, this->_engine->getWidth() - 1, Wall, NoDir, tWall));
-                this->listErase(this->_freePos, x, this->_engine->getWidth() - 1);
+                this->listAdd(this->_walls, createEntity(x, this->_engine->getHeight() - 1, Wall, NoDir, tWall));
+                this->listErase(this->_freePos, x, this->_engine->getHeight() - 1);
             }
             for (unsigned int y = 0; y < this->_engine->getHeight(); y++) {
                 this->listAdd(this->_walls, createEntity( 0, y, Wall, NoDir, tWall));
                 this->listErase(this->_freePos, 0, y);
-                this->listAdd(this->_walls, createEntity( this->_engine->getHeight() - 1, y, Wall, NoDir, tWall));
-                this->listErase(this->_freePos, this->_engine->getHeight() - 1, y);
+                this->listAdd(this->_walls, createEntity( this->_engine->getWidth() - 1, y, Wall, NoDir, tWall));
+                this->listErase(this->_freePos, this->_engine->getWidth() - 1, y);
             }
         }
         default: break;
