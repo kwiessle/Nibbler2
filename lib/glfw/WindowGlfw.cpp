@@ -1,4 +1,5 @@
 #include "WindowGlfw.hpp"
+#include "GException.hpp"
 
 Window::Window(void) { return; }
 
@@ -345,12 +346,13 @@ void       Window::initTextures(void) {
     glGenTextures(23, this->_textures);
 
     for (int i = 1; i <= 23; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+        // if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
         glBindTexture(GL_TEXTURE_2D, this->_textures[i]);
         this->loadBMP(name.c_str());
+
     }
     return;
 }
@@ -373,11 +375,15 @@ GLuint Window::loadBMP(const char *filename) const {
     unsigned int imageSize;
     unsigned char * data;
 
-    FILE * file = fopen(filename,"rb");
-    if (!file) {
-        std::cout << "Image could not be opened" << std::endl;
-        exit(0);
-    }
+
+    // if (!file) {
+    //     std::cout << "Image could not be opened" << std::endl;
+    //     exit(0);
+    // }
+    FILE * file = 0;
+    try {
+        file = fopen(filename,"rb");
+    } catch (GException::GraphicalException &e) { GException::Throw(EX_FILE).Display(filename, e); }
     if ( fread(header, 1, 54, file) != 54 ){ // If not 54 bytes read : problem
         std::cout << "Not a correct BMP file" << std::endl;
         exit(0);

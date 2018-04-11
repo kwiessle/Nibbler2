@@ -1,13 +1,14 @@
 NAME = glfw.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
-INC	= -I .. -I . -I ../Entity -Iglfw/include  -I ~/.brew/include
+INC	= -I .. -I . -I ../Entity -Iglfw/include  -I ~/.brew/include  -I ../GException
 GLFW = -fPIC -shared
 GLFW += -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 GLFW += -force_load ./glfw/src/libglfw3.a
 
 SRC = WindowGlfw.cpp \
-	../Entity/Entity.cpp
+	../Entity/Entity.cpp \
+	../GException/GException.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

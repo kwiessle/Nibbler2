@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include "GException.hpp"
 
 Window::Window(void) { return; }
 
@@ -289,11 +290,14 @@ unsigned int    Window::getHeight(void) const {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        if ( i >= 5 && i <= 8) {i++; continue;}
+        // if ( i >= 5 && i <= 8) {i++; continue;}
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";
-        this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
+        try {
+            this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
+        } catch (GException::GraphicalException &e) { GException::Throw(EX_FILE).Display(name, e); }
+
     }
     return;
 }
