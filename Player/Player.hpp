@@ -12,7 +12,7 @@ class Player {
     int                                     _score;
     int                                     _speed;
     bool                                    _dead;
-
+    bool                                    _scoreChange;
     void                                    _grow(void);
     void                                    _updateSnake(eDirection direction);
     void                                    _detectCollision(eDirection direction);
@@ -32,6 +32,7 @@ class Player {
     std::list <IEntity *>        getSnake(void) const;
     int                          getLife(void) const;
     int                          getScore(void) const;
+    bool                         getScoreChange(void) const;
     int                          getSpeed(void) const;
     bool                         checkDeath(void) const;
     void                         initSnake(void);

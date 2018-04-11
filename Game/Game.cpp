@@ -102,6 +102,14 @@ void  Game::initFire(void) {
 }
 
 void  Game::initMap(unsigned int width, unsigned int height) {
+    if (this->_freePos.size()) {
+        std::list<IEntity *>::iterator it = this->_freePos.begin();
+        while ( it != this->_freePos.end()) {
+            deleteEntity((*it));
+            it++;
+        }
+        this->_freePos.clear();
+    }
     for(unsigned int x = 0; x < width; x++) {
         for (unsigned int y = 0; y < height; y++) {
             IEntity *tmp = createEntity( x, y, Free, NoDir, None);
@@ -123,7 +131,7 @@ void Game::initGame(unsigned int width, unsigned int height, int mode) {
 
 void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer frame(33);
-    Timer speed(100);
+    Timer speed(200);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
     while (this->_engine->getStatus() != Exit) {
@@ -132,7 +140,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             case Exit : this->_engine->updateStatus(Exit); break;
             case Start :
                 this->initGame(width, height, mode);
-                speed.resetDiff(100);
+                speed.resetDiff(200);
                 this->_engine->updateStatus(Play);
                 break;
             case Pause : this->_engine->updateStatus(Pause); break;
@@ -148,9 +156,13 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             this->_engine->updateStatus(tmp);
         }
         if ( this->_engine->getStatus() == Play ) {
-            if (fire.update()) { this->initFire(); }
-
+            if (fire.update()) {
+                 this->initFire();
+            }
             if (speed.update()) {
+                if (this->_player->getScoreChange() && this->_player->getScore() % 5 == 0 && speed.getDiff() >= 50) {
+                    speed.changeDiff(10);
+                }
                 this->_player->move(this->_engine->getDirection());
                 this->_engine->reverseDirectionChecker();
                 this->refresh();
@@ -172,8 +184,8 @@ void  Game::pause(int status) {
 }
 
 void  Game::refresh(void) {
-  this->_engine->drawFrame(this->mergeEntities(), this->_player->getLife(), this->_player->getScore());
-  return;
+    this->_engine->drawFrame(this->mergeEntities(), this->_player->getLife(), this->_player->getScore());
+    return;
 }
 
 void Game::initMode(int mode) {

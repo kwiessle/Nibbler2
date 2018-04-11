@@ -21,7 +21,10 @@ void        Timer::resetDiff(float diff) {
     this->_diffTime = diff;
 }
 void        Timer::changeDiff(float newDiff) {
-    this->_diffTime /= newDiff;
+    this->_diffTime -= newDiff;
+}
+float       Timer::getDiff(void) const {
+    return this->_diffTime;
 }
 
 bool		Timer::update(void) {

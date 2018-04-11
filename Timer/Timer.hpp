@@ -23,6 +23,7 @@ class Timer {
 		~Timer();
 		void 				changeDiff(float newdiff);
 		void        		resetDiff(float diff);
+		float				getDiff(void) const;
 		bool				update();
 
 		// Timer &			operator=(Timer const & rhs);

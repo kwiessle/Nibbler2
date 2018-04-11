@@ -28,8 +28,9 @@ std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
 
 bool    Player::checkDeath(void) const { return this->_dead; }
-int Player::getLife(void) const { return this->_life; }
-int Player::getScore(void) const { return this->_score; }
+int     Player::getLife(void) const { return this->_life; }
+int     Player::getScore(void) const { return this->_score; }
+bool    Player::getScoreChange(void) const { return this->_scoreChange; }
 
 void  Player::initSnake(void) {
     Game &singleton = Game::singleton();
@@ -138,8 +139,10 @@ void  Player::_grow(void) {
 void  Player::_updateSnake(eDirection direction) {
     Game &singleton = Game::singleton();
     IEntity *newHead = this->_createHead(direction);
+    this->_scoreChange = false;
     if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
+        this->_scoreChange = true;
         this->_grow();
         singleton.initFood();
     }
