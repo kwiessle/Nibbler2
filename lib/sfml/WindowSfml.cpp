@@ -15,7 +15,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         sf::VideoMode(
             this->wWidth * CELL_UNITY,
             this->wHeight * CELL_UNITY + CELL_UNITY * 2),
-        "Nibbler",
+        "Nibbler SFML",
         sf::Style::Titlebar | sf::Style::Close
     );
     this->initTextures();

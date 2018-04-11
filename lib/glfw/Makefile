@@ -1,7 +1,7 @@
 NAME = glfw.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
-INC	= -I .. -I . -I ../Entity -Iglfw/include
+INC	= -I .. -I . -I ../Entity -Iglfw/include  -I ~/.brew/include
 GLFW = -fPIC -shared
 GLFW += -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 GLFW += -force_load ./glfw/src/libglfw3.a

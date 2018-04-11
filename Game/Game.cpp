@@ -216,7 +216,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
         default : break;
     }
     openBinaryLib(const_cast<char*>(path.c_str()));
-    this->_engine = createEngine( tmpWidth, tmpHeight, direction);
+    this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
 }
 

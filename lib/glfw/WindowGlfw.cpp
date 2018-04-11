@@ -19,7 +19,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     this->pWindow = glfwCreateWindow(
         this->wWidth * CELL_UNITY,
         this->wHeight * CELL_UNITY + CELL_UNITY * 2,
-        "Nibbler",
+        "Nibbler GLFW",
         NULL,
         NULL
     );
@@ -133,45 +133,64 @@ void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
     GLfloat y = (*iter)->getPosY() * CELL_UNITY;
     glBindTexture(GL_TEXTURE_2D, this->_textures[((*iter)->getTexture())]);
     glBegin(GL_QUADS);
-    if ((*iter)->getTexture() == 3 || (*iter)->getTexture() == 4 || (*iter)->getTexture() == 15 || (*iter)->getTexture() == 16) {
-        glTexCoord2f(0,0);
-        glVertex2f(x, y);
-        glTexCoord2f(0,1);
-        glVertex2f(x, y + CELL_UNITY);
-        glTexCoord2f(1,1);
-        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
-        glTexCoord2f(1,0);
-        glVertex2f(x+ CELL_UNITY,y);
-    }
-    else if ((*iter)->getTexture() == 9 || (*iter)->getTexture() == 12) {
-        glTexCoord2f(0,1);
-        glVertex2f(x, y);
-        glTexCoord2f(1,1);
-        glVertex2f(x, y + CELL_UNITY);
-        glTexCoord2f(1,0);
-        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
-        glTexCoord2f(0, 0);
-        glVertex2f(x+ CELL_UNITY,y);
-    }
-    else if ((*iter)->getTexture() == 10 || (*iter)->getTexture() == 11) {
-        glTexCoord2f(1,0);
-        glVertex2f(x, y);
-        glTexCoord2f(0,0);
-        glVertex2f(x, y + CELL_UNITY);
-        glTexCoord2f(0,1);
-        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
-        glTexCoord2f(1,1);
-        glVertex2f(x+ CELL_UNITY,y);
-    }
-    else {
-        glTexCoord2f(1,1);
-        glVertex2f(x, y);
-        glTexCoord2f(1,0);
-        glVertex2f(x, y + CELL_UNITY);
-        glTexCoord2f(0,0);
-        glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
-        glTexCoord2f(0,1);
-        glVertex2f(x+ CELL_UNITY,y);
+    switch((*iter)->getTexture()) {
+        case 3 :
+        case 4 :
+        case 15 :
+        case 16 :
+            glTexCoord2f(0,0);
+            glVertex2f(x, y);
+            glTexCoord2f(0,1);
+            glVertex2f(x, y + CELL_UNITY);
+            glTexCoord2f(1,1);
+            glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+            glTexCoord2f(1,0);
+            glVertex2f(x+ CELL_UNITY,y);
+            break;
+        case 9 :
+        case 12 :
+            glTexCoord2f(0,1);
+            glVertex2f(x, y);
+            glTexCoord2f(1,1);
+            glVertex2f(x, y + CELL_UNITY);
+            glTexCoord2f(1,0);
+            glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+            glTexCoord2f(0, 0);
+            glVertex2f(x+ CELL_UNITY,y);
+            break;
+        case 10 :
+        case 11 :
+            glTexCoord2f(1,0);
+            glVertex2f(x, y);
+            glTexCoord2f(0,0);
+            glVertex2f(x, y + CELL_UNITY);
+            glTexCoord2f(0,1);
+            glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+            glTexCoord2f(1,1);
+            glVertex2f(x+ CELL_UNITY,y);
+            break;
+        case 19 :
+        case 23 :
+            glTexCoord2f(0,1);
+            glVertex2f(x, y);
+            glTexCoord2f(0,0);
+            glVertex2f(x, y + CELL_UNITY);
+            glTexCoord2f(1,0);
+            glVertex2f(x + CELL_UNITY, y+CELL_UNITY);
+            glTexCoord2f(1,1);
+            glVertex2f(x+ CELL_UNITY,y);
+            break;
+        default :
+            glTexCoord2f(1,1);
+            glVertex2f(x, y);
+            glTexCoord2f(1,0);
+            glVertex2f(x, y + CELL_UNITY);
+            glTexCoord2f(0,0);
+            glVertex2f(x+CELL_UNITY, y+CELL_UNITY);
+            glTexCoord2f(0,1);
+            glVertex2f(x+ CELL_UNITY,y);
+            break;
+
     }
     glEnd();
 }
