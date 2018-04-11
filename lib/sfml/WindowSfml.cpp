@@ -173,10 +173,10 @@ bool            Window::displayPause(int status)  {
     this->window->draw(background);
     switch (status) {
         case 2 :
-            resume = this->drawResume(color);
+            resume = this->drawResume();
         case 1 :
-            start = this->drawStart(color);
-            exit = this->drawExit(color);
+            start = this->drawStart();
+            exit = this->drawExit();
             break;
     }
     this->window->display();
@@ -206,34 +206,28 @@ bool            Window::displayPause(int status)  {
     return true;
 }
 
-sf::RectangleShape            Window::drawStart(sf::Color color) const {
+sf::RectangleShape            Window::drawStart(void) const {
     sf::RectangleShape start;
     start.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    start.setOutlineColor(sf::Color::Green);
-    start.setOutlineThickness(5);
+    start.setFillColor(sf::Color::Green);
     start.setPosition((wWidth * CELL_UNITY / 5),  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    start.setFillColor(color);
     this->window->draw(start);
     return start;
 }
 
-sf::RectangleShape            Window::drawResume(sf::Color color) const {
+sf::RectangleShape            Window::drawResume(void) const {
     sf::RectangleShape resume;
     resume.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    resume.setOutlineColor(sf::Color::Blue);
-    resume.setOutlineThickness(5);
+    resume.setFillColor(sf::Color::Blue);
     resume.setPosition((wWidth * CELL_UNITY / 5) * 2,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    resume.setFillColor(color);
     this->window->draw(resume);
     return resume;
 }
-sf::RectangleShape            Window::drawExit(sf::Color color) const {
+sf::RectangleShape            Window::drawExit(void) const {
     sf::RectangleShape exit;
     exit.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    exit.setOutlineColor(sf::Color::Red);
-    exit.setOutlineThickness(5);
+    exit.setFillColor(sf::Color::Red);
     exit.setPosition((wWidth * CELL_UNITY / 5) * 3, wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    exit.setFillColor(color);
     this->window->draw(exit);
     return exit;
 }

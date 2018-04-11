@@ -13,9 +13,9 @@ class Window : public IGraphism {
 
     void                drawFrame(std::list <IEntity *> data, int lives, int score) const;
     bool                displayPause(int status);
-    sf::RectangleShape  drawStart(sf::Color color) const;
-    sf::RectangleShape  drawResume(sf::Color color) const;
-    sf::RectangleShape  drawExit(sf::Color color) const;
+    sf::RectangleShape  drawStart(void) const;
+    sf::RectangleShape  drawResume(void) const;
+    sf::RectangleShape  drawExit(void) const;
     void                drawMenu(int lives, int score) const;
     void                initTextures(void);
 
