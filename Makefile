@@ -1,14 +1,16 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
 COMPILATOR = g++ -g
-INC	= -I . -I lib -I Game -I Player -I Timer
+INC	=  -I lib -I include
 FLAGS = -Werror -Wall -Wextra -std=c++11
 LDFLAGS = -rpath ./lib/sfml/sfml/lib
 SRC = main.cpp \
-			BinaryCall.cpp \
-			Game/Game.cpp \
-			Player/Player.cpp \
-			Timer/Timer.cpp
+	BinaryCall.cpp \
+	Game/Game.cpp \
+	Player/Player.cpp \
+	Timer/Timer.cpp \
+	GException/GException.cpp \
+	Entity/Entity.cpp
 
 
 OBJ = $(SRC:.cpp=.o)
@@ -17,7 +19,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: _assets _install sdl sfml glfw $(NAME)
+all: _assets _install $(NAME) sdl sfml glfw
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)

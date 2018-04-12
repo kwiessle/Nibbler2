@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include "GException.hpp"
 
 Window::Window(void) { return; }
 
@@ -12,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
  {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
-    exit(0);
+    throw GException::Throw(WIN_FAIL);
   }
   else {
     SDL_Window    *pWindow = nullptr;
@@ -289,7 +290,7 @@ unsigned int    Window::getHeight(void) const {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        if ( i >= 5 && i <= 8) {i++; continue;}
+        // if ( i >= 5 && i <= 8) {i++; continue;}
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

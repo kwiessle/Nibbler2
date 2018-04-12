@@ -13,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     if (!glfwInit()) {
         std::cout << "OpenGL init failed" << std::endl;
         glfwTerminate();
-        exit(0);
+        throw GException::Throw(WIN_FAIL);
     }
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     this->pWindow = glfwCreateWindow(
@@ -351,6 +351,7 @@ void       Window::initTextures(void) {
         name += ".bmp";
         glBindTexture(GL_TEXTURE_2D, this->_textures[i]);
         this->loadBMP(name.c_str());
+
     }
     return;
 }
@@ -372,20 +373,15 @@ GLuint Window::loadBMP(const char *filename) const {
     unsigned int height;
     unsigned int imageSize;
     unsigned char * data;
-
     FILE * file = fopen(filename,"rb");
-    if (!file) {
-        std::cout << "Image could not be opened" << std::endl;
-        exit(0);
-    }
-    if ( fread(header, 1, 54, file) != 54 ){ // If not 54 bytes read : problem
-        std::cout << "Not a correct BMP file" << std::endl;
-        exit(0);
-    }
-    if ( header[0] != 'B' || header[1] != 'M' ){
-        std::cout << "Not a correct BMP file" << std::endl;
-        exit(0);
-    }
+
+     if (!file)
+        throw GException::Throw(EX_FILE);
+    if (fread(header, 1, 54, file) != 54)
+        throw GException::Throw(EX_FILE);
+    if (header[0] != 'B' || header[1] != 'M')
+        throw GException::Throw(EX_FILE);
+
     dataPos    = *(int*)&(header[0x0A]);
     imageSize  = *(int*)&(header[0x22]);
     width      = *(int*)&(header[0x12]);
