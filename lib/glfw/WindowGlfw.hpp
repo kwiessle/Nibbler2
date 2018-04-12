@@ -6,7 +6,7 @@
 # include <GL/freeglut.h>
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
-# include "GException.hpp"
+# include "Exception.hpp"
 
 
 class Window  : public IGraphism {

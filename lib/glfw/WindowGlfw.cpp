@@ -13,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     if (!glfwInit()) {
         std::cout << "OpenGL init failed" << std::endl;
         glfwTerminate();
-        throw GException::Throw(WIN_FAIL);
+        throw Exception::Throw(WIN_FAIL);
     }
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     this->pWindow = glfwCreateWindow(
@@ -376,11 +376,11 @@ GLuint Window::loadBMP(const char *filename) const {
     FILE * file = fopen(filename,"rb");
 
      if (!file)
-        throw GException::Throw(EX_FILE);
+        throw Exception::Throw(EX_FILE);
     if (fread(header, 1, 54, file) != 54)
-        throw GException::Throw(EX_FILE);
+        throw Exception::Throw(EX_FILE);
     if (header[0] != 'B' || header[1] != 'M')
-        throw GException::Throw(EX_FILE);
+        throw Exception::Throw(EX_FILE);
 
     dataPos    = *(int*)&(header[0x0A]);
     imageSize  = *(int*)&(header[0x22]);

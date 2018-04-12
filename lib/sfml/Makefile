@@ -1,4 +1,4 @@
-NAME = sfml.so
+NAME = ../../sfml.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I sfml/include
@@ -7,7 +7,7 @@ SFML += -Lsfml/lib -lsfml-system -lsfml-window -lsfml-graphics
 
 SRC = WindowSfml.cpp \
 	../../Entity/Entity.cpp \
-	../../GException/GException.cpp \
+	../../Exception/Exception.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 

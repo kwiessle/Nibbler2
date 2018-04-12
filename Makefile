@@ -9,7 +9,7 @@ SRC = main.cpp \
 	Game/Game.cpp \
 	Player/Player.cpp \
 	Timer/Timer.cpp \
-	GException/GException.cpp \
+	Exception/Exception.cpp \
 	Entity/Entity.cpp
 
 
@@ -19,7 +19,11 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: _assets _install $(NAME) sdl sfml glfw
+all: $(NAME) sdl sfml glfw
+
+game: $(NAME)
+
+install: _assets _install $(NAME) sdl sfml glfw
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)

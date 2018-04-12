@@ -1,5 +1,5 @@
 #include "Window.hpp"
-#include "GException.hpp"
+#include "Exception.hpp"
 
 Window::Window(void) { return; }
 
@@ -13,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
  {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
-    throw GException::Throw(WIN_FAIL);
+    throw Exception::Throw(WIN_FAIL);
   }
   else {
     SDL_Window    *pWindow = nullptr;

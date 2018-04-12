@@ -1,4 +1,4 @@
-NAME = glfw.so
+NAME = ../../glfw.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	=  -I . -I ../../include -Iglfw/include  -I ~/.brew/include
@@ -8,7 +8,7 @@ GLFW += -force_load ./glfw/src/libglfw3.a
 
 SRC = WindowGlfw.cpp \
 	../../Entity/Entity.cpp \
-	../../GException/GException.cpp \
+	../../Exception/Exception.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 

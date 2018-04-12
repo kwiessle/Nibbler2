@@ -1,4 +1,4 @@
-NAME = sdl.so
+NAME = ../../sdl.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I ~/.brew/include
@@ -7,7 +7,7 @@ SDL += -L ~/.brew/lib/ -lSDL2 -lSDL2_TTF
 
 SRC = Window.cpp \
 	../../Entity/Entity.cpp \
-	../../GException/GException.cpp \
+	../../Exception/Exception.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 
