@@ -214,7 +214,10 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     unsigned int tmpWidth = this->_engine->getWidth();
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
-    deleteEngine(this->_engine);
+    if (this->_engine != NULL) { //SEG FAULT ICI
+        // deleteEngine(this->_engine);
+        delete this->_engine;
+    }
     switch(engine) {
         case SDL :
             path = "sdl.so";
@@ -227,7 +230,8 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
             break;
         default : break;
     }
-    openBinaryLib(const_cast<char*>(path.c_str()));
+    if (!openBinaryLib(const_cast<char*>(path.c_str())))
+        throw Exception::Throw(LIB_FAIL);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
 }

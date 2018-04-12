@@ -36,6 +36,7 @@ int      main(int ac, char **av) {
                 }
                 else
                     Game::singleton().start(width, height, mode);
+                break;
             }
             default: throw Exception::Throw(USAGE);
         }
