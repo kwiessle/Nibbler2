@@ -25,7 +25,6 @@ Exception      &Exception::Throw(int code) {
 }
 
 
-// class FileException : public GraphicalException {
 const char *Exception::FileException::what (void) const throw () {
     return "Can't open file";
 };

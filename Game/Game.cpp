@@ -264,4 +264,3 @@ bool    Game::listCheck(std::list <IEntity *> &list, unsigned int x, unsigned in
     }
     return false;
 }
-// EXTERNAL FUNCTS
