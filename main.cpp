@@ -23,7 +23,7 @@ void    handleParameters(unsigned int width, unsigned int height) {
 
 int      main(int ac, char **av) {
     try {
-            switch (ac) {
+        switch (ac) {
             case 4:
             case 5: {
                 unsigned int width = atoi(av[1]);
