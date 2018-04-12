@@ -80,4 +80,4 @@ glfw:
 allegro:
 	@make re -C ./lib/allegro
 
-.PHONY : re fclean clean all libs aclean dsclean sdl sfml glfw
+.PHONY : re fclean clean all libs aclean dsclean sdl sfml glfw game install
