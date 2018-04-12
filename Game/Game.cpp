@@ -160,7 +160,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                  this->initFire();
             }
             if (speed.update()) {
-                if (this->_player->getScoreChange() && this->_player->getScore() % 5 == 0 && speed.getDiff() >= 50) {
+                if (this->_player->getScoreChange() && this->_player->getScore() % 5 == 0 && speed.getDiff() >= 70) {
                     speed.changeDiff(10);
                 }
                 this->_player->move(this->_engine->getDirection());
