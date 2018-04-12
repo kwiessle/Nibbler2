@@ -5,6 +5,7 @@
 # include <dlfcn.h>
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
+# include "GException.hpp"
 # include <list>
 
 extern void *BINARY_LIB;

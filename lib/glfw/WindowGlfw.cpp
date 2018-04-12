@@ -1,5 +1,4 @@
 #include "WindowGlfw.hpp"
-#include "GException.hpp"
 
 Window::Window(void) { return; }
 
@@ -14,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     if (!glfwInit()) {
         std::cout << "OpenGL init failed" << std::endl;
         glfwTerminate();
-        exit(0);
+        throw GException::Throw(WIN_FAIL);
     }
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     this->pWindow = glfwCreateWindow(
@@ -346,7 +345,7 @@ void       Window::initTextures(void) {
     glGenTextures(23, this->_textures);
 
     for (int i = 1; i <= 23; i++) {
-        // if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
+        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
@@ -374,24 +373,15 @@ GLuint Window::loadBMP(const char *filename) const {
     unsigned int height;
     unsigned int imageSize;
     unsigned char * data;
+    FILE * file = fopen(filename,"rb");
 
+     if (!file)
+        throw GException::Throw(EX_FILE);
+    if (fread(header, 1, 54, file) != 54)
+        throw GException::Throw(EX_FILE);
+    if (header[0] != 'B' || header[1] != 'M')
+        throw GException::Throw(EX_FILE);
 
-    // if (!file) {
-    //     std::cout << "Image could not be opened" << std::endl;
-    //     exit(0);
-    // }
-    FILE * file = 0;
-    try {
-        file = fopen(filename,"rb");
-    } catch (GException::GraphicalException &e) { GException::Throw(EX_FILE).Display(filename, e); }
-    if ( fread(header, 1, 54, file) != 54 ){ // If not 54 bytes read : problem
-        std::cout << "Not a correct BMP file" << std::endl;
-        exit(0);
-    }
-    if ( header[0] != 'B' || header[1] != 'M' ){
-        std::cout << "Not a correct BMP file" << std::endl;
-        exit(0);
-    }
     dataPos    = *(int*)&(header[0x0A]);
     imageSize  = *(int*)&(header[0x22]);
     width      = *(int*)&(header[0x12]);

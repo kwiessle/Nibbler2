@@ -1,13 +1,13 @@
 NAME = sdl.so
 COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
-INC	= -I .. -I . -I ../Entity -I ~/.brew/include -I ../GException
+INC	= -I . -I ../../include -I ~/.brew/include
 SDL = -fPIC  -shared
 SDL += -L ~/.brew/lib/ -lSDL2 -lSDL2_TTF
 
 SRC = Window.cpp \
-	../Entity/Entity.cpp \
-	../GException/GException.cpp
+	../../Entity/Entity.cpp \
+	../../GException/GException.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 

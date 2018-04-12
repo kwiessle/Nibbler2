@@ -15,14 +15,8 @@ GException      &GException::Throw(int code) {
     switch (code) {
         case -1 : break;
         case EX_FILE : throw GException::FileException(); break;
+        case WIN_FAIL : throw GException::WindowInit(); break;
         default : throw std::exception();
     }
     return shared;
-}
-
-void            GException::Display(std::string context, std::exception &e) const {
-
-    std::cout << "\033[31m Graphical Exception : " << "\033[34m";
-    std::cout << e.what() << " " << context;
-    return;
 }

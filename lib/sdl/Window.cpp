@@ -13,7 +13,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
  {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
-    exit(0);
+    throw GException::Throw(WIN_FAIL);
   }
   else {
     SDL_Window    *pWindow = nullptr;
@@ -294,10 +294,7 @@ void       Window::initTextures(void) {
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";
-        try {
-            this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
-        } catch (GException::GraphicalException &e) { GException::Throw(EX_FILE).Display(name, e); }
-
+        this->_textures.insert(std::make_pair(static_cast<eTexture>(i), SDL_LoadBMP(name.c_str())));
     }
     return;
 }
