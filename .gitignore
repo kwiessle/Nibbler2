@@ -1,6 +1,6 @@
 *.o
-lib/*/*.so
+./*.o
+*.so
 Nibbler
 /assets
 .DS_Store
-schemes.pdf
