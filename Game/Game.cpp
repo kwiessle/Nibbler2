@@ -217,13 +217,13 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     deleteEngine(this->_engine);
     switch(engine) {
         case SDL :
-            path = "lib/sdl/sdl.so";
+            path = "sdl.so";
             break;
         case SFML :
-            path = "lib/sfml/sfml.so";
+            path = "sfml.so";
             break;
         case GL :
-            path = "lib/glfw/glfw.so";
+            path = "glfw.so";
             break;
         default : break;
     }
