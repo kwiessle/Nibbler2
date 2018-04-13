@@ -26,7 +26,7 @@ CoreAudio::~CoreAudio(void) {
 
 void    CoreAudio::play(eSound sound) const {
     switch (sound) {
-        case Theme : Mix_PlayChannel(1, this->soundTheme, 4); break;
+        case Theme : Mix_PlayChannel(1, this->soundTheme, -1); break;
         case Croc : Mix_PlayChannel(0, this->soundCroc, 0); break;
         case Damage : Mix_PlayChannel(2, this->soundDamage, 0); break;
         default: break;
