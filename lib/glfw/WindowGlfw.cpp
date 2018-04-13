@@ -154,6 +154,8 @@ void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
     switch((*iter)->getTexture()) {
         case 3 :
         case 4 :
+        case 8 :
+        case 7 :
         case 15 :
         case 16 :
             glTexCoord2f(0,0);
