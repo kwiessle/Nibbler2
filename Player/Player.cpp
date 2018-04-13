@@ -155,6 +155,7 @@ void  Player::_updateSnake(eDirection direction) {
     if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
+        singleton.coreAudio->play(Damage);
     }
     if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
         this->_life--;
@@ -164,6 +165,7 @@ void  Player::_updateSnake(eDirection direction) {
             singleton.getEngine()->updateStatus(Pause);
             this->_dead = true;
         }
+        singleton.coreAudio->play(Damage);
     }
     std::list<IEntity *>::iterator iter = this->_snake.begin();
     singleton.listAdd(singleton.getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));

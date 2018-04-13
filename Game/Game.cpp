@@ -3,6 +3,7 @@
 Game::Game(void) {
     this->_player = new Player(4, 0);
     this->coreAudio = createCoreAudio();
+    this->coreAudio->play(Theme);
     return;
 }
 
@@ -235,6 +236,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     deleteCoreAudio(this->coreAudio);
     this->coreAudio = createCoreAudio();
+    this->coreAudio->play(Theme);
     return;
 }
 

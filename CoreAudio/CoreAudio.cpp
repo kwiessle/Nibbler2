@@ -5,19 +5,28 @@ CoreAudio::CoreAudio(void) {
         std::cout << Mix_GetError() << std::endl;
         exit(0);
     }
-    this->soundCroc = Mix_LoadMUS("/assets/s_food.wav");
+    Mix_AllocateChannels(3);
+    Mix_Volume(1, MIX_MAX_VOLUME/2);
+    this->soundCroc = Mix_LoadWAV("/assets/s_food.wav");
+    this->soundTheme = Mix_LoadWAV("/assets/s_theme.wav");
+    this->soundDamage = Mix_LoadWAV("/assets/s_damage.wav");
+
     return;
 }
 
 CoreAudio::~CoreAudio(void) {
-    Mix_FreeMusic(this->soundCroc);
+    Mix_FreeChunk(this->soundCroc);
+    Mix_FreeChunk(this->soundTheme);
+    Mix_FreeChunk(this->soundDamage);
     Mix_CloseAudio();
     return;
 }
 
 void    CoreAudio::play(eSound sound) const {
     switch (sound) {
-        case Croc :  Mix_PlayMusic( this->soundCroc, 1); break;
+        case Theme : Mix_PlayChannel(1, this->soundTheme, 4); break;
+        case Croc : Mix_PlayChannel(0, this->soundCroc, 0); break;
+        case Damage : Mix_PlayChannel(2, this->soundDamage, 0); break;
         default: break;
     }
     return;

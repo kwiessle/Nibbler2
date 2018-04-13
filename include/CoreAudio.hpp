@@ -15,7 +15,9 @@ class CoreAudio : public ICoreAudio {
         void        play(eSound sound) const;
 
     private:
-        Mix_Music              *soundCroc;
+        Mix_Chunk              *soundCroc;
+        Mix_Chunk              *soundTheme;
+        Mix_Chunk              *soundDamage;
 };
 
 extern "C" {
