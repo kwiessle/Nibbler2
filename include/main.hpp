@@ -10,6 +10,7 @@
 # include <list>
 
 extern void *BINARY_LIB;
+extern void *BINARY_AUDIO;
 
 class Game;
 
@@ -31,6 +32,7 @@ ICoreAudio  *createCoreAudio(void);
 
 
 bool        openBinaryLib(char *path);
+bool        openBinaryAudio(void);
 void        deleteEngine(IGraphism *engine);
 void        deleteEntity(IEntity *entity);
 void        deleteCoreAudio(ICoreAudio *coreCoreAudio);

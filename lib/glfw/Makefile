@@ -9,7 +9,6 @@ GLFW += ./glfw/src/libglfw3.a
 SRC = WindowGlfw.cpp \
 	../../Entity/Entity.cpp \
 	../../Exception/Exception.cpp \
-	../../CoreAudio/CoreAudio.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

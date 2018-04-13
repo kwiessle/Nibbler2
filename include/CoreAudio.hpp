@@ -22,7 +22,7 @@ class CoreAudio : public ICoreAudio {
 
 extern "C" {
     CoreAudio            *newCoreAudio(void);
-    void              deleteCoreAudio(CoreAudio *coreCoreAudio);
+    void                 deleteCoreAudio(CoreAudio *coreCoreAudio);
 }
 
 #endif

@@ -8,7 +8,15 @@ bool   openBinaryLib(char *path) {
     if (!(BINARY_LIB = dlopen(path, RTLD_NOW))) {
       dlerror_wrapper();
       return false;
-    }
+  }
+    else { return true; }
+}
+
+bool   openBinaryAudio(void) {
+    if (!(BINARY_AUDIO = dlopen("audio.so", RTLD_NOW | RTLD_GLOBAL))) {
+      dlerror_wrapper();
+      return false;
+  }
     else { return true; }
 }
 
@@ -61,7 +69,7 @@ void      deleteEntity(IEntity *entity) {
 ICoreAudio  *createCoreAudio(void) {
     std::string symbol = "newCoreAudio";
     ICoreAudio  *(*CoreAudioCreator)(void);
-    CoreAudioCreator = (ICoreAudio *(*)(void)) dlsym(BINARY_LIB, symbol.c_str());
+    CoreAudioCreator = (ICoreAudio *(*)(void)) dlsym(BINARY_AUDIO, symbol.c_str());
 
     ICoreAudio *coreAudio = CoreAudioCreator();
     return coreAudio;
@@ -70,7 +78,7 @@ ICoreAudio  *createCoreAudio(void) {
 void    deleteCoreAudio(ICoreAudio *coreAudio) {
     std::string symbol = "deleteCoreAudio";
     ICoreAudio *(*CoreAudioDestructor)(ICoreAudio *);
-    CoreAudioDestructor = (ICoreAudio *(*)(ICoreAudio *)) dlsym(BINARY_LIB, symbol.c_str());
+    CoreAudioDestructor = (ICoreAudio *(*)(ICoreAudio *)) dlsym(BINARY_AUDIO, symbol.c_str());
 
     if (!CoreAudioDestructor)
       dlerror_wrapper();

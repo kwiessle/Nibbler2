@@ -10,6 +10,8 @@ CoreAudio::CoreAudio(void) {
     this->soundCroc = Mix_LoadWAV("/assets/s_food.wav");
     this->soundTheme = Mix_LoadWAV("/assets/s_theme.wav");
     this->soundDamage = Mix_LoadWAV("/assets/s_damage.wav");
+    Mix_VolumeChunk(this->soundCroc, MIX_MAX_VOLUME/2);
+    Mix_VolumeChunk(this->soundDamage, MIX_MAX_VOLUME/2);
 
     return;
 }

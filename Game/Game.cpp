@@ -30,6 +30,7 @@ Game::~Game(void) {
     }
     delete this->_player;
     dlclose(BINARY_LIB);
+    dlclose(BINARY_AUDIO);
 }
 
 Game   &Game::singleton(void) {
@@ -135,7 +136,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer speed(200);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
-    // this->_coreCoreAudio = createCoreCoreAudio();
+    // this->_coreCoreAudio = createCoreAudio();
     while (this->_engine->getStatus() != Exit) {
         this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
@@ -237,6 +238,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     deleteCoreAudio(this->coreAudio);
     this->coreAudio = createCoreAudio();
     this->coreAudio->play(Theme);
+    this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
 }
 

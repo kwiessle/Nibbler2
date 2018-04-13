@@ -3,12 +3,11 @@ COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I sfml/include
 SFML = -fPIC -shared
-SFML += -Lsfml/lib -lsfml-system -lsfml-window -lsfml-graphics -lSDL2_MIXER -lSDL2
+SFML += -Lsfml/lib -lsfml-system -lsfml-window -lsfml-graphics
 
 SRC = WindowSfml.cpp \
 	../../Entity/Entity.cpp \
 	../../Exception/Exception.cpp \
-	../../CoreAudio/CoreAudio.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

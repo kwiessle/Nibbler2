@@ -2,6 +2,7 @@
 #include "Game.hpp"
 
 void *BINARY_LIB;
+void *BINARY_AUDIO;
 
 int     handleMode(char *string) {
     std::string flag = "--hardcore";
@@ -31,7 +32,7 @@ int      main(int ac, char **av) {
                 handleParameters(width, height);
                 int mode = handleMode(av[4]);
                 char *path = av[3];
-                if (!openBinaryLib(path)) {
+                if (!openBinaryLib(path) || !openBinaryAudio()) {
                     throw Exception::Throw(LIB_FAIL);
                 }
                 else

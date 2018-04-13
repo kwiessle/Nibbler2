@@ -19,7 +19,7 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-all: $(NAME) sdl sfml glfw
+all: $(NAME) sdl sfml glfw audio
 
 game: $(NAME)
 
@@ -81,5 +81,7 @@ glfw:
 	@make re -C ./lib/glfw
 allegro:
 	@make re -C ./lib/allegro
+audio:
+	@make re -C ./CoreAudio
 
 .PHONY : re fclean clean all libs aclean dsclean sdl sfml glfw game install
