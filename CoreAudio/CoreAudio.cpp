@@ -39,6 +39,7 @@ CoreAudio   *newCoreAudio(void) {
     CoreAudio *coreCoreAudio = new CoreAudio();
     return coreCoreAudio;
 }
+
 void    deleteCoreAudio(CoreAudio *coreCoreAudio) {
     delete coreCoreAudio;
     return;
