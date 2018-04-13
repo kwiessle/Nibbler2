@@ -57,3 +57,26 @@ void      deleteEntity(IEntity *entity) {
   entityDestructor(entity);
   return;
 }
+
+ICoreAudio  *createCoreAudio(void) {
+    std::string symbol = "newCoreAudio";
+    ICoreAudio  *(*CoreAudioCreator)(void);
+    CoreAudioCreator = (ICoreAudio *(*)(void)) dlsym(BINARY_LIB, symbol.c_str());
+
+    ICoreAudio *coreAudio = CoreAudioCreator();
+    return coreAudio;
+}
+
+void    deleteCoreAudio(ICoreAudio *coreAudio) {
+    std::string symbol = "deleteCoreAudio";
+    ICoreAudio *(*CoreAudioDestructor)(ICoreAudio *);
+    CoreAudioDestructor = (ICoreAudio *(*)(ICoreAudio *)) dlsym(BINARY_LIB, symbol.c_str());
+
+    if (!CoreAudioDestructor)
+      dlerror_wrapper();
+
+    CoreAudioDestructor(coreAudio);
+    return;
+
+
+}

@@ -3,11 +3,12 @@ COMPILATOR = g++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I ~/.brew/include
 SDL = -fPIC  -shared
-SDL += -L ~/.brew/lib/ -lSDL2 -lSDL2_TTF
+SDL += -L ~/.brew/lib/ -lSDL2 -lSDL2_TTF -lSDL2_MIXER
 
 SRC = Window.cpp \
 	../../Entity/Entity.cpp \
 	../../Exception/Exception.cpp \
+	../../CoreAudio/CoreAudio.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

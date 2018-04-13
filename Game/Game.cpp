@@ -2,6 +2,7 @@
 
 Game::Game(void) {
     this->_player = new Player(4, 0);
+    this->coreAudio = createCoreAudio();
     return;
 }
 
@@ -133,6 +134,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer speed(200);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
+    // this->_coreCoreAudio = createCoreCoreAudio();
     while (this->_engine->getStatus() != Exit) {
         this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
@@ -231,6 +233,8 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     if (!openBinaryLib(const_cast<char *>(path.c_str())))
         throw Exception::Throw(LIB_FAIL);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
+    deleteCoreAudio(this->coreAudio);
+    this->coreAudio = createCoreAudio();
     return;
 }
 

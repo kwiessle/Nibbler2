@@ -5,6 +5,7 @@
 # include <dlfcn.h>
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
+# include "ICoreAudio.hpp"
 # include "Exception.hpp"
 # include <list>
 
@@ -26,9 +27,13 @@ IEntity     *createEntity(
     eTexture texture
 );
 
+ICoreAudio  *createCoreAudio(void);
+
+
 bool        openBinaryLib(char *path);
 void        deleteEngine(IGraphism *engine);
 void        deleteEntity(IEntity *entity);
+void        deleteCoreAudio(ICoreAudio *coreCoreAudio);
 void        dlerror_wrapper(void);
 
 

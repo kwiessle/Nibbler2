@@ -146,6 +146,7 @@ void  Player::_updateSnake(eDirection direction) {
         this->_scoreChange = true;
         this->_grow();
         singleton.initFood();
+        singleton.coreAudio->play(Croc);
     }
     if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
