@@ -23,6 +23,10 @@ Exception      &Exception::Throw(int code) {
     }
     return shared;
 }
+//
+// GREEN = '\033[1;32m'
+// BLUE = '\033[1;36m'
+// RED = '\033[1;31m'
 
 
 const char *Exception::FileException::what (void) const throw () {
@@ -34,7 +38,7 @@ const char * Exception::WindowInit::what (void) const throw () {
 };
 
 const char * Exception::Usage::what (void) const throw () {
-    return "usage: ./Nibbler width height path/to/dynamic_library [--hardcore]\n      15 <= width <= 55 & 15 <= heigth <= 30";
+    return "\033[33;5m[1] usage:\033[0m  ./Nibbler \033[38;5;32mwidth height\033[0m path/to/dynamic_library\033[38;5;204m [--hardcore]\n\033[33;5m[2] param:\033[0m  \033[38;5;32mwidth\033[0m  [15-55]\n            \033[38;5;32mheight\033[0m [15-30]";
 };
 
 const char * Exception::Size::what (void) const throw () {

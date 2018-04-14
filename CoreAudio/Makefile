@@ -13,7 +13,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "✏️ \033[33;5m[SDL_MIXER] Creating extern lib\033[0m"
+	@echo "🔊 \033[33;5m[SDL_MIXER]\033[0m dylib compiled"
 	@$(COMPILATOR) $(AUDIO) $(OBJ) -o $(NAME)
 
 %.o: %.cpp

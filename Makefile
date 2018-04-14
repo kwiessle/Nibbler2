@@ -48,7 +48,7 @@ fclean: clean
 
 re: fclean all
 
-lib: sdl sfml glfw
+lib: sdl sfml glfw audio
 
 _install:
 	./install.sh
