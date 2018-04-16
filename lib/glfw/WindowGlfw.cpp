@@ -31,10 +31,13 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
 }
 
 Window::~Window(void) {
-    glfwTerminate();
+    glDeleteTextures(23, this->_textures);
+    if(this->pWindow)
+        glfwTerminate();
 }
 
 void    Window::handleEvent(void) {
+    if (this->pWindow) {
     glfwPollEvents();
     this->setEngine();
     if (!this->engineChecker) {
@@ -43,6 +46,7 @@ void    Window::handleEvent(void) {
         this->setStatus();
         if ( this->status == Pause)
             this->handlePauseEvent();
+    }
     }
 }
 
@@ -107,11 +111,17 @@ void    Window::updateStatus(eStatus status)  {
 
 void    Window::setEngine(void) {
     if (glfwGetKey(this->pWindow, GLFW_KEY_F) == GLFW_PRESS &&
-        this->engine != SFML)
-        { this->engine = SFML; this->engineChecker = true; }
+        this->engine != SFML) {
+            this->engine = SFML;
+            this->engineChecker = true;
+            glfwSetWindowShouldClose(this->pWindow, true);
+        }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_G) == GLFW_PRESS &&
-        this->engine != SDL)
-        { this->engine = SDL; this->engineChecker = true; }
+        this->engine != SDL) {
+             this->engine = SDL;
+             this->engineChecker = true;
+             glfwSetWindowShouldClose(this->pWindow, true);
+        }
     return;
 }
 
@@ -303,7 +313,7 @@ Window    *createWindow(unsigned int width, unsigned int height, eDirection dire
 }
 
 void      deleteWindow(Window *window) {
-  delete window;
+    delete window;
 }
 
 GLuint Window::loadBMP(const char *filename) const {

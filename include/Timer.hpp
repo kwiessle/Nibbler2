@@ -12,7 +12,7 @@ class Timer {
 	private:
 		int		_refTimer;
 		int		_newTimer;
-		float	_diffTime;
+		int		_diffTime;
 
 		int 	_getMilliCount();
 
@@ -23,7 +23,7 @@ class Timer {
 		~Timer();
 		void 				changeDiff(float newdiff);
 		void        		resetDiff(float diff);
-		float				getDiff(void) const;
+		int				getDiff(void) const;
 		bool				update();
 
 		// Timer &			operator=(Timer const & rhs);

@@ -150,14 +150,13 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             if (fire.update()) {
                  this->initFire();
             }
-            if (speed.update()) {
                 if (this->_player->getScoreChange() && this->_player->getScore() % 5 == 0 && speed.getDiff() >= 70) {
                     speed.changeDiff(10);
                 }
                 this->_player->move(this->_engine->getDirection());
-                this->_engine->reverseDirectionChecker();
                 this->refresh();
-            }
+                usleep(speed.getDiff() * 1000);
+                this->_engine->reverseDirectionChecker();
         }
         if (this->_engine->getStatus() == Pause) {
             if (this->_player->checkDeath())
@@ -167,6 +166,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
         }
         if (this->_engine->engineHasChanged()) {
             eStatus tmp = this->_engine->getStatus();
+            this->_engine->updateStatus(Pause);
             switchEngine(
                 this->_engine->getEngine(),
                 this->_engine->getDirection()
@@ -214,8 +214,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
     if (this->_engine != NULL){
-        // deleteEngine(this->_engine);
-        delete this->_engine;
+        deleteEngine(this->_engine);
     }
     switch(engine) {
         case SDL :
@@ -229,6 +228,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
             break;
         default : break;
     }
+
     if (!openBinaryLib(const_cast<char*>(path.c_str())))
         throw Exception::Throw(LIB_FAIL);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
@@ -239,9 +239,8 @@ void    Game::listErase(std::list <IEntity *> &list, unsigned int x, unsigned in
     std::list<IEntity *>::iterator check = list.begin();
     while (check != list.end()) {
         if ((*check)->getPosX() == x && (*check)->getPosY() == y) {
-            deleteEntity(*check);
+            deleteEntity((*check));
             check = list.erase(check);
-            return;
         }
         else
             ++check;

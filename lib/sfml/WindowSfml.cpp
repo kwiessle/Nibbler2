@@ -34,7 +34,7 @@ Window::~Window(void) {
 
 void        Window::handleEvent(void) {
     sf::Event event;
-    while(this->window->pollEvent(event)) {
+    if(this->window && this->window->pollEvent(event)) {
         this->setEngine(event);
         if (!this->engineChecker){
             if (this->status == Play)
