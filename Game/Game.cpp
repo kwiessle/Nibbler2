@@ -137,23 +137,14 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     while (this->_engine->getStatus() != Exit) {
         this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
-            case Exit : this->_engine->updateStatus(Exit); break;
+            case Play :
+                if((this->_player->getSnake().size()) && !this->_player->checkDeath())
+                    break;
             case Start :
                 this->initGame(width, height, mode);
                 speed.resetDiff(200);
                 this->_engine->updateStatus(Play);
-                break;
-            case Pause : this->_engine->updateStatus(Pause); break;
             default : break;
-        }
-        if (this->_engine->engineHasChanged()) {
-            eStatus tmp = this->_engine->getStatus();
-            this->_engine->updateStatus(Pause);
-            switchEngine(
-                this->_engine->getEngine(),
-                this->_engine->getDirection()
-            );
-            this->_engine->updateStatus(tmp);
         }
         if ( this->_engine->getStatus() == Play ) {
             if (fire.update()) {
@@ -173,6 +164,14 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 this->pause(1);
             else
                 this->pause(2);
+        }
+        if (this->_engine->engineHasChanged()) {
+            eStatus tmp = this->_engine->getStatus();
+            switchEngine(
+                this->_engine->getEngine(),
+                this->_engine->getDirection()
+            );
+            this->_engine->updateStatus(tmp);
         }
     }
     return;
@@ -214,7 +213,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     unsigned int tmpWidth = this->_engine->getWidth();
     unsigned int tmpHeight = this->_engine->getHeight();
     std::string path;
-    if (this->_engine != NULL) { //SEG FAULT ICI
+    if (this->_engine != NULL){
         // deleteEngine(this->_engine);
         delete this->_engine;
     }
@@ -240,11 +239,12 @@ void    Game::listErase(std::list <IEntity *> &list, unsigned int x, unsigned in
     std::list<IEntity *>::iterator check = list.begin();
     while (check != list.end()) {
         if ((*check)->getPosX() == x && (*check)->getPosY() == y) {
-            list.erase(check);
-            delete *check;
+            deleteEntity(*check);
+            check = list.erase(check);
             return;
         }
-        check++;
+        else
+            ++check;
     }
     return;
 }

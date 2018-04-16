@@ -12,14 +12,12 @@ class Window : public IGraphism {
 
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
     bool              displayPause(int status);
-    bool              checkMousePos(SDL_Rect button, int x, int y) const;
     void              drawMenu(int lives, int score) const;
-    SDL_Rect          drawStart(SDL_Color color) const;
-    SDL_Rect          drawResume(SDL_Color color) const;
-    SDL_Rect          drawExit(SDL_Color color) const;
     void              initTextures(void);
 
     void              handleEvent(void);
+    void              handlePauseEvent(SDL_Event event);
+
     eDirection        getDirection(void) const;
     void              setDirection(SDL_Event event);
     void              updateDirection(eDirection direction);

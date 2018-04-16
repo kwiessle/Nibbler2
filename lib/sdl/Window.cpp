@@ -56,10 +56,15 @@ Window::~Window(void) {
 
 void        Window::handleEvent(void) {
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        this->setDirection(event);
+    while(SDL_PollEvent(&event)){
         this->setEngine(event);
-        this->setStatus(event);
+        if (!this->engineChecker){
+            if (this->status == Play)
+                this->setDirection(event);
+            this->setStatus(event);
+            if (this->status == Pause)
+                this->handlePauseEvent(event);
+        }
     }
 }
 
@@ -67,6 +72,17 @@ eDirection   Window::getDirection(void) const {
     return this->direction;
 }
 
+void    Window::handlePauseEvent(SDL_Event event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_1)
+            { this->status = Play; return; }
+        else if (event.key.keysym.sym == SDLK_2)
+            { this->status = Start; return; }
+        else if (event.key.keysym.sym == SDLK_3)
+            { this->status = Exit; return; }
+    }
+    return;
+}
 void    Window::setDirection(SDL_Event event) {
     if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.sym == SDLK_UP && this->direction != Down && this->direction != Up)
@@ -101,7 +117,7 @@ void    Window::setStatus(SDL_Event event) {
     if (event.type == SDL_QUIT ||
      (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27))
         { this->status = Exit; }
-    if (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN)
+    else if (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN)
         { this->status = Pause; }
     return;
 }
@@ -115,7 +131,7 @@ void    Window::setEngine(SDL_Event event) {
     if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.sym == 102 && this->engine != GL) {
             this->engine = GL; this->engineChecker = true; }
-        if (event.key.keysym.sym == 103 && this->engine != SFML) {
+        else if (event.key.keysym.sym == 103 && this->engine != SFML) {
             this->engine = SFML; this->engineChecker = true; }
     }
     return;
@@ -191,93 +207,18 @@ void    Window::drawMenu(int lives, int score) const {
 
 bool            Window::displayPause(int status) {
     SDL_Rect  background = {0, 0, static_cast<int>(this->wWidth * CELL_UNITY), static_cast<int>(this->wHeight * CELL_UNITY) };
-    SDL_Rect  start;
-    SDL_Rect  resume;
-    SDL_Rect  exit;
-    SDL_Event event;
-    SDL_Color color = { 22, 22, 24, 0};
-
     SDL_Surface *img = SDL_LoadBMP("/assets/appicon.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(this->pRenderer, img);
     SDL_FreeSurface(img);
-
     SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
     SDL_RenderClear(this->pRenderer);
     SDL_RenderCopy(this->pRenderer, texture, nullptr, &background);
     SDL_DestroyTexture(texture);
-
-    switch (status) {
-        case 2 :
-            resume = this->drawResume(color);
-        case 1 :
-            start = this->drawStart(color);
-            exit = this->drawExit(color);
-            break;
+    switch(status) {
+        default: break;
     }
     SDL_RenderPresent( this->pRenderer );
-    while (SDL_PollEvent(&event)) {
-        if (event.type ==  SDL_MOUSEBUTTONDOWN) {
-            if ( this->checkMousePos(resume, event.button.x, event.button.y) ) {
-                this->status = Play;
-                return false;
-            }
-            if ( this->checkMousePos(exit, event.button.x, event.button.y) ) {
-                this->status = Exit;
-                return false;
-            }
-            if ( this->checkMousePos(start, event.button.x, event.button.y) ) {
-                this->status = Start;
-                return false;
-            }
-        }
-        this->setStatus(event);
-        this->setEngine(event);
-    }
     return true;
-}
-
-bool    Window::checkMousePos(SDL_Rect button, int x, int y) const {
-    if (x >= button.x && x <= (button.x + button.w)
-        && y >= button.y && y <= (button.y + button.h))
-        return true;
-    return false;
-}
-
-SDL_Rect Window::drawStart(SDL_Color color) const {
-    SDL_Rect start;
-    (void)color;
-    start.x = wWidth * CELL_UNITY / 5;
-    start.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    start.w = CELL_UNITY * 3;
-    start.h = CELL_UNITY * 2;
-    SDL_SetRenderDrawColor( this->pRenderer, 0, 255, 0, 0 );
-    SDL_RenderFillRect( this->pRenderer, &start);
-    return start;
-}
-
-SDL_Rect Window::drawResume(SDL_Color color) const {
-    SDL_Rect resume;
-    (void)color;
-
-    resume.x = (wWidth * CELL_UNITY / 5) * 2;
-    resume.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    resume.w = CELL_UNITY * 3;
-    resume.h = CELL_UNITY * 2;
-    SDL_SetRenderDrawColor( this->pRenderer, 0, 0, 255, 0 );
-    SDL_RenderFillRect( this->pRenderer, &resume);
-    return resume;
-}
-
-SDL_Rect Window::drawExit(SDL_Color color) const {
-    SDL_Rect exit;
-    (void)color;
-    exit.x = (wWidth * CELL_UNITY / 5) * 3;
-    exit.y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    exit.w = CELL_UNITY * 3;
-    exit.h = CELL_UNITY * 2;
-    SDL_SetRenderDrawColor( this->pRenderer, 255, 0, 0, 0 );
-    SDL_RenderFillRect( this->pRenderer, &exit);
-    return exit;
 }
 
 unsigned int    Window::getWidth(void) const {

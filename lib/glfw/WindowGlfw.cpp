@@ -35,16 +35,26 @@ Window::~Window(void) {
 }
 
 void    Window::handleEvent(void) {
-    if (!glfwWindowShouldClose(this->pWindow)) {
-        glfwPollEvents();
-
-        this->setEngine();
-        this->setDirection();
+    glfwPollEvents();
+    this->setEngine();
+    if (!this->engineChecker) {
+        if (this->status == Play)
+            this->setDirection();
         this->setStatus();
+        if ( this->status == Pause)
+            this->handlePauseEvent();
     }
-    return;
 }
 
+void       Window::handlePauseEvent() {
+    if (glfwGetKey(this->pWindow, GLFW_KEY_1) == GLFW_PRESS)
+        { this->status = Play; return; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_2) == GLFW_PRESS)
+        { this->status = Start; return; }
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_3) == GLFW_PRESS)
+        { this->status = Exit; return; }
+    return;
+}
 eDirection   Window::getDirection(void) const {
     return this->direction;
 }
@@ -83,7 +93,7 @@ eStatus Window::getStatus(void) const {
 
 void    Window::setStatus(void) {
     if (glfwWindowShouldClose(this->pWindow) != 0) { this->status = Exit; }
-    if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         { this->status = Exit; }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
         { this->status = Pause; }
@@ -257,81 +267,13 @@ bool   Window::displayPause(int status) {
     glEnd();
     glDisable(GL_TEXTURE_2D);
     switch(status) {
-        case 2 :
-            this->drawResume();
-        case 1 :
-            this->drawStart();
-            this->drawExit();
-            break;
+        default: break;
     }
     glColor3f(1, 1, 1);
     glfwSwapBuffers(this->pWindow);
-    glfwPollEvents();
-    if ( glfwGetMouseButton(this->pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        double xpos;
-        double ypos;
-        float ycheck = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-        glfwGetCursorPos(this->pWindow, &xpos, &ypos);
-        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5), ycheck)) {
-            this->status = Start;
-            return false;
-        }
-        if ( status == 2 && this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5) * 2, ycheck )) {
-            this->status = Play;
-            return false;
-        }
-        if ( this->checkMousePos(xpos, ypos, (wWidth * CELL_UNITY / 5) * 3, ycheck)) {
-            this->status = Exit;
-            return false;
-        }
-    }
-    this->setStatus();
-    this->setEngine();
     return true;
 }
 
-bool    Window::checkMousePos(double x, double y, float xcheck, float ycheck) const {
-    if (x >= xcheck && x <= xcheck + CELL_UNITY * 3
-        && y >= ycheck && y <= ycheck + CELL_UNITY * 2)
-        return true;
-    return false;
-}
-
-void      Window::drawStart(void) const {
-    float x = (wWidth * CELL_UNITY / 5);
-    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    glBegin(GL_QUADS);
-    glColor3f(0,1,0);
-    glVertex2f(x, y);
-    glVertex2f(x + CELL_UNITY * 3, y);
-    glVertex2f(x + CELL_UNITY * 3, y + CELL_UNITY * 2);
-    glVertex2f(x, y + CELL_UNITY * 2);
-    glEnd();
-}
-
-void      Window::drawResume(void) const {
-    float x = (wWidth * CELL_UNITY / 5) * 2;
-    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    glBegin(GL_QUADS);
-    glColor3f(0, 0, 1);
-    glVertex2f(x, y);
-    glVertex2f(x + CELL_UNITY * 3, y);
-    glVertex2f(x + CELL_UNITY * 3, y + CELL_UNITY * 2);
-    glVertex2f(x, y + CELL_UNITY * 2);
-    glEnd();
-}
-
-void      Window::drawExit(void) const {
-    float x = (wWidth * CELL_UNITY / 5) * 3;
-    float y = wHeight * CELL_UNITY - CELL_UNITY * 1.5;
-    glBegin(GL_QUADS);
-    glColor3f(1, 0, 0);
-    glVertex2f(x, y);
-    glVertex2f(x + CELL_UNITY * 3, y);
-    glVertex2f(x+ CELL_UNITY * 3, y + CELL_UNITY * 2);
-    glVertex2f(x , y + CELL_UNITY * 2);
-    glEnd();
-}
 
 unsigned int    Window::getWidth(void) const {
     return this->wWidth;

@@ -139,6 +139,10 @@ void  Player::_grow(void) {
 void  Player::_updateSnake(eDirection direction) {
     Game &singleton = Game::singleton();
     IEntity *newHead = this->_createHead(direction);
+    std::list<IEntity *>::iterator iter = this->_snake.begin();
+
+    singleton.listAdd(singleton.getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
+    singleton.listErase(this->_snake, (*iter)->getPosX(), (*iter)->getPosY());
     this->_scoreChange = false;
     if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
@@ -163,9 +167,6 @@ void  Player::_updateSnake(eDirection direction) {
             this->_dead = true;
         }
     }
-    std::list<IEntity *>::iterator iter = this->_snake.begin();
-    singleton.listAdd(singleton.getFreePos(), createEntity((*iter)->getPosX(), (*iter)->getPosY(), Free, NoDir, None));
-    singleton.listErase(this->_snake, (*iter)->getPosX(), (*iter)->getPosY());
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());
     this->_snake.push_back(newHead);
