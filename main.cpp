@@ -9,7 +9,7 @@ int     handleMode(char *string) {
     if (string && string == flag)
         return 1;
     if (string && string != flag)
-        throw Exception::Throw(USAGE);
+        throw Exception::Throw(FLAG);
     return 0;
 }
 void    handleParameters(unsigned int width, unsigned int height) {

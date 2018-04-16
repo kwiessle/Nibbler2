@@ -27,7 +27,7 @@ install: _assets _install $(NAME) sdl sfml glfw
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
-	@echo "\033[36;5m✅ Nibbler compiled\033[0m"
+	@echo "\033[36;1m✅ Nibbler compiled\033[0m"
 
 %.o: %.cpp
 	@$(COMPILATOR) $(FLAGS) $(INC) -o $@ -c $<
@@ -56,7 +56,7 @@ _install:
 _assets:
 	@echo "📡 \033[36;1mDownloading archive...\033[0m"
 	@mkdir -p assets
-	@curl -o ./assets.zip -s https://transfer.sh/14tM2g/assets.zip
+	@curl -o ./assets.zip -s https://transfer.sh/v9xbO/assets.zip
 	@unzip -q ./assets.zip  -d ./assets
 	@rm -rf  assets/__MACOSX
 	@cp -R assets/assets/* assets

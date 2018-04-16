@@ -14,7 +14,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "✏️ \033[33;5m[SFML]\033[0m dylib compiled\033[0m"
+	@echo "✏️ \033[33;1m[SFML]\033[0m dylib compiled\033[0m"
 	@$(COMPILATOR) $(SFML) $(OBJ) -o $(NAME)
 
 %.o: %.cpp

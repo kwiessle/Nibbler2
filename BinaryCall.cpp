@@ -1,7 +1,8 @@
 #include "main.hpp"
 
  void  dlerror_wrapper(void) {
-  std::cout << "Error: " << dlerror() << std::endl;
+  std::cout << "\033[38;5;204mDynamic Library Error : \033[0m" << dlerror() << std::endl;
+  throw Exception::Throw(LIB_FAIL);
 }
 
 bool   openBinaryLib(char *path) {
@@ -13,7 +14,7 @@ bool   openBinaryLib(char *path) {
 }
 
 bool   openBinaryAudio(void) {
-    if (!(BINARY_AUDIO = dlopen("audio.so", RTLD_NOW | RTLD_GLOBAL))) {
+    if (!(BINARY_AUDIO = dlopen("audio.so", RTLD_NOW | RTLD_NODELETE))) {
       dlerror_wrapper();
       return false;
   }

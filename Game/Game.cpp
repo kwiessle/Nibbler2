@@ -105,7 +105,7 @@ void  Game::initFire(void) {
 }
 
 void  Game::initMap(unsigned int width, unsigned int height) {
-    if (this->_freePos.size()) {
+    if (this->_freePos.size() - 1) {
         std::list<IEntity *>::iterator it = this->_freePos.begin();
         while ( it != this->_freePos.end()) {
             deleteEntity((*it));
