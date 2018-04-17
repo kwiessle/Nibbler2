@@ -24,6 +24,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
+    glfwSetInputMode(this->pWindow, GLFW_STICKY_KEYS, 1);
     // glfwSetWindowIcon(this->pWindow, 1, icons);
     glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
@@ -33,7 +34,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
 Window::~Window(void) {
     glDeleteTextures(23, this->_textures);
     if(this->pWindow)
-        glfwTerminate();
+        glfwDestroyWindow(this->pWindow);
 }
 
 void    Window::handleEvent(void) {

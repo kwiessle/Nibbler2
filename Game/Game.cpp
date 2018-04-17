@@ -135,6 +135,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
     while (this->_engine->getStatus() != Exit) {
+        if (speed.update()) {
         this->_engine->handleEvent();
         switch(this->_engine->getStatus()) {
             case Play :
@@ -155,9 +156,9 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 }
                 this->_player->move(this->_engine->getDirection());
                 this->refresh();
-                usleep(speed.getDiff() * 1000);
                 this->_engine->reverseDirectionChecker();
-        }
+            }
+
         if (this->_engine->getStatus() == Pause) {
             if (this->_player->checkDeath())
                 this->pause(1);
@@ -173,6 +174,7 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             );
             this->_engine->updateStatus(tmp);
         }
+    }
     }
     return;
 }

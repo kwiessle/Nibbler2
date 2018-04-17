@@ -29,12 +29,12 @@ Window::~Window(void) {
     if (this->window->isOpen()){
         this->window->close();
     }
-    delete this->window;
+    // delete this->window;
 }
 
 void        Window::handleEvent(void) {
     sf::Event event;
-    if(this->window && this->window->pollEvent(event)) {
+    if(this->window->isOpen() && this->window->pollEvent(event)) {
         this->setEngine(event);
         if (!this->engineChecker){
             if (this->status == Play)
