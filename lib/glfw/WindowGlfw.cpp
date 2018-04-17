@@ -24,7 +24,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
-    glfwSetInputMode(this->pWindow, GLFW_STICKY_KEYS, 1);
+    // glfwSetInputMode(this->pWindow, GLFW_STICKY_KEYS, 1);
     // glfwSetWindowIcon(this->pWindow, 1, icons);
     glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
@@ -33,31 +33,28 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
 
 Window::~Window(void) {
     glDeleteTextures(23, this->_textures);
-    if(this->pWindow)
-        glfwDestroyWindow(this->pWindow);
+    glfwTerminate();
 }
 
 void    Window::handleEvent(void) {
-    if (this->pWindow) {
-    glfwPollEvents();
-    this->setEngine();
-    if (!this->engineChecker) {
-        if (this->status == Play)
-            this->setDirection();
-        this->setStatus();
-        if ( this->status == Pause)
-            this->handlePauseEvent();
-    }
+    if (!glfwWindowShouldClose(this->pWindow)) {
+        glfwPollEvents();
+        this->setEngine();
+        if (!this->engineChecker) {
+            this->setStatus();
+            if (this->status == Play)
+                this->setDirection();
+            else if ( this->status == Pause)
+                this->handlePauseEvent();
+        }
     }
 }
 
 void       Window::handlePauseEvent() {
-    if (glfwGetKey(this->pWindow, GLFW_KEY_1) == GLFW_PRESS)
+    if (glfwGetKey(this->pWindow, GLFW_KEY_R) == GLFW_PRESS)
         { this->status = Play; return; }
-    else if (glfwGetKey(this->pWindow, GLFW_KEY_2) == GLFW_PRESS)
+    else if (glfwGetKey(this->pWindow, GLFW_KEY_S) == GLFW_PRESS)
         { this->status = Start; return; }
-    else if (glfwGetKey(this->pWindow, GLFW_KEY_3) == GLFW_PRESS)
-        { this->status = Exit; return; }
     return;
 }
 eDirection   Window::getDirection(void) const {
@@ -97,9 +94,9 @@ eStatus Window::getStatus(void) const {
 }
 
 void    Window::setStatus(void) {
-    if (glfwWindowShouldClose(this->pWindow) != 0) { this->status = Exit; }
+    if (glfwWindowShouldClose(this->pWindow) != 0) { this->status = Exit;glfwSetWindowShouldClose(this->pWindow, true); }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        { this->status = Exit; }
+        { this->status = Exit;glfwSetWindowShouldClose(this->pWindow, true);}
     else if (glfwGetKey(this->pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
         { this->status = Pause; }
     return;
@@ -263,7 +260,7 @@ bool   Window::displayPause(int status) {
     GLuint background;
     glGenTextures(1, &background);
     glBindTexture(GL_TEXTURE_2D, background);
-    this->loadBMP("./assets/appicon.bmp");
+    this->loadBMP("./assets/menu.bmp");
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, background);
     glBegin(GL_QUADS);
@@ -298,7 +295,6 @@ void       Window::initTextures(void) {
     glGenTextures(23, this->_textures);
 
     for (int i = 1; i <= 23; i++) {
-        if (i == 5 || i == 6 || i == 7 || i == 8) {i++; continue;} // Delete this line when headmiam
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";

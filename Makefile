@@ -54,11 +54,13 @@ _install:
 	./install.sh
 
 _assets:
-	@echo "📡 \033[36;5mDownloading archive...\033[0m"
+	@echo "📡 \033[36;1mDownloading archive...\033[0m"
 	@mkdir -p assets
-	@curl -o ./assets.zip -s https://transfer.sh/ZFcEp/assets.zip
+	@curl -o ./assets.zip -s https://transfer.sh/v9xbO/assets.zip
 	@unzip -q ./assets.zip  -d ./assets
-	@rm -rf  __MACOSX/\*
+	@rm -rf  assets/__MACOSX
+	@cp -R assets/assets/* assets
+	@rm -rf assets/assets
 	@rm ./assets.zip
 	@echo "\033[38;5;82m✅ Assets downloaded\033[0m"
 

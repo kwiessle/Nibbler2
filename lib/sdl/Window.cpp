@@ -41,7 +41,6 @@ Window::~Window(void) {
     SDL_RenderClear(this->pRenderer);
     std::map<eTexture, SDL_Surface *>::iterator it = this->_textures.begin();
     while (it != this->_textures.end()) {
-        if (it->first >= 5 && it->first <= 8) {it++; continue;}
         SDL_FreeSurface(it->second);
         it++;
     }
@@ -56,13 +55,13 @@ Window::~Window(void) {
 
 void        Window::handleEvent(void) {
     SDL_Event event;
-    while(SDL_PollEvent(&event)){
+    if(SDL_PollEvent(&event)){
         this->setEngine(event);
         if (!this->engineChecker){
+            this->setStatus(event);
             if (this->status == Play)
                 this->setDirection(event);
-            this->setStatus(event);
-            if (this->status == Pause)
+            else if (this->status == Pause)
                 this->handlePauseEvent(event);
         }
     }
@@ -74,12 +73,10 @@ eDirection   Window::getDirection(void) const {
 
 void    Window::handlePauseEvent(SDL_Event event) {
     if (event.type == SDL_KEYDOWN) {
-        if (event.key.keysym.sym == SDLK_1)
+        if (event.key.keysym.sym == SDLK_r)
             { this->status = Play; return; }
-        else if (event.key.keysym.sym == SDLK_2)
+        else if (event.key.keysym.sym == SDLK_s)
             { this->status = Start; return; }
-        else if (event.key.keysym.sym == SDLK_3)
-            { this->status = Exit; return; }
     }
     return;
 }
@@ -207,7 +204,7 @@ void    Window::drawMenu(int lives, int score) const {
 
 bool            Window::displayPause(int status) {
     SDL_Rect  background = {0, 0, static_cast<int>(this->wWidth * CELL_UNITY), static_cast<int>(this->wHeight * CELL_UNITY) };
-    SDL_Surface *img = SDL_LoadBMP("/assets/appicon.bmp");
+    SDL_Surface *img = SDL_LoadBMP("/assets/menu.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(this->pRenderer, img);
     SDL_FreeSurface(img);
     SDL_SetRenderDrawColor(this->pRenderer, 22, 22, 24, 0);
@@ -231,7 +228,6 @@ unsigned int    Window::getHeight(void) const {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        // if ( i >= 5 && i <= 8) {i++; continue;}
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

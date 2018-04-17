@@ -21,26 +21,25 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     this->initTextures();
     this->pFont.loadFromFile("./assets/roboto.ttf");
     icon.loadFromFile("./assets/appicon.bmp");
-    this->window->setIcon(512, 512, icon.getPixelsPtr());
+    this->window->setIcon(256, 256, icon.getPixelsPtr());
+
     return;
 }
 
 Window::~Window(void) {
-    if (this->window->isOpen()){
-        this->window->close();
-    }
-    // delete this->window;
+    this->window->close();
+    delete this->window;
 }
 
 void        Window::handleEvent(void) {
     sf::Event event;
-    if(this->window->isOpen() && this->window->pollEvent(event)) {
+    if (this->window->isOpen() && this->window->pollEvent(event)) {
         this->setEngine(event);
-        if (!this->engineChecker){
+        if (!this->engineChecker) {
+            this->setStatus(event);
             if (this->status == Play)
                 this->setDirection(event);
-            this->setStatus(event);
-            if (this->status == Pause)
+            else if (this->status == Pause)
                 this->handlePauseEvent(event);
         }
     }
@@ -48,12 +47,10 @@ void        Window::handleEvent(void) {
 
 void       Window::handlePauseEvent(sf::Event event) {
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Num1)
+        if (event.key.code == sf::Keyboard::R)
             { this->status = Play; return; }
-        else if (event.key.code ==sf::Keyboard::Num2)
+        else if (event.key.code ==sf::Keyboard::S)
             { this->status = Start; return; }
-        else if (event.key.code == sf::Keyboard::Num3)
-            { this->status = Exit; return; }
     }
     return;
 }
@@ -92,10 +89,10 @@ eStatus   Window::getStatus(void) const {
 }
 
 void    Window::setStatus(sf::Event event) {
-    if (event.type == sf::Event::Closed) { this->status = Exit; }
+    if (event.type == sf::Event::Closed) { this->status = Exit; this->window->close();}
     else if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Escape)
-            { this->status = Exit; }
+            { this->status = Exit;this->window->close(); }
         else if (event.key.code == sf::Keyboard::Space)
            { this->status = Pause; }
     }
@@ -109,10 +106,18 @@ void    Window::updateStatus(eStatus status)  {
 
 void    Window::setEngine(sf::Event event) {
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::F && this->engine != SDL)
-            { this->engine = SDL; this->engineChecker = true; return;}
-        else if (event.key.code == sf::Keyboard::G && this->engine != GL)
-            { this->engine = GL; this->engineChecker = true; return;}
+        if (event.key.code == sf::Keyboard::F && this->engine != SDL) {
+            this->engine = SDL;
+            this->engineChecker = true;
+            this->window->close();
+            return;
+        }
+        else if (event.key.code == sf::Keyboard::G && this->engine != GL) {
+            this->engine = GL;
+            this->engineChecker = true;
+            this->window->close();
+            return;
+        }
     }
     return;
 }
@@ -179,7 +184,7 @@ bool            Window::displayPause(int status)  {
     sf::Texture img;
     sf::Sprite background;
     background.setPosition(sf::Vector2f(0, 0));
-    img.loadFromFile("./assets/appicon.bmp");
+    img.loadFromFile("./assets/menu.bmp");
     background.setTexture(img);
     background.setScale(static_cast<float>(CELL_UNITY * wWidth) / 512 , static_cast<float>(CELL_UNITY * wHeight) / 512 );
     this->window->clear(color);
@@ -211,7 +216,6 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);
