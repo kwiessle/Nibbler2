@@ -21,24 +21,38 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     this->initTextures();
     this->pFont.loadFromFile("./assets/roboto.ttf");
     icon.loadFromFile("./assets/appicon.bmp");
-    this->window->setIcon(512, 512, icon.getPixelsPtr());
+    this->window->setIcon(256, 256, icon.getPixelsPtr());
+
     return;
 }
 
 Window::~Window(void) {
-    if (this->window->isOpen()){
-        this->window->close();
-    }
+    this->window->close();
     delete this->window;
 }
 
 void        Window::handleEvent(void) {
     sf::Event event;
-    while (this->window->pollEvent(event)) {
-        this->setDirection(event);
+    if (this->window->isOpen() && this->window->pollEvent(event)) {
         this->setEngine(event);
-        this->setStatus(event);
+        if (!this->engineChecker) {
+            this->setStatus(event);
+            if (this->status == Play)
+                this->setDirection(event);
+            else if (this->status == Pause)
+                this->handlePauseEvent(event);
+        }
     }
+}
+
+void       Window::handlePauseEvent(sf::Event event) {
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::R)
+            { this->status = Play; return; }
+        else if (event.key.code ==sf::Keyboard::S)
+            { this->status = Start; return; }
+    }
+    return;
 }
 
 eDirection   Window::getDirection(void) const {
@@ -75,11 +89,11 @@ eStatus   Window::getStatus(void) const {
 }
 
 void    Window::setStatus(sf::Event event) {
-    if (event.type == sf::Event::Closed) { this->status = Exit; }
+    if (event.type == sf::Event::Closed) { this->status = Exit; this->window->close();}
     else if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Escape)
-            { this->status = Exit; }
-        if (event.key.code == sf::Keyboard::Space)
+            { this->status = Exit;this->window->close(); }
+        else if (event.key.code == sf::Keyboard::Space)
            { this->status = Pause; }
     }
     return;
@@ -92,10 +106,18 @@ void    Window::updateStatus(eStatus status)  {
 
 void    Window::setEngine(sf::Event event) {
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::F && this->engine != SDL)
-            { this->engine = SDL; this->engineChecker = true; return;}
-        if (event.key.code == sf::Keyboard::G && this->engine != GL)
-            { this->engine = GL; this->engineChecker = true; return;}
+        if (event.key.code == sf::Keyboard::F && this->engine != SDL) {
+            this->engine = SDL;
+            this->engineChecker = true;
+            this->window->close();
+            return;
+        }
+        else if (event.key.code == sf::Keyboard::G && this->engine != GL) {
+            this->engine = GL;
+            this->engineChecker = true;
+            this->window->close();
+            return;
+        }
     }
     return;
 }
@@ -159,78 +181,22 @@ void    Window::drawMenu(int lives, int score) const {
 
 bool            Window::displayPause(int status)  {
     sf::Color color(22,22, 24, 0);
-    sf::Event event;
     sf::Texture img;
     sf::Sprite background;
-    sf::RectangleShape  start;
-    sf::RectangleShape  resume;
-    sf::RectangleShape  exit;
     background.setPosition(sf::Vector2f(0, 0));
-    img.loadFromFile("./assets/appicon.bmp");
+    img.loadFromFile("./assets/menu.bmp");
     background.setTexture(img);
     background.setScale(static_cast<float>(CELL_UNITY * wWidth) / 512 , static_cast<float>(CELL_UNITY * wHeight) / 512 );
     this->window->clear(color);
     this->window->draw(background);
-    switch (status) {
-        case 2 :
-            resume = this->drawResume();
-        case 1 :
-            start = this->drawStart();
-            exit = this->drawExit();
-            break;
+    switch(status) {
+        default: break;
     }
     this->window->display();
-    if (this->window->isOpen() && this->window->pollEvent(event)) {
-        if (event.type == sf::Event::MouseButtonPressed) {
-            sf::Vector2i mousePos = sf::Mouse::getPosition( *this->window );
-            sf::Vector2f mousePosF(
-                static_cast<float>(mousePos.x),
-                static_cast<float>(mousePos.y)
-            );
-            if ( resume.getGlobalBounds().contains( mousePosF ) ) {
-                this->status = Play;
-                return false;
-            }
-            if ( exit.getGlobalBounds().contains( mousePosF ) ) {
-                this->status = Exit;
-                return false;
-            }
-            if ( start.getGlobalBounds().contains( mousePosF ) ) {
-                this->status = Start;
-                return false;
-            }
-        }
-        this->setStatus(event);
-        this->setEngine(event);
-    }
     return true;
 }
 
-sf::RectangleShape            Window::drawStart(void) const {
-    sf::RectangleShape start;
-    start.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    start.setFillColor(sf::Color::Green);
-    start.setPosition((wWidth * CELL_UNITY / 5),  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    this->window->draw(start);
-    return start;
-}
 
-sf::RectangleShape            Window::drawResume(void) const {
-    sf::RectangleShape resume;
-    resume.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    resume.setFillColor(sf::Color::Blue);
-    resume.setPosition((wWidth * CELL_UNITY / 5) * 2,  wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    this->window->draw(resume);
-    return resume;
-}
-sf::RectangleShape            Window::drawExit(void) const {
-    sf::RectangleShape exit;
-    exit.setSize(sf::Vector2f(CELL_UNITY * 3, CELL_UNITY * 2));
-    exit.setFillColor(sf::Color::Red);
-    exit.setPosition((wWidth * CELL_UNITY / 5) * 3, wHeight * CELL_UNITY - CELL_UNITY * 1.5);
-    this->window->draw(exit);
-    return exit;
-}
 unsigned int    Window::getWidth(void) const {
     return this->wWidth;
 }
@@ -250,7 +216,6 @@ void        deleteWindow(Window *window) {
 
 void       Window::initTextures(void) {
     for (int i = 1; i <= 23; i++) {
-        if (i >= 5 && i <= 8) {i++; continue;} // Delete this line when headmiam
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);

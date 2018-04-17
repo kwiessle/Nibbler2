@@ -139,6 +139,7 @@ void  Player::_grow(void) {
 void  Player::_updateSnake(eDirection direction) {
     Game &singleton = Game::singleton();
     IEntity *newHead = this->_createHead(direction);
+
     this->_scoreChange = false;
     if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;

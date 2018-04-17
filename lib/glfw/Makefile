@@ -4,7 +4,7 @@ FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	=  -I . -I ../../include -Iglfw/include  -I ~/.brew/include
 GLFW = -fPIC -shared
 GLFW += -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
-GLFW += -force_load ./glfw/src/libglfw3.a
+GLFW += ./glfw/src/libglfw3.a
 
 SRC = WindowGlfw.cpp \
 	../../Entity/Entity.cpp \

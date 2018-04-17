@@ -16,15 +16,12 @@ class Window  : public IGraphism {
     void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
     void            displayTextures(std::list <IEntity *>::iterator iter) const;
     bool            displayPause(int status);
-    void            drawStart(void) const;
-    void            drawResume(void) const;
-    void            drawExit(void) const;
-    bool            checkMousePos(double x, double y, float xcheck, float ycheck) const;
     void            drawMenu(int lives, int score) const;
     void            initTextures(void);
     GLuint          loadBMP(const char * imagepath) const;
 
     void            handleEvent(void);
+    void            handlePauseEvent(void);
     eDirection      getDirection(void) const;
     void            setDirection(void);
     void            updateDirection(eDirection direction);
