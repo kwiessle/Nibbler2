@@ -1,5 +1,5 @@
 NAME = ../../sfml.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I sfml/include
 SFML = -fPIC -shared

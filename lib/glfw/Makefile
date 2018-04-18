@@ -1,5 +1,5 @@
 NAME = ../../glfw.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	=  -I . -I ../../include -Iglfw/include  -I ~/.brew/include
 GLFW = -fPIC -shared

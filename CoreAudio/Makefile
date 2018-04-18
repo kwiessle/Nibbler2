@@ -1,9 +1,9 @@
 NAME = ../audio.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	=  -I ../include -I ~/.brew/include
 AUDIO = -fPIC -shared
-AUDIO +=  -lSDL2_MIXER -lSDL2
+AUDIO +=  -L ~/.brew/lib/ -lSDL2 -lSDL2_MIXER
 
 
 SRC = CoreAudio.cpp

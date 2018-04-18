@@ -1,6 +1,6 @@
 NAME = Nibbler
 LOGIN = kwiessle/vquesnel
-COMPILATOR = g++ -g
+COMPILATOR = clang++
 INC	=  -I lib -I include
 FLAGS = -Werror -Wall -Wextra -std=c++11
 LDFLAGS = -rpath ./lib/sfml/sfml/lib
