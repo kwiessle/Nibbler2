@@ -112,7 +112,7 @@ void  Player::_fillHead(void) {
             break;
         }
         case Down : {
-            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() +1 )) {
+            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() + 1 )) {
                 head->setTexture(dHeadMiam);
             }
             else { head->setTexture(dHead); }
@@ -150,7 +150,7 @@ void  Player::_grow(void) {
         break;
       case Left :
         piece = createEntity(queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
-         break;
+        break;
       case Right :
         piece = createEntity(queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
         break;

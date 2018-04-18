@@ -235,9 +235,6 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
     if (!openBinaryLib(const_cast<char*>(path.c_str()))) {
         throw Exception::Throw(LIB_FAIL);
     }
-    deleteCoreAudio(this->coreAudio);
-    this->coreAudio = createCoreAudio();
-    this->coreAudio->play(Theme);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
 }
