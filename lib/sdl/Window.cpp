@@ -11,7 +11,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   wWidth(width),
   wHeight(height)
  {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) != 0 || TTF_Init() != 0) {
     std::cout << "SDL init() failed." << std::endl;
     throw Exception::Throw(WIN_FAIL);
   }
@@ -25,9 +25,12 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
       this->wHeight * CELL_UNITY + CELL_UNITY * 2,
       SDL_WINDOW_SHOWN
   );
+  if (pWindow == NULL) {
+      throw Exception::Throw(WIN_FAIL);
+  }
     this->pWindow = pWindow;
     SDL_SetWindowResizable(this->pWindow, SDL_FALSE);
-    this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
+    this->pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_SOFTWARE);
     SDL_Surface *icon = SDL_LoadBMP("/assets/appicon.bmp");
     SDL_SetWindowIcon(pWindow, icon);
     SDL_FreeSurface(icon);
@@ -49,13 +52,13 @@ Window::~Window(void) {
     this->_textures.clear();
     SDL_DestroyRenderer(this->pRenderer);
     SDL_DestroyWindow(this->pWindow);
-    SDL_Quit();
+    // SDL_Quit();
     return;
 }
 
 void        Window::handleEvent(void) {
     SDL_Event event;
-    if(SDL_PollEvent(&event)){
+    while (SDL_PollEvent(&event)){
         this->setEngine(event);
         if (!this->engineChecker){
             this->setStatus(event);
@@ -112,8 +115,10 @@ eStatus   Window::getStatus(void) const {
 
 void    Window::setStatus(SDL_Event event) {
     if (event.type == SDL_QUIT ||
-     (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27))
-        { this->status = Exit; }
+     (event.type == SDL_KEYDOWN && event.key.keysym.sym == 27)) {
+        this->status = Exit;
+        SDL_DestroyWindow(this->pWindow);
+    }
     else if (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN)
         { this->status = Pause; }
     return;
@@ -127,9 +132,15 @@ void    Window::updateStatus(eStatus status) {
 void    Window::setEngine(SDL_Event event) {
     if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.sym == 102 && this->engine != GL) {
-            this->engine = GL; this->engineChecker = true; }
+            this->engine = GL;
+            this->engineChecker = true;
+            SDL_DestroyWindow(this->pWindow);
+        }
         else if (event.key.keysym.sym == 103 && this->engine != SFML) {
-            this->engine = SFML; this->engineChecker = true; }
+            this->engine = SFML;
+            this->engineChecker = true;
+            SDL_DestroyWindow(this->pWindow);
+        }
     }
     return;
 }

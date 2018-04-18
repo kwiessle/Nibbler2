@@ -22,25 +22,26 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
     this->pFont.loadFromFile("./assets/roboto.ttf");
     icon.loadFromFile("./assets/appicon.bmp");
     this->window->setIcon(256, 256, icon.getPixelsPtr());
-
     return;
 }
 
 Window::~Window(void) {
-    this->window->close();
+    // this->window->close();
     delete this->window;
 }
 
 void        Window::handleEvent(void) {
-    sf::Event event;
-    if (this->window->isOpen() && this->window->pollEvent(event)) {
-        this->setEngine(event);
-        if (!this->engineChecker) {
-            this->setStatus(event);
+    if (this->window->isOpen()) {
+        sf::Event event;
+        while(this->window->pollEvent(event)) {
+            this->setEngine(event);
+            if (!this->engineChecker) {
+                this->setStatus(event);
             if (this->status == Play)
                 this->setDirection(event);
             else if (this->status == Pause)
                 this->handlePauseEvent(event);
+            }
         }
     }
 }
@@ -89,10 +90,15 @@ eStatus   Window::getStatus(void) const {
 }
 
 void    Window::setStatus(sf::Event event) {
-    if (event.type == sf::Event::Closed) { this->status = Exit; this->window->close();}
+    if (event.type == sf::Event::Closed) {
+        this->status = Exit;
+        this->window->close();
+    }
     else if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape)
-            { this->status = Exit;this->window->close(); }
+        if (event.key.code == sf::Keyboard::Escape) {
+            this->status = Exit;
+            this->window->close();
+        }
         else if (event.key.code == sf::Keyboard::Space)
            { this->status = Pause; }
     }

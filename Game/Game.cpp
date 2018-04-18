@@ -130,7 +130,6 @@ void Game::initGame(unsigned int width, unsigned int height, int mode) {
 }
 
 void  Game::start(unsigned int width, unsigned int height, int mode) {
-    Timer frame(33);
     Timer speed(200);
     Timer fire(4000);
     this->_engine = createEngine(width, height, Right);
@@ -229,8 +228,7 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
             break;
         default : break;
     }
-
-    if (!openBinaryLib(const_cast<char*>(path.c_str())))
+    if (!openBinaryLib(const_cast<char *>(path.c_str())))
         throw Exception::Throw(LIB_FAIL);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
