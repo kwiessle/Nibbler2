@@ -1,5 +1,5 @@
 NAME = ../../sdl.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I ~/.brew/include
 SDL = -fPIC  -shared
@@ -9,12 +9,13 @@ SRC = Window.cpp \
 	../../Entity/Entity.cpp \
 	../../Exception/Exception.cpp \
 
+
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "✏️ \033[33;5m[SDL]  Creating extern lib\033[0m"
+	@echo "✏️ \033[33;1m[SDL]\033[0m  dylib compiled\033[0m"
 	@$(COMPILATOR) $(SDL) $(OBJ) -o $(NAME)
 
 %.o: %.cpp

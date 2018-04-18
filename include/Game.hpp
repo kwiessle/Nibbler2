@@ -21,14 +21,18 @@ class Game {
     std::list <IEntity *>         _freePos;
     IGraphism                     *_engine;
 
+
   public:
     ~Game(void);
 
     static Game                   &singleton(void);
 
+    ICoreAudio                    *coreAudio;
+
     std::list <IEntity *>         mergeEntities(void) const;
     void                          initMap(unsigned int width, unsigned int height);
     IGraphism                     *getEngine(void) const;
+    ICoreAudio                    *getCoreAudio(void) const;
     void                          setEngine(IGraphism  *engine);
     std::list <IEntity *>         &getFood(void);
     std::list <IEntity *>         &getFreePos(void);

@@ -24,8 +24,7 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
-    // glfwSetInputMode(this->pWindow, GLFW_STICKY_KEYS, 1);
-    // glfwSetWindowIcon(this->pWindow, 1, icons);
+    // glfwSetWindowIcon(this->pWindow, 1, this->loadBMP("/assets/menu.bmp"));
     glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
     return;
@@ -127,7 +126,7 @@ eEngine  Window::getEngine(void) const {
     return this->engine;
 }
 
-bool    Window::engineHasChanged(void) const{
+bool    Window::engineHasChanged(void) const {
     return this->engineChecker;
 }
 
@@ -154,6 +153,8 @@ void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
     switch((*iter)->getTexture()) {
         case 3 :
         case 4 :
+        case 8 :
+        case 7 :
         case 15 :
         case 16 :
             glTexCoord2f(0,0);
@@ -340,14 +341,16 @@ GLuint Window::loadBMP(const char *filename) const {
         imageSize = width * height * 3;
     if (dataPos == 0)
         dataPos = 54;
-    data = (unsigned char *)malloc( width * height * 3 );
+    data = (unsigned char *)malloc( (width * height  * 3) );
     fread( data, width * height * 3, 1, file );
     fclose(file);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    free(data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, GL_LINEAR);
+    free(data);
 
    return texture;
 

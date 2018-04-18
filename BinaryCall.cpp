@@ -1,14 +1,23 @@
 #include "main.hpp"
 
  void  dlerror_wrapper(void) {
-  std::cout << "Error: " << dlerror() << std::endl;
+  std::cout << "\033[38;5;204mDynamic Library Error : \033[0m" << dlerror() << std::endl;
+  throw Exception::Throw(LIB_FAIL);
 }
 
 bool   openBinaryLib(char *path) {
     if (!(BINARY_LIB = dlopen(path, RTLD_NOW))) {
       dlerror_wrapper();
       return false;
-    }
+  }
+    else { return true; }
+}
+
+bool   openBinaryAudio(void) {
+    if (!(BINARY_AUDIO = dlopen("audio.so", RTLD_NOW | RTLD_NODELETE))) {
+      dlerror_wrapper();
+      return false;
+  }
     else { return true; }
 }
 
@@ -56,4 +65,27 @@ void      deleteEntity(IEntity *entity) {
 
   entityDestructor(entity);
   return;
+}
+
+ICoreAudio  *createCoreAudio(void) {
+    std::string symbol = "newCoreAudio";
+    ICoreAudio  *(*CoreAudioCreator)(void);
+    CoreAudioCreator = (ICoreAudio *(*)(void)) dlsym(BINARY_AUDIO, symbol.c_str());
+
+    ICoreAudio *coreAudio = CoreAudioCreator();
+    return coreAudio;
+}
+
+void    deleteCoreAudio(ICoreAudio *coreAudio) {
+    std::string symbol = "deleteCoreAudio";
+    ICoreAudio *(*CoreAudioDestructor)(ICoreAudio *);
+    CoreAudioDestructor = (ICoreAudio *(*)(ICoreAudio *)) dlsym(BINARY_AUDIO, symbol.c_str());
+
+    if (!CoreAudioDestructor)
+      dlerror_wrapper();
+
+    CoreAudioDestructor(coreAudio);
+    return;
+
+
 }

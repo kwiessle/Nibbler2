@@ -1,5 +1,5 @@
 NAME = ../../sfml.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	= -I . -I ../../include -I sfml/include
 SFML = -fPIC -shared
@@ -14,7 +14,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "✏️ \033[33;5m[SFML] Creating extern lib\033[0m"
+	@echo "✏️ \033[33;1m[SFML]\033[0m dylib compiled\033[0m"
 	@$(COMPILATOR) $(SFML) $(OBJ) -o $(NAME)
 
 %.o: %.cpp

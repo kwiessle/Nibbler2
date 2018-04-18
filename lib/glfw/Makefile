@@ -1,5 +1,5 @@
 NAME = ../../glfw.so
-COMPILATOR = g++
+COMPILATOR = clang++
 FLAGS = -Werror -Wall -Wextra -std=c++11
 INC	=  -I . -I ../../include -Iglfw/include  -I ~/.brew/include
 GLFW = -fPIC -shared
@@ -15,7 +15,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "✏️ \033[33;5m[OPENGL] Creating extern lib\033[0m"
+	@echo "✏️ \033[33;1m[GLFW]\033[0m dylib compiled\033[0m"
 	@$(COMPILATOR) $(GLFW) $(OBJ) -o $(NAME)
 
 %.o: %.cpp

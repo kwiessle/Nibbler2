@@ -9,6 +9,7 @@
 # define USAGE 2
 # define SIZE 3
 # define LIB_FAIL 4
+# define FLAG 5
 
 class Exception {
 
@@ -34,6 +35,9 @@ class Exception {
                 virtual const char * what (void) const throw ();
         };
         class LibFail : public GameException {
+                virtual const char * what (void) const throw ();
+        };
+        class Flag : public GameException {
                 virtual const char * what (void) const throw ();
         };
 };

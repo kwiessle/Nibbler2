@@ -2,6 +2,8 @@
 
 Game::Game(void) {
     this->_player = new Player(4, 0);
+    this->coreAudio = createCoreAudio();
+    this->coreAudio->play(Theme);
     return;
 }
 
@@ -28,6 +30,7 @@ Game::~Game(void) {
     }
     delete this->_player;
     dlclose(BINARY_LIB);
+    dlclose(BINARY_AUDIO);
 }
 
 Game   &Game::singleton(void) {
@@ -102,7 +105,7 @@ void  Game::initFire(void) {
 }
 
 void  Game::initMap(unsigned int width, unsigned int height) {
-    if (this->_freePos.size()) {
+    if (this->_freePos.size() - 1) {
         std::list<IEntity *>::iterator it = this->_freePos.begin();
         while ( it != this->_freePos.end()) {
             deleteEntity((*it));
@@ -132,6 +135,7 @@ void Game::initGame(unsigned int width, unsigned int height, int mode) {
 void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer speed(200);
     Timer fire(4000);
+
     this->_engine = createEngine(width, height, Right);
     while (this->_engine->getStatus() != Exit) {
         this->_engine->handleEvent();
@@ -228,8 +232,12 @@ void    Game::switchEngine(eEngine engine, eDirection direction) {
             break;
         default : break;
     }
-    if (!openBinaryLib(const_cast<char *>(path.c_str())))
+    if (!openBinaryLib(const_cast<char*>(path.c_str()))) {
         throw Exception::Throw(LIB_FAIL);
+    }
+    deleteCoreAudio(this->coreAudio);
+    this->coreAudio = createCoreAudio();
+    this->coreAudio->play(Theme);
     this->_engine = createEngine(tmpWidth, tmpHeight, direction);
     return;
 }
