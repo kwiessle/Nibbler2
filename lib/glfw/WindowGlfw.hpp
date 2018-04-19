@@ -7,6 +7,7 @@
 # include "IGraphism.hpp"
 # include "IEntity.hpp"
 # include "Exception.hpp"
+# include "BMP.hpp"
 
 
 class Window  : public IGraphism {
@@ -18,7 +19,6 @@ class Window  : public IGraphism {
     bool            displayPause(int score);
     void            drawMenu(int lives, int score) const;
     void            initTextures(void);
-    GLuint          loadBMP(const char * imagepath) const;
 
     void            handleEvent(void);
     void            handlePauseEvent(void);
@@ -49,7 +49,6 @@ class Window  : public IGraphism {
     unsigned int                        wWidth;
     unsigned int                        wHeight;
     GLFWwindow                          *pWindow;
-    // sf::Font                            pFont;
     GLuint                              _textures[23];
 
 

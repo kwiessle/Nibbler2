@@ -1,5 +1,6 @@
 #include "WindowGlfw.hpp"
 
+
 Window::Window(void) { return; }
 
 Window::Window(unsigned int width, unsigned int height, eDirection direction) :
@@ -24,7 +25,6 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
         NULL
     );
     glfwMakeContextCurrent(this->pWindow);
-    // glfwSetWindowIcon(this->pWindow, 1, this->loadBMP("/assets/menu.bmp"));
     glOrtho(0.0f, this->wWidth * CELL_UNITY, this->wHeight * CELL_UNITY + CELL_UNITY * 2, 0.0f, 1.0f, -1.0f);
     this->initTextures();
     return;
@@ -261,9 +261,14 @@ bool   Window::displayPause(int score) {
     GLuint background;
     glGenTextures(1, &background);
     glBindTexture(GL_TEXTURE_2D, background);
-    this->loadBMP("./assets/menu.bmp");
+    BMP image =  BMP("./assets/menu.bmp");
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, image.HasAlphaChannel() ? GL_RGBA : GL_RGB, image.GetWidth(), image.GetWidth(), 0, image.HasAlphaChannel() ? GL_BGRA : GL_BGR, GL_UNSIGNED_BYTE, image.GetPixels().data());
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, background);
     glBegin(GL_QUADS);
     glTexCoord2f(0,1);
     glVertex2f(0, 0);
@@ -303,12 +308,19 @@ void       Window::initTextures(void) {
     glGenTextures(23, this->_textures);
 
     for (int i = 1; i <= 23; i++) {
+
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
-        glBindTexture(GL_TEXTURE_2D, this->_textures[i]);
-        this->loadBMP(name.c_str());
+        BMP image = BMP(name.c_str());
 
+        glBindTexture(GL_TEXTURE_2D, this->_textures[i]);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, image.HasAlphaChannel() ? GL_RGBA : GL_RGB, image.GetWidth(), image.GetWidth(), 0, image.HasAlphaChannel() ? GL_BGRA : GL_BGR, GL_UNSIGNED_BYTE, image.GetPixels().data());
     }
     return;
 }
@@ -319,46 +331,4 @@ Window    *createWindow(unsigned int width, unsigned int height, eDirection dire
 
 void      deleteWindow(Window *window) {
     delete window;
-}
-
-GLuint Window::loadBMP(const char *filename) const {
-    GLuint texture = 0;
-    // Data read from the header of the BMP file
-    unsigned char header[54]; // Each BMP file begins by a 54-bytes header
-    unsigned int dataPos;     // Position in the file where the actual data begins
-    unsigned int width;
-    unsigned int height;
-    unsigned int imageSize;
-    unsigned char * data;
-    FILE * file = fopen(filename,"rb");
-
-     if (!file)
-        throw Exception::Throw(EX_FILE);
-    if (fread(header, 1, 54, file) != 54)
-        throw Exception::Throw(EX_FILE);
-    if (header[0] != 'B' || header[1] != 'M')
-        throw Exception::Throw(EX_FILE);
-
-    dataPos    = *(int*)&(header[0x0A]);
-    imageSize  = *(int*)&(header[0x22]);
-    width      = *(int*)&(header[0x12]);
-    height     = *(int*)&(header[0x16]);
-
-    if (imageSize == 0)
-        imageSize = width * height * 3;
-    if (dataPos == 0)
-        dataPos = 54;
-    data = (unsigned char *)malloc( (width * height  * 3) );
-    fread( data, width * height * 3, 1, file );
-    fclose(file);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, GL_LINEAR);
-    free(data);
-
-   return texture;
-
 }
