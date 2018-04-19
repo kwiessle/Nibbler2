@@ -11,7 +11,7 @@ class Window : public IGraphism {
     Window(void);
 
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
-    bool              displayPause(int status);
+    bool              displayPause(int score);
     void              drawMenu(int lives, int score) const;
     void              initTextures(void);
 

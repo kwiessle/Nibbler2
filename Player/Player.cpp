@@ -158,7 +158,6 @@ void  Player::_grow(void) {
         break;
     }
     singleton.listAdd(this->_snake, piece);
-    std::cout << this->_snake.size() << std::endl;
     singleton.listErase(singleton.getFreePos(), piece->getPosX(),  piece->getPosY());
 }
 

@@ -213,7 +213,7 @@ void    Window::drawMenu(int lives, int score) const {
   return;
 }
 
-bool            Window::displayPause(int status) {
+bool            Window::displayPause(int score) {
     SDL_Rect  background = {0, 0, static_cast<int>(this->wWidth * CELL_UNITY), static_cast<int>(this->wHeight * CELL_UNITY) };
     SDL_Surface *img = SDL_LoadBMP("/assets/menu.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(this->pRenderer, img);
@@ -222,8 +222,22 @@ bool            Window::displayPause(int status) {
     SDL_RenderClear(this->pRenderer);
     SDL_RenderCopy(this->pRenderer, texture, nullptr, &background);
     SDL_DestroyTexture(texture);
-    switch(status) {
-        default: break;
+    if(score >=0) {
+        SDL_Surface *surface = nullptr;
+        SDL_Texture *texture = nullptr;
+        SDL_Rect form;
+        SDL_Color White = {255, 255, 255, 0};
+        std::string sScore = "You lose... Your score was: ";
+        sScore += std::to_string(score);
+        surface = TTF_RenderText_Blended(this->pFont, sScore.c_str(), White);
+        texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
+        form.x =  CELL_UNITY;
+        form.y = this->wHeight * CELL_UNITY + CELL_UNITY / 2;
+        form.w = this->wHeight * CELL_UNITY / 2;
+        form.h = 20;
+        SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
+        SDL_DestroyTexture(texture);
+        SDL_FreeSurface(surface);
     }
     SDL_RenderPresent( this->pRenderer );
     return true;

@@ -255,7 +255,7 @@ void    Window::drawMenu(int lives, int score) const {
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
 }
 
-bool   Window::displayPause(int status) {
+bool   Window::displayPause(int score) {
     glClearColor(22/255.0, 22/255.0, 24/255.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
     GLuint background;
@@ -275,8 +275,15 @@ bool   Window::displayPause(int status) {
     glVertex2f(0, this->wHeight * CELL_UNITY);
     glEnd();
     glDisable(GL_TEXTURE_2D);
-    switch(status) {
-        default: break;
+    if (score >= 0) {
+        glRasterPos2i(CELL_UNITY,
+        this->wHeight * CELL_UNITY + CELL_UNITY / 2);
+        glColor3f(1.0f, 1.0f, 1.0f);
+        std::string sScore = "You lose... Your score was: ";
+        sScore += std::to_string(score);
+        const char *tmp = sScore.c_str();
+        for( unsigned int i = 0; i < sScore.length(); i++)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
     }
     glColor3f(1, 1, 1);
     glfwSwapBuffers(this->pWindow);

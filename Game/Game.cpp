@@ -163,10 +163,10 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             }
         }
         if (this->_engine->getStatus() == Pause) {
-            if (this->_player->checkDeath())
-                this->pause(1);
+            if (this->_player->getSnake().size() &&this->_player->checkDeath())
+                this->pause(this->_player->getScore());
             else
-                this->pause(2);
+                this->pause(-1);
         }
         if (this->_engine->engineHasChanged()) {
             eStatus tmp = this->_engine->getStatus();
@@ -182,8 +182,8 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
 }
 
 
-void  Game::pause(int status) {
-    this->_engine->displayPause(status);
+void  Game::pause(int score) {
+    this->_engine->displayPause(score);
 }
 
 void  Game::refresh(void) {

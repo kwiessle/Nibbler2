@@ -185,7 +185,7 @@ void    Window::drawMenu(int lives, int score) const {
   return;
 }
 
-bool            Window::displayPause(int status)  {
+bool            Window::displayPause(int score)  {
     sf::Color color(22,22, 24, 0);
     sf::Texture img;
     sf::Sprite background;
@@ -195,8 +195,19 @@ bool            Window::displayPause(int status)  {
     background.setScale(static_cast<float>(CELL_UNITY * wWidth) / 512 , static_cast<float>(CELL_UNITY * wHeight) / 512 );
     this->window->clear(color);
     this->window->draw(background);
-    switch(status) {
-        default: break;
+    if (score >= 0) {
+        sf::Text text;
+        text.setFont(this->pFont);
+        std::string sScore = "You lose... Your score was: ";
+        sScore += std::to_string(score);
+        text.setString(sScore.c_str());
+        text.setCharacterSize(20);
+        text.setFillColor(sf::Color::White);
+        text.setPosition(sf::Vector2f(
+            CELL_UNITY,
+            this->wHeight * CELL_UNITY + CELL_UNITY / 2
+        ));
+        this->window->draw(text);
     }
     this->window->display();
     return true;
