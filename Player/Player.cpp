@@ -4,7 +4,8 @@
 Player::Player(int life, int score) :
   _life(life),
   _score(score),
-  _dead(true)
+  _dead(true),
+  _scoreChange(false)
  { return; }
 
 Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
@@ -12,7 +13,8 @@ Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
   _life(life),
   _score(score),
   _speed(speed),
-  _dead(true)
+  _dead(true),
+  _scoreChange(false)
 { return; }
 
 Player::~Player(void) {
@@ -104,31 +106,30 @@ void  Player::_fillHead(void) {
     IEntity *head = this->_snake.back();
     switch(head->getDirection()) {
         case Up : {
-            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() -1)
-            ) {
+            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() -1) ||
+            singleton.listCheck(singleton.getBonus(), head->getPosX(), head->getPosY() -1))
                 head->setTexture(uHeadMiam);
-            }
             else { head->setTexture(uHead); }
             break;
         }
         case Down : {
-            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() + 1 )) {
+            if (singleton.listCheck(singleton.getFood(), head->getPosX(), head->getPosY() + 1 ) ||
+            singleton.listCheck(singleton.getBonus(), head->getPosX(), head->getPosY() + 1 ))
                 head->setTexture(dHeadMiam);
-            }
             else { head->setTexture(dHead); }
             break;
         }
         case Left : {
-            if (singleton.listCheck(singleton.getFood(), head->getPosX() - 1, head->getPosY())) {
+            if (singleton.listCheck(singleton.getFood(), head->getPosX() - 1, head->getPosY()) ||
+            singleton.listCheck(singleton.getBonus(), head->getPosX() - 1, head->getPosY()))
                 head->setTexture(lHeadMiam);
-            }
             else { head->setTexture(lHead); }
             break;
         }
         case Right : {
-            if (singleton.listCheck(singleton.getFood(), head->getPosX() + 1, head->getPosY())) {
+            if (singleton.listCheck(singleton.getFood(), head->getPosX() + 1, head->getPosY()) ||
+            singleton.listCheck(singleton.getBonus(), head->getPosX() + 1, head->getPosY()))
                 head->setTexture(rHeadMiam);
-            }
             else { head->setTexture(rHead); }
             break;
         }
@@ -175,16 +176,24 @@ void  Player::_updateSnake(eDirection direction) {
         singleton.initFood();
         singleton.coreAudio->play(Croc);
     }
-    if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
+    else if (singleton.listCheck(singleton.getBonus(), newHead->getPosX(), newHead->getPosY())) {
+        this->_score += 5;
+        this->_scoreChange = true;
+        this->_grow();
+        deleteEntity(singleton.getBonus().front());
+        singleton.getBonus().clear();
+        singleton.coreAudio->play(Croc);
+    }
+    else if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
     }
-    if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
+    else if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
         singleton.coreAudio->play(Damage);
     }
-    if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
+    else if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
         this->_life--;
         deleteEntity(singleton.getFire().front());
         singleton.getFire().clear();

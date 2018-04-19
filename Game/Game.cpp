@@ -50,6 +50,7 @@ void   Game::setEngine(IGraphism  *engine)
 }
 
 std::list <IEntity *>  &Game::getFood(void) { return this->_food; }
+std::list <IEntity *>  &Game::getBonus(void) { return this->_bonus; }
 std::list <IEntity *>  &Game::getFreePos(void) { return this->_freePos; }
 std::list <IEntity *>  &Game::getWalls(void) { return this->_walls; }
 std::list <IEntity *>  &Game::getFire(void) { return this->_fire; }
@@ -60,6 +61,7 @@ std::list <IEntity *>  Game::mergeEntities(void) const {
     tmp.insert(tmp.end(), this->_food.begin(), this->_food.end());
     tmp.insert(tmp.end(), this->_walls.begin(), this->_walls.end());
     tmp.insert(tmp.end(), this->_fire.begin(), this->_fire.end());
+    tmp.insert(tmp.end(), this->_bonus.begin(), this->_bonus.end());
   return tmp;
 }
 
@@ -103,6 +105,26 @@ void  Game::initFire(void) {
     this->listErase(this->_freePos, (*it)->getPosX(), (*it)->getPosY());
     return;
 }
+void  Game::initBonus(void) {
+    std::list<IEntity *>::iterator it =
+        this->_freePos.begin();
+    std::random_device seed;
+    std::mt19937 engine(seed());
+    std::uniform_int_distribution<int> choose(
+        0,
+        static_cast<int>(this->_freePos.size() - 1)
+    );
+    std::advance(it, choose(engine));
+    IEntity *bonus = createEntity( (*it)->getPosX(), (*it)->getPosY(), Bonus, NoDir, tBonus );
+    if (this->_bonus.size()) {
+        this->listAdd(this->_freePos, createEntity(this->_bonus.front()->getPosX(), this->_bonus.front()->getPosY(), Free, NoDir, None));
+        deleteEntity(this->_bonus.front());
+        this->_bonus.pop_back();
+    }
+    this->listAdd(this->_bonus, bonus);
+    this->listErase(this->_freePos, (*it)->getPosX(), (*it)->getPosY());
+    return;
+}
 
 void  Game::initMap(unsigned int width, unsigned int height) {
     if (this->_freePos.size()) {
@@ -135,10 +157,9 @@ void Game::initGame(unsigned int width, unsigned int height, int mode) {
 void  Game::start(unsigned int width, unsigned int height, int mode) {
     Timer speed(200);
     Timer fire(4000);
-
     this->_engine = createEngine(width, height, Right);
     while (this->_engine->getStatus() != Exit) {
-        this->_engine->handleEvent();
+        this->_engine->handleEvent(speed.getDiff());
         switch(this->_engine->getStatus()) {
             case Play :
                 if((this->_player->getSnake().size()) && !this->_player->checkDeath())
@@ -154,8 +175,11 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                  this->initFire();
             }
             if (speed.update()) {
-                if (this->_player->getScoreChange() && this->_player->getScore() % 5 == 0 && speed.getDiff() >= 70) {
-                    speed.changeDiff(10);
+                if (this->_player->getScoreChange()) {
+                    if (this->_player->getScore() % 5 == 0 && speed.getDiff() >= 70)
+                        speed.changeDiff(10);
+                    if (this->_player->getScore() % 15 == 0)
+                        this->initBonus();
                 }
                 this->_player->move(this->_engine->getDirection());
                 this->refresh();

@@ -19,11 +19,13 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
+install: _install all
+
 all: $(NAME) sdl sfml glfw audio
 
-game: $(NAME)
+lib: sdl sfml glfw audio
 
-install: _assets _install all
+game: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
@@ -48,24 +50,11 @@ fclean: clean
 
 re: fclean all
 
-lib: sdl sfml glfw audio
-
 _install:
-	./install.sh
-
-_assets:
-	@echo "📡 \033[36;1mDownloading archive...\033[0m"
-	@mkdir -p assets
-	@curl -o ./assets.zip -s https://transfer.sh/v9xbO/assets.zip
-	@unzip -q ./assets.zip  -d ./assets
-	@rm -rf  assets/__MACOSX
-	@cp -R assets/assets/* assets
-	@rm -rf assets/assets
-	@rm ./assets.zip
-	@echo "\033[38;5;82m✅ Assets downloaded\033[0m"
+	@./install.sh
 
 aclean:
-	@rm -rf assets schemes.pdf
+	@rm -rf assets
 	@echo "\033[38;5;204m🗑 Assets removed\033[0m"
 
 dsclean:
@@ -75,12 +64,13 @@ dsclean:
 
 sdl:
 	@make re -C ./lib/sdl
+
 sfml:
 	@make re -C ./lib/sfml
+
 glfw:
 	@make re -C ./lib/glfw
-allegro:
-	@make re -C ./lib/allegro
+
 audio:
 	@make re -C ./CoreAudio
 

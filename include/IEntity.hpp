@@ -7,13 +7,14 @@ enum eDirection { NoDir, Up, Down, Left, Right };
 enum eStatus { Play, Pause, Exit, Start };
 enum eEngine { SDL, SFML, GL };
 
-enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4 };
+enum eType { Free = 0, Snake = 1, Food = 2, Wall = 3, Fire = 4, Bonus = 5 };
 
 enum eTexture {
   uHead = 1, uHeadMiam = 5, luCorner = 9, uQueue = 13, vBody = 17, NoImg = 21,
   dHead = 2, dHeadMiam = 6, ldCorner = 10, dQueue = 14, hBody = 18, Life = 22,
   lHead = 3, lHeadMiam = 7, ruCorner = 11, lQueue = 15, tFood = 19, tFire = 23,
-  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20, None = 24
+  rHead = 4, rHeadMiam = 8, rdCorner = 12, rQueue = 16, tWall = 20, tBonus = 24,
+  None = 25,
 };
 
 class IEntity {

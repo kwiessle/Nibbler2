@@ -30,7 +30,8 @@ Window::~Window(void) {
     delete this->window;
 }
 
-void        Window::handleEvent(void) {
+void        Window::handleEvent(int milliseconds) {
+    (void)milliseconds;
     if (this->window->isOpen()) {
         sf::Event event;
         while(this->window->pollEvent(event)) {
@@ -232,7 +233,7 @@ void        deleteWindow(Window *window) {
 }
 
 void       Window::initTextures(void) {
-    for (int i = 1; i <= 23; i++) {
+    for (int i = 1; i <= 24; i++) {
         sf::Texture texture;
         std::string name = "./assets/";
         name += std::to_string(i);

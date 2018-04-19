@@ -35,7 +35,8 @@ Window::~Window(void) {
     glfwTerminate();
 }
 
-void    Window::handleEvent(void) {
+void    Window::handleEvent(int milliseconds) {
+    (void)milliseconds;
     if (!glfwWindowShouldClose(this->pWindow)) {
         glfwPollEvents();
         this->setEngine();
@@ -190,6 +191,7 @@ void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
             break;
         case 19 :
         case 23 :
+        case 24 :
             glTexCoord2f(0,1);
             glVertex2f(x, y);
             glTexCoord2f(0,0);
@@ -305,10 +307,9 @@ unsigned int    Window::getHeight(void) const {
 }
 
 void       Window::initTextures(void) {
-    glGenTextures(23, this->_textures);
+    glGenTextures(24, this->_textures);
 
-    for (int i = 1; i <= 23; i++) {
-
+    for (int i = 1; i <= 24; i++) {
         std::string name = "./assets/";
         name += std::to_string(i);
         name += ".bmp";
