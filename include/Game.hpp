@@ -19,6 +19,7 @@ class Game {
     std::list <IEntity *>         _walls;
     std::list <IEntity *>         _fire;
     std::list <IEntity *>         _freePos;
+    std::list <IEntity *>         _bonus;
     IGraphism                     *_engine;
 
 
@@ -38,6 +39,7 @@ class Game {
     std::list <IEntity *>         &getFreePos(void);
     std::list <IEntity *>         &getWalls(void);
     std::list <IEntity *>         &getFire(void);
+    std::list <IEntity *>         &getBonus(void);
     void                          refresh(void);
     void                          start(unsigned int with, unsigned int height, int mode);
     void                          initGame(unsigned int with, unsigned int height, int mode);
@@ -46,6 +48,7 @@ class Game {
     void                          quit(void) const;
     void                          initFood(void);
     void                          initFire(void);
+    void                          initBonus(void);
     void                          initMode(int mode);
     void                          switchEngine(eEngine engine, eDirection direction);
     void                          listErase(std::list <IEntity *> &list, unsigned int x, unsigned int y);

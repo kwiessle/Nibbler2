@@ -56,8 +56,9 @@ Window::~Window(void) {
     return;
 }
 
-void        Window::handleEvent(void) {
+void        Window::handleEvent(int milliseconds) {
     SDL_Event event;
+    (void)milliseconds;
     while (SDL_PollEvent(&event)){
         this->setEngine(event);
         if (!this->engineChecker){
@@ -252,7 +253,7 @@ unsigned int    Window::getHeight(void) const {
 }
 
 void       Window::initTextures(void) {
-    for (int i = 1; i <= 23; i++) {
+    for (int i = 1; i <= 24; i++) {
         std::string name = "/assets/";
         name += std::to_string(i);
         name += ".bmp";

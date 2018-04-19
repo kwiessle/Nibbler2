@@ -20,7 +20,7 @@ class Window  : public IGraphism {
     void            drawMenu(int lives, int score) const;
     void            initTextures(void);
 
-    void            handleEvent(void);
+    void            handleEvent(int milliseconds);
     void            handlePauseEvent(void);
     eDirection      getDirection(void) const;
     void            setDirection(void);
@@ -49,9 +49,7 @@ class Window  : public IGraphism {
     unsigned int                        wWidth;
     unsigned int                        wHeight;
     GLFWwindow                          *pWindow;
-    GLuint                              _textures[23];
-
-
+    GLuint                              _textures[24];
 };
 
 extern "C" {

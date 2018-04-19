@@ -16,7 +16,7 @@ class Window : public IGraphism {
     void                drawMenu(int lives, int score) const;
     void                initTextures(void);
 
-    void                handleEvent(void);
+    void                handleEvent(int milliseconds);
     void                handlePauseEvent(sf::Event event);
     eDirection          getDirection(void) const;
     void                setDirection(sf::Event event);
