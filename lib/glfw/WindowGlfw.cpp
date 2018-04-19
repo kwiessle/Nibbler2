@@ -191,6 +191,7 @@ void    Window::displayTextures(std::list <IEntity *>::iterator iter) const {
             break;
         case 19 :
         case 23 :
+        case 24 :
             glTexCoord2f(0,1);
             glVertex2f(x, y);
             glTexCoord2f(0,0);
