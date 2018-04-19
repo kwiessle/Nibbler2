@@ -23,7 +23,7 @@ all: $(NAME) sdl sfml glfw audio
 
 game: $(NAME)
 
-install: _assets _install $(NAME) sdl sfml glfw
+install: _assets _install all
 
 $(NAME): $(OBJ)
 	@$(COMPILATOR) $(LDFLAGS) $(OBJ) -o $(NAME)
