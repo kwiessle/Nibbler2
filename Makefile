@@ -46,6 +46,7 @@ fclean: clean
 	@make fclean -C ./lib/sdl
 	@make fclean -C ./lib/sfml
 	@make fclean -C ./lib/glfw
+	@make fclean -C ./CoreAudio
 	@echo "\033[38;5;204m🗑 Nibbler removed\033[0m"
 
 re: fclean all
