@@ -2,6 +2,8 @@
 
 Timer::Timer(void) { return; }
 
+Timer::Timer(Timer const &src) { *this = src; }
+
 Timer::Timer(float diff):
   _diffTime(diff)
 {
@@ -10,6 +12,8 @@ Timer::Timer(float diff):
 }
 
 Timer::~Timer() { return; }
+
+Timer   &Timer::operator=(Timer const &) { return *this; }
 
 int 		Timer::_getMilliCount(void) {
 	timeb tb;

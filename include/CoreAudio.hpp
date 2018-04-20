@@ -9,15 +9,19 @@
 class CoreAudio : public ICoreAudio {
     public:
         CoreAudio(void);
-        CoreAudio(CoreAudio const &src);
         ~CoreAudio(void);
 
         void        play(eSound sound) const;
 
     private:
+        CoreAudio(CoreAudio const &src);
+
+        CoreAudio              &operator=(CoreAudio const &rhs);
+
         Mix_Chunk              *soundCroc;
         Mix_Chunk              *soundTheme;
         Mix_Chunk              *soundDamage;
+        Mix_Chunk              *soundFailure;
 };
 
 extern "C" {

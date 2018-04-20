@@ -4,12 +4,15 @@
 
 # include <time.h>
 # include <sys/timeb.h>
-// # include <unistd.h>
-// # include <stdlib.h>
+
 
 
 class Timer {
 	private:
+		Timer(Timer const & src);
+
+		Timer &			operator=(Timer const & rhs);
+
 		int		_refTimer;
 		int		_newTimer;
 		int		_diffTime;
@@ -17,16 +20,14 @@ class Timer {
 		int 	_getMilliCount();
 
 	public:
-		Timer();
+		Timer(void);
 		Timer(float diff);
-		// Timer(Timer const & src);
-		~Timer();
-		void 				changeDiff(float newdiff);
-		void        		resetDiff(float diff);
-		int				getDiff(void) const;
-		bool				update();
+		~Timer(void);
 
-		// Timer &			operator=(Timer const & rhs);
+		void 				changeDiff(float newdiff);
+		void        resetDiff(float diff);
+		int					getDiff(void) const;
+		bool				update();
 };
 
 

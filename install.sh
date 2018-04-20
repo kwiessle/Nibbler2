@@ -2,7 +2,7 @@
 
 echo "📡 \033[36;1mDownloading archive...\033[0m"
 mkdir -p assets
-curl -o ./assets.zip -s https://transfer.sh/v9xbO/assets.zip
+curl -o ./assets.zip -s https://transfer.sh/oEyke/assets.zip
 unzip -q ./assets.zip  -d ./assets
 rm -rf  assets/__MACOSX
 cp -R assets/assets/* assets

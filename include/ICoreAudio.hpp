@@ -3,7 +3,7 @@
 
 
 
-enum eSound { Theme, Croc, Damage };
+enum eSound { Theme, Croc, Damage, Failure };
 
 class ICoreAudio {
     public:

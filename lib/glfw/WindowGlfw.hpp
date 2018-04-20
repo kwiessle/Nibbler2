@@ -13,6 +13,9 @@
 class Window  : public IGraphism {
   private:
     Window(void);
+    Window(Window const &src);
+
+    Window  &operator=(Window const &rhs);
 
     void            drawFrame(std::list <IEntity *> data, int lives, int score) const;
     void            displayTextures(std::list <IEntity *>::iterator iter) const;

@@ -9,6 +9,9 @@
 class Window : public IGraphism {
   private:
     Window(void);
+    Window(Window const &src);
+
+    Window  &operator=(Window const &rhs);
 
     void              drawFrame(std::list <IEntity *> data, int lives, int score) const;
     bool              displayPause(int score);

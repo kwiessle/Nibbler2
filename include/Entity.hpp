@@ -7,6 +7,9 @@
 class Entity : public IEntity  {
   private:
     Entity(void);
+    Entity(Entity const &src);
+
+    Entity  &operator=(Entity const &rhs);
 
     unsigned int          _posX;
     unsigned int          _posY;

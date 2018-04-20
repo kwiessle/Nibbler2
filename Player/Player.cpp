@@ -17,6 +17,8 @@ Player::Player(std::list <IEntity *> snake, int life, int score, int speed) :
   _scoreChange(false)
 { return; }
 
+Player::Player(Player const &src) { *this = src; }
+
 Player::~Player(void) {
     std::list<IEntity *>::iterator it = this->_snake.begin();
     while (it != this->_snake.end()) {
@@ -25,6 +27,8 @@ Player::~Player(void) {
     }
     return;
 }
+
+Player    &Player::operator=(Player const &) { return *this; }
 
 std::list <IEntity *>    Player::getSnake(void) const
   { return this->_snake; }
@@ -187,21 +191,24 @@ void  Player::_updateSnake(eDirection direction) {
     else if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
+        singleton.coreAudio->play(Failure);
     }
     else if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
         singleton.coreAudio->play(Damage);
+        singleton.coreAudio->play(Failure);
     }
     else if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
         this->_life--;
         deleteEntity(singleton.getFire().front());
         singleton.getFire().clear();
+        singleton.coreAudio->play(Damage);
         if (this->_life == 0) {
             singleton.getEngine()->updateStatus(Pause);
             this->_dead = true;
+            singleton.coreAudio->play(Failure);
         }
-        singleton.coreAudio->play(Damage);
     }
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());

@@ -7,6 +7,10 @@ Game::Game(void) {
     return;
 }
 
+Game::Game(Game const &src) { *this = src; }
+
+Game  &Game::operator=(Game const &) { return *this; }
+
 Game::~Game(void) {
     std::list<IEntity *>::iterator itPos = this->_freePos.begin();
     while (itPos != this->_freePos.end()) {
@@ -32,6 +36,8 @@ Game::~Game(void) {
     dlclose(BINARY_LIB);
     dlclose(BINARY_AUDIO);
 }
+
+
 
 Game   &Game::singleton(void) {
   static Game game;

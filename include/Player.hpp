@@ -7,6 +7,10 @@
 
 class Player {
   private:
+    Player(Player const &src);
+
+    Player  &operator=(Player const &rhs);
+
     std::list <IEntity *>                   _snake;
     int                                     _life;
     int                                     _score;

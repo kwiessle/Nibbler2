@@ -13,6 +13,9 @@
 class Game {
   private:
     Game(void);
+    Game(Game const &src);
+
+    Game    &operator=(Game const &rhs);
 
     Player                        *_player;
     std::list <IEntity *>         _food;

@@ -2,6 +2,9 @@
 #include "Exception.hpp"
 
 Window::Window(void) { return; }
+Window::Window(Window const &src) { *this = src; }
+
+Window  &Window::operator=(Window const &) { return *this; }
 
 Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   direction(direction),

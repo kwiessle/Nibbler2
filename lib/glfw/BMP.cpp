@@ -1,7 +1,10 @@
 #include "BMP.hpp"
 
 BMP::BMP(void) { return; }
+BMP::BMP(BMP const &src) { *this = src; }
 BMP::~BMP(void) { return; }
+
+BMP   &BMP::operator=(BMP const &) { return *this; }
 
 BMP::BMP(const char* FilePath)
 {

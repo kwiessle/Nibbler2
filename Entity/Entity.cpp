@@ -2,6 +2,8 @@
 
 Entity::Entity(void) { return; }
 
+Entity::Entity(Entity const &src) { *this = src; }
+
 Entity::Entity(unsigned int x, unsigned int y, eType type, eDirection direction, eTexture texture) :
     _posX(x),
     _posY(y),
@@ -12,6 +14,7 @@ Entity::Entity(unsigned int x, unsigned int y, eType type, eDirection direction,
 
 Entity::~Entity(void) { return; }
 
+Entity  &Entity::operator=(Entity const &) { return *this; }
 
 // GETTERS & SETTERS
 
