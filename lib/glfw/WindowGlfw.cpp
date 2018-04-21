@@ -258,7 +258,7 @@ void    Window::drawMenu(int lives, int score) const {
     std::string sScore = std::to_string(score);
     const char *tmp = sScore.c_str();
     for( unsigned int i = 0; i < sScore.length(); i++)
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tmp[i]);
 }
 
 bool   Window::displayPause(int score) {
@@ -294,7 +294,7 @@ bool   Window::displayPause(int score) {
         sScore += std::to_string(score);
         const char *tmp = sScore.c_str();
         for( unsigned int i = 0; i < sScore.length(); i++)
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tmp[i]);
     }
     glColor3f(1, 1, 1);
     glfwSwapBuffers(this->pWindow);

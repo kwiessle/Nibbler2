@@ -196,19 +196,19 @@ void  Player::_updateSnake(eDirection direction) {
     else if (singleton.listCheck(singleton.getWalls(), newHead->getPosX(), newHead->getPosY())) {
         singleton.getEngine()->updateStatus(Pause);
         this->_dead = true;
-        singleton.coreAudio->play(Damage);
         singleton.coreAudio->play(Failure);
     }
     else if (singleton.listCheck(singleton.getFire(), newHead->getPosX(), newHead->getPosY())) {
         this->_life--;
         deleteEntity(singleton.getFire().front());
         singleton.getFire().clear();
-        singleton.coreAudio->play(Damage);
         if (this->_life == 0) {
             singleton.getEngine()->updateStatus(Pause);
             this->_dead = true;
             singleton.coreAudio->play(Failure);
         }
+        else
+            singleton.coreAudio->play(Damage);
     }
     this->_fillQueue();
     this->_fillNeck(newHead->getDirection());
