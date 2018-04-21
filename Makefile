@@ -19,9 +19,9 @@ GREEN = '\033[1;32m'
 BLUE = '\033[1;36m'
 RED = '\033[1;31m'
 
-install: _install all
-
 all: $(NAME) sdl sfml glfw audio
+
+install: _install all
 
 lib: sdl sfml glfw audio
 
@@ -39,6 +39,7 @@ clean:
 	@make clean -C ./lib/sdl
 	@make clean -C ./lib/sfml
 	@make clean -C ./lib/glfw
+	@make clean -C ./CoreAudio
 	@echo "\033[38;5;204m🗑 Object files removed\033[0m"
 
 fclean: clean
@@ -64,15 +65,15 @@ dsclean:
 	@echo "\033[38;5;204m🗑 All '.DS_STORE' files removed\033[0m"
 
 sdl:
-	@make re -C ./lib/sdl
+	@make -C ./lib/sdl
 
 sfml:
-	@make re -C ./lib/sfml
+	@make -C ./lib/sfml
 
 glfw:
-	@make re -C ./lib/glfw
+	@make -C ./lib/glfw
 
 audio:
-	@make re -C ./CoreAudio
+	@make -C ./CoreAudio
 
 .PHONY : re fclean clean all libs aclean dsclean sdl sfml glfw game install
