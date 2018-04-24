@@ -30,9 +30,7 @@ Player::~Player(void) {
 
 Player    &Player::operator=(Player const &) { return *this; }
 
-std::list <IEntity *>    Player::getSnake(void) const
-  { return this->_snake; }
-
+std::list <IEntity *>   Player::getSnake(void) const { return this->_snake; }
 bool    Player::checkDeath(void) const { return this->_dead; }
 int     Player::getLife(void) const { return this->_life; }
 int     Player::getScore(void) const { return this->_score; }
@@ -54,8 +52,8 @@ void  Player::initSnake(void) {
 }
 
 void  Player::move(eDirection direction) {
-  this->_updateSnake(direction);
-  return;
+    this->_updateSnake(direction);
+    return;
 }
 
 void  Player::_fillNeck(eDirection headDirection) {
@@ -148,19 +146,19 @@ void  Player::_grow(void) {
     Game &singleton = Game::singleton();
     switch ( queue->getDirection() ) {
       case Up :
-        piece = createEntity(queue->getPosX(), queue->getPosY() + 1, Snake, queue->getDirection(), queue->getTexture() );
-        break;
+            piece = createEntity(queue->getPosX(), queue->getPosY() + 1, Snake, queue->getDirection(), queue->getTexture() );
+            break;
       case Down :
-        piece = createEntity(queue->getPosX(), queue->getPosY() - 1, Snake, queue->getDirection(), queue->getTexture() );
-        break;
+            piece = createEntity(queue->getPosX(), queue->getPosY() - 1, Snake, queue->getDirection(), queue->getTexture() );
+            break;
       case Left :
-        piece = createEntity(queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
-        break;
+            piece = createEntity(queue->getPosX() + 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
+            break;
       case Right :
-        piece = createEntity(queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
-        break;
+            piece = createEntity(queue->getPosX() - 1, queue->getPosY(), Snake, queue->getDirection(), queue->getTexture() );
+            break;
       default:
-        break;
+            break;
     }
     singleton.listAdd(this->_snake, piece);
     singleton.listErase(singleton.getFreePos(), piece->getPosX(),  piece->getPosY());
@@ -175,6 +173,7 @@ void  Player::_updateSnake(eDirection direction) {
     this->_scoreChange = false;
     if (singleton.listCheck(singleton.getFood(), newHead->getPosX(), newHead->getPosY())) {
         this->_score++;
+        singleton.setBestScore(this->_score);
         this->_scoreChange = true;
         this->_grow();
         singleton.initFood();
@@ -182,10 +181,10 @@ void  Player::_updateSnake(eDirection direction) {
     }
     else if (singleton.listCheck(singleton.getBonus(), newHead->getPosX(), newHead->getPosY())) {
         this->_score += 5;
+        singleton.setBestScore(this->_score);
         this->_scoreChange = true;
         this->_grow();
-        deleteEntity(singleton.getBonus().front());
-        singleton.getBonus().clear();
+        singleton.listErase(singleton.getBonus(),newHead->getPosX(), newHead->getPosY());
         singleton.coreAudio->play(Croc);
     }
     else if (singleton.listCheck(this->_snake, newHead->getPosX(), newHead->getPosY())) {

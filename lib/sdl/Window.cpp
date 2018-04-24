@@ -204,20 +204,21 @@ void    Window::drawMenu(int lives, int score) const {
   }
 
   SDL_Color White = {255, 255, 255, 0};
-  std::string sScore = std::to_string(score);
+  std::string sScore = "Score : ";
+  sScore += std::to_string(score);
   surface = TTF_RenderText_Blended(this->pFont, sScore.c_str(), White);
   texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
   form.x =  this->wWidth * CELL_UNITY - 140;
   form.y = this->wHeight * CELL_UNITY + CELL_UNITY / 2;
-  form.w = 40;
-  form.h = 30;
+  form.w = 80;
+  form.h = 24;
   SDL_RenderCopy(this->pRenderer, texture, nullptr, &form);
   SDL_DestroyTexture(texture);
   SDL_FreeSurface(surface);
   return;
 }
 
-bool            Window::displayPause(int score) {
+bool            Window::displayPause(int score, int bestScore) {
     SDL_Rect  background = {0, 0, static_cast<int>(this->wWidth * CELL_UNITY), static_cast<int>(this->wHeight * CELL_UNITY) };
     SDL_Surface *img = SDL_LoadBMP("/assets/menu.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(this->pRenderer, img);
@@ -233,6 +234,8 @@ bool            Window::displayPause(int score) {
         SDL_Color White = {255, 255, 255, 0};
         std::string sScore = "You lose... Your score was: ";
         sScore += std::to_string(score);
+        sScore +=  " Your best score is: ";
+        sScore += std::to_string(bestScore);
         surface = TTF_RenderText_Blended(this->pFont, sScore.c_str(), White);
         texture = SDL_CreateTextureFromSurface(this->pRenderer, surface);
         form.x =  CELL_UNITY;

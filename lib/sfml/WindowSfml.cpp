@@ -178,19 +178,20 @@ void    Window::drawMenu(int lives, int score) const {
     }
     sf::Text text;
     text.setFont(this->pFont);
-    std::string sScore = std::to_string(score);
+    std::string sScore = "Score : ";
+    sScore += std::to_string(score);
     text.setString(sScore.c_str());
-    text.setCharacterSize(30);
+    text.setCharacterSize(24);
     text.setFillColor(sf::Color::White);
     text.setPosition(sf::Vector2f(
         this->wWidth * CELL_UNITY - 140,
-        this->wHeight * CELL_UNITY + CELL_UNITY /2
+        this->wHeight * CELL_UNITY + CELL_UNITY / 2
     ));
     this->window->draw(text);
   return;
 }
 
-bool            Window::displayPause(int score)  {
+bool            Window::displayPause(int score, int bestScore)  {
     sf::Color color(22,22, 24, 0);
     sf::Texture img;
     sf::Sprite background;
@@ -205,6 +206,8 @@ bool            Window::displayPause(int score)  {
         text.setFont(this->pFont);
         std::string sScore = "You lose... Your score was: ";
         sScore += std::to_string(score);
+        sScore +=  " Your best score is: ";
+        sScore += std::to_string(bestScore);
         text.setString(sScore.c_str());
         text.setCharacterSize(20);
         text.setFillColor(sf::Color::White);

@@ -13,7 +13,7 @@ class IGraphism {
     virtual ~IGraphism(void) {}
 
     virtual void            drawFrame(std::list <IEntity *> data, int lives, int score) const = 0;
-    virtual bool            displayPause(int score)  = 0;
+    virtual bool            displayPause(int score, int bestScore) = 0;
     virtual void            handleEvent(int milliseconds) = 0;
     virtual eDirection      getDirection(void) const = 0;
     virtual void            updateDirection(eDirection status) = 0;

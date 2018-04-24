@@ -255,13 +255,14 @@ void    Window::drawMenu(int lives, int score) const {
     glRasterPos2i(this->wWidth * CELL_UNITY - 140,
     this->wHeight * CELL_UNITY + CELL_UNITY / 2);
     glColor3f(1.0f, 1.0f, 1.0f);
-    std::string sScore = std::to_string(score);
+    std::string sScore = "Score : ";
+    sScore += std::to_string(score);
     const char *tmp = sScore.c_str();
     for( unsigned int i = 0; i < sScore.length(); i++)
     glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tmp[i]);
 }
 
-bool   Window::displayPause(int score) {
+bool   Window::displayPause(int score, int bestScore) {
     glClearColor(22/255.0, 22/255.0, 24/255.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
     GLuint background;
@@ -292,6 +293,8 @@ bool   Window::displayPause(int score) {
         glColor3f(1.0f, 1.0f, 1.0f);
         std::string sScore = "You lose... Your score was: ";
         sScore += std::to_string(score);
+        sScore +=  " Your best score is: ";
+        sScore += std::to_string(bestScore);
         const char *tmp = sScore.c_str();
         for( unsigned int i = 0; i < sScore.length(); i++)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tmp[i]);

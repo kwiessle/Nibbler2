@@ -30,16 +30,14 @@ class Player {
     Player(int life, int score); //Use this constructor for default game.
     Player(std::list <IEntity *> snake, int life, int score, int speed);         //Use this constructor for load a saved game.
     ~Player(void);
-
+    void                         initSnake(void);
     void                         move(eDirection direction);
-
     std::list <IEntity *>        getSnake(void) const;
     int                          getLife(void) const;
     int                          getScore(void) const;
     bool                         getScoreChange(void) const;
     int                          getSpeed(void) const;
     bool                         checkDeath(void) const;
-    void                         initSnake(void);
 
 
 };
