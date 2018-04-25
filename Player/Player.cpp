@@ -38,15 +38,19 @@ bool    Player::getScoreChange(void) const { return this->_scoreChange; }
 
 void  Player::initSnake(void) {
     Game &singleton = Game::singleton();
+    unsigned int width = singleton.getEngine()->getWidth();
+    unsigned int height = singleton.getEngine()->getHeight();
+    singleton.listErase(singleton.getFreePos(), width / 2 + 1, height / 2);
+    singleton.listAdd(this->_snake, createEntity(width / 2 + 1, height / 2, Snake, Right, rHead));
 
-    singleton.listErase(singleton.getFreePos(), 3, 1);
-    singleton.listAdd(this->_snake, createEntity(3, 1, Snake, Right, rHead));
+    singleton.listErase(singleton.getFreePos(), width / 2, height / 2);
+    singleton.listAdd(this->_snake, createEntity(width / 2, height / 2, Snake, Right, hBody));
 
-    singleton.listErase(singleton.getFreePos(), 2, 1);
-    singleton.listAdd(this->_snake, createEntity(2, 1, Snake, Right, hBody));
+    singleton.listErase(singleton.getFreePos(), width / 2 - 1, height / 2);
+    singleton.listAdd(this->_snake, createEntity(width / 2 - 1, height / 2, Snake, Right, hBody));
 
-    singleton.listErase(singleton.getFreePos(), 1, 1);
-    singleton.listAdd(this->_snake, createEntity(1, 1, Snake, Right, rQueue));
+    singleton.listErase(singleton.getFreePos(), width / 2 - 2, height / 2);
+    singleton.listAdd(this->_snake, createEntity(width / 2 - 2, height / 2, Snake, Right, rQueue));
     this->_dead = false;
     return;
 }
