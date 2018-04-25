@@ -3,8 +3,19 @@
 Game::Game(void) {
     this->_player = new Player(4, 0);
     this->coreAudio = createCoreAudio();
-    this->coreAudio->play(Theme);
-    this->_bestScore = 0;
+    this->coreAudio->play(Theme);;
+    std::ifstream file;
+    file.open("./assets/.bestscore.txt");
+    int score;
+    if (file.is_open()) {
+        if(file.good()) {
+            file >> score;
+            this->_bestScore = score;
+        }
+        file.close();
+    }
+    else
+        this->_bestScore = 0;
     return;
 }
 
@@ -207,6 +218,10 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             this->_engine->updateStatus(tmp);
         }
     }
+    std::ofstream outfile("./assets/.bestscore.txt");
+    std::string s = std::to_string(this->_bestScore);
+    outfile << s.c_str() << std::endl;
+    outfile.close();
     return;
 }
 
