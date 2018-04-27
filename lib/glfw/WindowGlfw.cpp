@@ -253,7 +253,7 @@ void    Window::drawMenu(int lives, int score) const {
         lives--;
     }
     glRasterPos2i(this->wWidth * CELL_UNITY - 140,
-    this->wHeight * CELL_UNITY + CELL_UNITY / 2);
+    y);
     glColor3f(1.0f, 1.0f, 1.0f);
     std::string sScore = "Score : ";
     sScore += std::to_string(score);
