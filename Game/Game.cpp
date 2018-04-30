@@ -181,6 +181,11 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             case Start :
                 this->initGame(width, height, mode);
                 speed.resetDiff(200);
+                if (this->_fire.size()) {
+                    this->listAdd(this->_freePos, createEntity(this->_fire.front()->getPosX(), this->_fire.front()->getPosY(), Free, NoDir, None));
+                    deleteEntity(this->_fire.front());
+                    this->_fire.pop_back();
+                }
                 this->_engine->updateStatus(Play);
             default : break;
         }
