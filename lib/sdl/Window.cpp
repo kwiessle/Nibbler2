@@ -10,7 +10,6 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   direction(direction),
   status(Pause),
   engine(SDL),
-  engineChecker(false),
   wWidth(width),
   wHeight(height)
  {
@@ -64,13 +63,11 @@ void        Window::handleEvent(int milliseconds) {
     (void)milliseconds;
     while (SDL_PollEvent(&event)){
         this->setEngine(event);
-        if (!this->engineChecker){
-            this->setStatus(event);
-            if (this->status == Play)
-                this->setDirection(event);
-            else if (this->status == Pause)
-                this->handlePauseEvent(event);
-        }
+        this->setStatus(event);
+        if (this->status == Play)
+            this->setDirection(event);
+        else if (this->status == Pause)
+            this->handlePauseEvent(event);
     }
 }
 
@@ -138,7 +135,7 @@ void    Window::updateStatus(eStatus status) {
 }
 
 void    Window::setEngine(SDL_Event event) {
-    if (event.type == SDL_KEYDOWN) {
+    if (event.type == SDL_KEYDOWN && !this->engineChecker) {
         if (event.key.keysym.sym == 102 && this->engine != GL) {
             this->engine = GL;
             this->engineChecker = true;
@@ -159,6 +156,10 @@ eEngine  Window::getEngine(void) const {
 
 bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
+}
+
+void    Window::setEngineChange(bool status) {
+    this->engineChecker = status;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {

@@ -11,7 +11,6 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   direction(direction),
   status(Pause),
   engine(GL),
-  engineChecker(false),
   wWidth(width),
   wHeight(height)
 {
@@ -114,18 +113,20 @@ void    Window::updateStatus(eStatus status)  {
 }
 
 void    Window::setEngine(void) {
-    if (glfwGetKey(this->pWindow, GLFW_KEY_F) == GLFW_PRESS &&
-        this->engine != SFML) {
-            this->engine = SFML;
-            this->engineChecker = true;
-            glfwSetWindowShouldClose(this->pWindow, true);
-        }
-    else if (glfwGetKey(this->pWindow, GLFW_KEY_G) == GLFW_PRESS &&
-        this->engine != SDL) {
-             this->engine = SDL;
-             this->engineChecker = true;
-             glfwSetWindowShouldClose(this->pWindow, true);
-        }
+    if (!this->engineChecker) {
+        if (glfwGetKey(this->pWindow, GLFW_KEY_F) == GLFW_PRESS &&
+            this->engine != SFML) {
+                this->engine = SFML;
+                this->engineChecker = true;
+                glfwSetWindowShouldClose(this->pWindow, true);
+            }
+            else if (glfwGetKey(this->pWindow, GLFW_KEY_G) == GLFW_PRESS &&
+            this->engine != SDL) {
+                this->engine = SDL;
+                this->engineChecker = true;
+                glfwSetWindowShouldClose(this->pWindow, true);
+            }
+    }
     return;
 }
 
@@ -135,6 +136,10 @@ eEngine  Window::getEngine(void) const {
 
 bool    Window::engineHasChanged(void) const {
     return this->engineChecker;
+}
+
+void    Window::setEngineChange(bool status) {
+    this->engineChecker = status;
 }
 
 void    Window::drawFrame(std::list <IEntity *> data, int lives, int score) const {

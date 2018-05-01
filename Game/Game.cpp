@@ -191,15 +191,6 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 this->_engine->updateStatus(Play);
             default : break;
         }
-        if (this->_engine->engineHasChanged()) {
-            eStatus tmp = this->_engine->getStatus();
-            this->_engine->updateStatus(Pause);
-            switchEngine(
-                this->_engine->getEngine(),
-                this->_engine->getDirection()
-            );
-            this->_engine->updateStatus(tmp);
-        }
         if (frame_count == 30) {
             this->update();
             frame_count = 0;
@@ -215,6 +206,16 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
 }
 
 void    Game::update(void) {
+    if (this->_engine->engineHasChanged()) {
+        eStatus tmp = this->_engine->getStatus();
+        this->_engine->updateStatus(Pause);
+        switchEngine(
+            this->_engine->getEngine(),
+            this->_engine->getDirection()
+        );
+        this->_engine->updateStatus(tmp);
+        this->_engine->setEngineChange(false);
+    }
     if (this->_engine->getStatus() == Play) {
         if (this->_fireTimer.update())
             this->initFire();

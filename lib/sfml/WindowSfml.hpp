@@ -34,6 +34,7 @@ class Window : public IGraphism {
     void                setEngine(sf::Event event);
     eEngine             getEngine(void) const;
     bool                engineHasChanged(void) const;
+    void                setEngineChange(bool status);
 
     unsigned int        getWidth(void) const;
     unsigned int        getHeight(void) const;

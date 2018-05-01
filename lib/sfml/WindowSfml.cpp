@@ -10,7 +10,6 @@ Window::Window(unsigned int width, unsigned int height, eDirection direction) :
   direction(direction),
   status(Pause),
   engine(SFML),
-  engineChecker(false),
   wWidth(width),
   wHeight(height)
 {
@@ -40,13 +39,11 @@ void        Window::handleEvent(int milliseconds) {
         sf::Event event;
         while(this->window->pollEvent(event)) {
             this->setEngine(event);
-            if (!this->engineChecker) {
-                this->setStatus(event);
+            this->setStatus(event);
             if (this->status == Play)
                 this->setDirection(event);
             else if (this->status == Pause)
                 this->handlePauseEvent(event);
-            }
         }
     }
 }
@@ -116,7 +113,7 @@ void    Window::updateStatus(eStatus status)  {
 }
 
 void    Window::setEngine(sf::Event event) {
-    if (event.type == sf::Event::KeyPressed) {
+    if (event.type == sf::Event::KeyPressed && !this->engineChecker) {
         if (event.key.code == sf::Keyboard::F && this->engine != SDL) {
             this->engine = SDL;
             this->engineChecker = true;
@@ -139,6 +136,10 @@ eEngine  Window::getEngine(void) const {
 
 bool    Window::engineHasChanged(void) const{
     return this->engineChecker;
+}
+
+void    Window::setEngineChange(bool status) {
+    this->engineChecker = status;
 }
 
 void      Window::drawFrame(std::list <IEntity *> data,int lives, int score) const {

@@ -8,6 +8,10 @@
 # include <iostream>
 # include "IEntity.hpp"
 
+
+enum eEngine { SDL, SFML, GL };
+enum eStatus { Play, Pause, Exit, Start };
+
 class IGraphism {
   public:
     virtual ~IGraphism(void) {}
@@ -25,6 +29,7 @@ class IGraphism {
 
     virtual eEngine         getEngine(void) const = 0;
     virtual bool            engineHasChanged(void) const = 0;
+    virtual void            setEngineChange(bool status) = 0;
 
     virtual unsigned int    getWidth(void) const = 0;
     virtual unsigned int    getHeight(void) const = 0;
