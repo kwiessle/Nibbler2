@@ -66,18 +66,20 @@ eDirection   Window::getDirection(void) const {
 }
 
 void    Window::setDirection(void) {
+    if (!this->directionChecker) {
     if (glfwGetKey(this->pWindow, GLFW_KEY_UP) == GLFW_PRESS &&
         this->direction != Down)
-        { this->direction = Up; }
+        { this->directionChecker = true; this->direction = Up; }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_DOWN) == GLFW_PRESS &&
         this->direction != Up)
-        { this->direction = Down; }
+        { this->directionChecker = true; this->direction = Down; }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_LEFT) == GLFW_PRESS &&
         this->direction != Right)
-        { this->direction = Left; }
+        { this->directionChecker = true; this->direction = Left; }
     else if (glfwGetKey(this->pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS &&
         this->direction != Left)
-        { this->direction = Right; }
+        { this->directionChecker = true; this->direction = Right; }
+    }
 
 }
 

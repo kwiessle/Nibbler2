@@ -36,6 +36,7 @@ class Player {
     int                          getLife(void) const;
     int                          getScore(void) const;
     bool                         getScoreChange(void) const;
+    void                         setScoreChange(bool status);
     int                          getSpeed(void) const;
     bool                         checkDeath(void) const;
 

@@ -36,6 +36,8 @@ int     Player::getLife(void) const { return this->_life; }
 int     Player::getScore(void) const { return this->_score; }
 bool    Player::getScoreChange(void) const { return this->_scoreChange; }
 
+void    Player::setScoreChange(bool status)  { this->_scoreChange = status; }
+
 void  Player::initSnake(void) {
     Game &singleton = Game::singleton();
     unsigned int width = singleton.getEngine()->getWidth();

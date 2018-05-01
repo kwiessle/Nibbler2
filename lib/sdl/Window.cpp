@@ -88,15 +88,19 @@ void    Window::handlePauseEvent(SDL_Event event) {
     return;
 }
 void    Window::setDirection(SDL_Event event) {
-    if (event.type == SDL_KEYDOWN) {
-        if (event.key.keysym.sym == SDLK_UP && this->direction != Down && this->direction != Up)
-            { this->directionChecker = true; this->direction = Up; return; }
-        else if (event.key.keysym.sym == SDLK_DOWN  && this->direction != Up && this->direction != Down)
-            { this->directionChecker = true; this->direction = Down; return; }
-        else if (event.key.keysym.sym == SDLK_LEFT && this->direction != Right && this->direction != Left)
-            { this->directionChecker = true; this->direction = Left; return; }
-        else if (event.key.keysym.sym == SDLK_RIGHT && this->direction != Left && this->direction != Right)
-            { this->directionChecker = true; this->direction = Right; return; }
+    if (event.type == SDL_KEYDOWN && !this->directionChecker) {
+        if (event.key.keysym.sym == SDLK_UP && this->direction != Down && this->direction != Up ) {
+            this->directionChecker = true; this->direction = Up;
+        }
+        else if (event.key.keysym.sym == SDLK_DOWN  && this->direction != Up && this->direction != Down) {
+            this->directionChecker = true; this->direction = Down;
+        }
+        else if (event.key.keysym.sym == SDLK_LEFT && this->direction != Right && this->direction != Left) {
+            this->directionChecker = true; this->direction = Left;
+        }
+        else if (event.key.keysym.sym == SDLK_RIGHT && this->direction != Left && this->direction != Right ) {
+            this->directionChecker = true; this->direction = Right;
+        }
     }
     return;
 }

@@ -8,6 +8,7 @@
 # include <random>
 # include <unistd.h>
 # include <fstream>
+# include <sys/time.h>
 
 
 
@@ -27,6 +28,8 @@ class Game {
     std::list <IEntity *>         _bonus;
     int                           _bestScore;
     IGraphism                     *_engine;
+    Timer                          _speedTimer;
+    Timer                          _fireTimer;
 
 
   public:
@@ -47,6 +50,8 @@ class Game {
     void                          initMode(int mode);
     void                          initMap(unsigned int width, unsigned int height);
     void                          start(unsigned int with, unsigned int height, int mode);
+    void                          draw(void);
+    void                          update(void);
     void                          switchEngine(eEngine engine, eDirection direction);
     void                          setEngine(IGraphism  *engine);
     void                          setBestScore(int score);

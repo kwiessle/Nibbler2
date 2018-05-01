@@ -13,7 +13,10 @@ Timer::Timer(float diff):
 
 Timer::~Timer() { return; }
 
-Timer   &Timer::operator=(Timer const &) { return *this; }
+Timer   &Timer::operator=(Timer const &rhs) {
+    this->_diffTime = rhs._diffTime;
+    return *this;
+}
 
 int     Timer::_getMilliCount(void) {
     timeb tb;
@@ -30,6 +33,14 @@ void    Timer::changeDiff(float newDiff) {
 
 int     Timer::getDiff(void) const {
     return this->_diffTime;
+}
+
+bool    Timer::needUpdate(void) {
+    int checker = _getMilliCount();
+    if (difftime(checker, _refTimer) > _diffTime) {
+        return true;
+    }
+    return false;
 }
 
 bool    Timer::update(void) {

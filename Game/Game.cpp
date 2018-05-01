@@ -169,18 +169,20 @@ void Game::initMode(int mode) {
 }
 
 void  Game::start(unsigned int width, unsigned int height, int mode) {
-    Timer speed(200);
-    Timer fire(4000);
+    this->_speedTimer = Timer(250);
+    this->_fireTimer =  Timer(4000);
+    int frame_count = 0;
+
     this->_engine = createEngine(width, height, Right);
     while (this->_engine->getStatus() != Exit) {
-        this->_engine->handleEvent(speed.getDiff());
+        this->_engine->handleEvent(this->_speedTimer.getDiff());
         switch(this->_engine->getStatus()) {
             case Play :
                 if ((this->_player->getSnake().size()) && !this->_player->checkDeath())
                     break;
             case Start :
                 this->initGame(width, height, mode);
-                speed.resetDiff(200);
+                this->_speedTimer.resetDiff(250);
                 if (this->_fire.size()) {
                     this->listAdd(this->_freePos, createEntity(this->_fire.front()->getPosX(), this->_fire.front()->getPosY(), Free, NoDir, None));
                     deleteEntity(this->_fire.front());
@@ -188,30 +190,6 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
                 }
                 this->_engine->updateStatus(Play);
             default : break;
-        }
-        if ( this->_engine->getStatus() == Play ) {
-            if (fire.update())
-                this->initFire();
-            if (speed.update()) {
-                if (this->_player->getScoreChange()) {
-                    if (this->_player->getScore() % 5 == 0 && speed.getDiff() >= 80)
-                        speed.changeDiff(10);
-                    if (this->_player->getScore() % 15 == 0)
-                        this->initBonus();
-                }
-                this->_player->move(this->_engine->getDirection());
-                this->_engine->drawFrame(
-                    this->mergeEntities(),
-                    this->_player->getLife(), this->_player->getScore()
-                );
-                this->_engine->reverseDirectionChecker();
-            }
-        }
-        if (this->_engine->getStatus() == Pause) {
-            if (this->_player->getSnake().size() && this->_player->checkDeath())
-                this->_engine->displayPause(this->_player->getScore(), this->_bestScore);
-            else
-                this->_engine->displayPause(-1, -1);
         }
         if (this->_engine->engineHasChanged()) {
             eStatus tmp = this->_engine->getStatus();
@@ -222,12 +200,58 @@ void  Game::start(unsigned int width, unsigned int height, int mode) {
             );
             this->_engine->updateStatus(tmp);
         }
+        if (frame_count == 30) {
+            this->update();
+            frame_count = 0;
+        }
+        else frame_count++;
+        this->draw();
     }
     std::ofstream outfile("./assets/.bestscore.txt");
     std::string s = std::to_string(this->_bestScore);
     outfile << s.c_str() << std::endl;
     outfile.close();
     return;
+}
+
+void    Game::update(void) {
+    if (this->_engine->getStatus() == Play) {
+        if (this->_fireTimer.update())
+            this->initFire();
+
+        if (this->_player->getScoreChange()) {
+            if (this->_player->getScore() % 5 == 0
+                && this->_speedTimer.getDiff() >= 80) {
+                this->_speedTimer.changeDiff(10);
+            }
+            if (this->_player->getScore() % 15 == 0)
+                this->initBonus();
+            this->_player->setScoreChange(false);
+        }
+        if (this->_speedTimer.update()) {
+            eDirection direction = this->_engine->getDirection();
+            if (this->_engine->directionHasChanged()) {
+                direction = this->_engine->getDirection();
+                this->_engine->reverseDirectionChecker();
+            }
+            this->_player->move(direction);
+        }
+    }
+}
+
+void    Game::draw(void) {
+    if (this->_engine->getStatus() == Play) {
+        this->_engine->drawFrame(
+            this->mergeEntities(),
+            this->_player->getLife(), this->_player->getScore()
+        );
+    }
+    if (this->_engine->getStatus() == Pause) {
+        if (this->_player->getSnake().size() && this->_player->checkDeath())
+            this->_engine->displayPause(this->_player->getScore(), this->_bestScore);
+        else
+            this->_engine->displayPause(-1, -1);
+    }
 }
 
 void    Game::switchEngine(eEngine engine, eDirection direction) {

@@ -66,7 +66,7 @@ eDirection   Window::getDirection(void) const {
 }
 
 void   Window::setDirection(sf::Event event) {
-    if (event.type == sf::Event::KeyPressed) {
+    if (event.type == sf::Event::KeyPressed && !this->directionChecker) {
         if (event.key.code == sf::Keyboard::Up && this->direction != Down && this->direction!= Up)
             { this->directionChecker = true; this->direction = Up; }
         else if (event.key.code ==sf::Keyboard::Down  && this->direction != Up && this->direction!= Down)
@@ -74,8 +74,8 @@ void   Window::setDirection(sf::Event event) {
         else if (event.key.code == sf::Keyboard::Left && this->direction != Right && this->direction!= Left)
             { this->directionChecker = true; this->direction = Left; }
         else if (event.key.code == sf::Keyboard::Right && this->direction != Left && this->direction!= Right)
-            { this->directionChecker = true; this->direction = Right;}
-        }
+            { this->directionChecker = true; this->direction = Right; }
+    }
     return;
 }
 
