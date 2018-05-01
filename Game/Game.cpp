@@ -219,7 +219,6 @@ void    Game::update(void) {
     if (this->_engine->getStatus() == Play) {
         if (this->_fireTimer.update())
             this->initFire();
-
         if (this->_player->getScoreChange()) {
             if (this->_player->getScore() % 5 == 0
                 && this->_speedTimer.getDiff() >= 80) {
